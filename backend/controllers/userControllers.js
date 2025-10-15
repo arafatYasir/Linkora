@@ -151,4 +151,47 @@ const verifyUser = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser };
+const loginUser = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+
+        // Checking if user exists with the email
+        const userExists = await User.findOne({email});
+
+        // If user not found
+        if(!userExists) {
+            res.status(404).json({
+                error: "The email doesn't exist"
+            });
+        }
+
+        // If found then check if the password matches
+        const isPasswordMatched = await bcrypt.compare(password, userExists.password);
+
+        if(!isPasswordMatched) {
+            return res.status(404).json({
+                error: "The password is invalid"
+            });
+        }
+
+        const token = jwtToken({id: userExists._id.toString()}, "7d");
+        
+        res.send({
+            id: userExists._id,
+            username: userExists.username,
+            profilePicture: userExists.profilePicture,
+            firstname: userExists.firstname,
+            lastname: userExists.lastname,
+            verified: userExists.verified,
+            message: "Login successful",
+            token,
+        });
+    }
+    catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser };
