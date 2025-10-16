@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { useAddUserMutation } from "../../api/authApi";
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const SignUpPage = () => {
     month: "",
     year: ""
   });
+  const [addUser, {isLoading, error}] = useAddUserMutation();
 
   const handleChange = (e) => {
     setFormData(prev => ({
@@ -21,13 +23,22 @@ const SignUpPage = () => {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // There will be obviously form validation
+
+    // Creating the user if everything is ok
+    const signUpMutation = await addUser(formData);
+
+    console.log(signUpMutation.data);
   }
 
   return (
     <div className="container mx-auto">
-      <form onSubmit={handleSubmit} className="flex flex-wrap gap-12 items-center min-h-screen">
+      {error && <p className="text-xl text-red-500">{error.data.error}</p>}
+
+      <form onSubmit={handleSubmit} className="flex flex-wrap gap-12 items-center">
 
         <input
           className="px-2 py-2 border mt-5" type="text" placeholder="First Name" name="firstname"
@@ -93,7 +104,7 @@ const SignUpPage = () => {
         <button type="submit" className="bg-[dodgerblue] py-3 px-5 rounded ml-5">Create an Account</button>
       </form>
 
-      <p>Already have an account? <Link className="text-[green]">Login</Link></p>
+      <p>Already have an account? <Link to="/login" className="text-[green]">Login</Link></p>
     </div>
   )
 }

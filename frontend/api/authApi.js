@@ -10,8 +10,15 @@ export const authApi = createApi({
                 method: "POST",
                 body
             })
+        }),
+        loginUser: build.mutation({
+            query: (body) => ({
+                url: "/api/v1/login",
+                method: "POST",
+                body
+            })
         })
     }),
 })
 
-export const { useAddUserMutation } = authApi;
+export const { useAddUserMutation, useLoginUserMutation } = authApi;

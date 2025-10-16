@@ -7,7 +7,6 @@ export const store = configureStore({
         [authApi.reducerPath]: authApi.reducer,
         auth: authReducer
     },
-    middleware: (getDefaultMiddlware) => {
-        getDefaultMiddlware().concat(authApi.middleware);
-    }
+    devTools: import.meta.env.MODE !== "production",
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware)
 })

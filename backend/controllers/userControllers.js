@@ -165,6 +165,13 @@ const loginUser = async (req, res) => {
             });
         }
 
+        // Check if the user is verified
+        if(!userExists.verified) {
+            return res.status(400).json({
+                error: "You are not verified. Please verify your email!"
+            });
+        }
+
         // If found then check if the password matches
         const isPasswordMatched = await bcrypt.compare(password, userExists.password);
 
