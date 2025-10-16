@@ -27,7 +27,7 @@ const SignUpPage = () => {
 
   return (
     <div className="container mx-auto">
-      <form className="flex flex-wrap gap-12 items-center min-h-screen">
+      <form onSubmit={handleSubmit} className="flex flex-wrap gap-12 items-center min-h-screen">
 
         <input
           className="px-2 py-2 border mt-5" type="text" placeholder="First Name" name="firstname"
