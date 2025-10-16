@@ -1,1 +1,71 @@
 @import "tailwindcss";
+
+@theme {
+  /* Light Theme Colors */
+  --color-primary: #00c26d;
+  --color-primary-hover: #00a85f;
+  --color-bg: #f9fafb;
+  --color-surface: #ffffff;
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-border: #e5e7eb;
+  --color-error: #ef4444;
+  --color-success: #16a34a;
+
+  /* Dark Theme Colors */
+  --dark-color-primary: #00e07b;
+  --dark-color-primary-hover: #00c46a;
+  --dark-color-bg: #0d1117;
+  --dark-color-surface: #161b22;
+  --dark-color-text-primary: #e5e7eb;
+  --dark-color-text-secondary: #9ca3af;
+  --dark-color-border: #1f2937;
+  --dark-color-error: #f87171;
+  --dark-color-success: #22c55e;
+
+  /* Gradients & Effects */
+  --color-gradient-primary: linear-gradient(135deg, #00e07b, #00b967);
+  --color-glow-green: 0 0 12px rgba(0, 224, 123, 0.5);
+
+  /* Layout & Components */
+  --radius-card: 12px;
+  --radius-button: 8px;
+  --radius-avatar: 50%;
+
+  /* Shadows */
+  --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+  /* Glass & Transitions */
+  --backdrop-blur: blur(12px);
+  --transition-default: all 0.25s ease;
+}
+
+/* Light Theme Defaults */
+:root {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+/* Dark Theme Overrides */
+.dark {
+  --color-primary: var(--dark-color-primary);
+  --color-primary-hover: var(--dark-color-primary-hover);
+  --color-bg: var(--dark-color-bg);
+  --color-surface: var(--dark-color-surface);
+  --color-text-primary: var(--dark-color-text-primary);
+  --color-text-secondary: var(--dark-color-text-secondary);
+  --color-border: var(--dark-color-border);
+  --color-error: var(--dark-color-error);
+  --color-success: var(--dark-color-success);
+  --color-gradient-primary: linear-gradient(135deg, #00c46a, #00e07b);
+  --box-shadow: var(--shadow-dark);
+}
+
+/* 🌐 Global Styles */
+body {
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-smooth: always;
+  height: 100vh;
+}

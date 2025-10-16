@@ -1,13 +1,13 @@
 import { Outlet, Route, Routes } from "react-router-dom";
-import RegistrationPage from "./pages/RegistrationPage";
+import SignUpPage from "./pages/SignUpPage";
 
 const App = () => {
   
   return (
     <>
       <Routes>
-        <Route path="/" element={<div>This is common component <Outlet /></div>}>
-          <Route path="/signup" element={<RegistrationPage />} />
+        <Route path="/" element={<div><Outlet /></div>}>
+          <Route path="/signup" element={<SignUpPage />} />
         </Route>
       </Routes>
     </>
