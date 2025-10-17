@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useLoginUserMutation } from "../../api/authApi";
+import { useDispatch } from "react-redux";
+import { setUser } from "../slices/authSlice";
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     });
-    const [loginUser, {isLoading, error}] = useLoginUserMutation();
+    const [loginUser, { isLoading, error, data }] = useLoginUserMutation();
+    const dispatch = useDispatch();
 
     const handleChange = (e) => {
         setFormData(prev => ({
@@ -26,14 +29,24 @@ const LoginPage = () => {
 
         console.log(res.data);
 
-        if(res.data.token) {
-            setFormData({email: "", password: ""});
+        if (res.data?.email && res.data?.email.trim() !== "") {
+            const { message, ...others } = res.data;
+
+            dispatch(setUser(others));
+            localStorage.setItem("userInfo", JSON.stringify(others));
+
+            if (res.data.token) {
+                setFormData({ email: "", password: "" });
+            }
         }
+
+
     }
 
     return (
         <div className="container mx-auto">
             {error && <p className="text-xl text-red-500">{error.data.error}</p>}
+            {data && <p className="text-xl text-green-500">{data.message}</p>}
 
             <form onSubmit={handleSubmit} className="flex flex-wrap gap-12 items-center pt-10">
                 <input

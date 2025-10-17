@@ -32,13 +32,13 @@ const newUser = async (req, res) => {
         }
 
         // Checking if the firs letter of both names are capital or not
-        if(firstname[0] !== firstname[0].toUpperCase()) {
+        if (firstname[0] !== firstname[0].toUpperCase()) {
             return res.status(400).json({
                 error: "First letter should be capital"
             });
         }
 
-        if(lastname[0] !== lastname[0].toUpperCase()) {
+        if (lastname[0] !== lastname[0].toUpperCase()) {
             return res.status(400).json({
                 error: "First letter should be capital"
             });
@@ -84,25 +84,29 @@ const newUser = async (req, res) => {
             day,
             month,
             year,
-            gender
+            gender,
         });
+
+        // Creating a verification token
+        const verificationToken = jwtToken({ id: user._id.toString() }, "15m");
+        const verificationTokenExpiry = new Date(Date.now() + 15 * 60 * 1000);
+        const verificationURL = `${process.env.BASE_URL}/verify/${verificationToken}`;
+
+        user.verificationTokenExpiry = verificationTokenExpiry;
 
         // Saving the user to database
         await user.save();
-
-        // Creating a verification token
-        const verificationToken = jwtToken({id: user._id.toString()}, "15m");
-        const verificationURL = `${process.env.BASE_URL}/verify/${verificationToken}`;
 
         // Sending verification email
         sendVerificationEmail(user.email, verificationURL);
 
         // Creating a access token
-        const token = jwtToken({id: user._id.toString()}, "7d");
+        const token = jwtToken({ id: user._id.toString() }, "7d");
 
         // Sending user data response
         res.send({
             id: user._id,
+            email: user.email,
             username: user.username,
             profilePicture: user.profilePicture,
             firstname: user.firstname,
@@ -119,7 +123,8 @@ const newUser = async (req, res) => {
 
 const verifyUser = async (req, res) => {
     try {
-        const {token} = req.body;
+        const { token } = req.body;
+
         // Decoding the user info object
         const userInfo = jwt.verify(token, process.env.SECRET);
 
@@ -127,7 +132,7 @@ const verifyUser = async (req, res) => {
         const isAlreadyVerified = await User.findById(userInfo.id);
 
         // Checking if the user is already verified
-        if(isAlreadyVerified.verified) {
+        if (isAlreadyVerified.verified) {
             return res.status(400).json({
                 error: "This email is already verified!"
             });
@@ -135,6 +140,7 @@ const verifyUser = async (req, res) => {
 
         // If not verified then verify him
         isAlreadyVerified.verified = true;
+        isAlreadyVerified.verificationTokenExpiry = null;
 
         // Save to database
         isAlreadyVerified.save();
@@ -146,45 +152,63 @@ const verifyUser = async (req, res) => {
     }
     catch (e) {
         res.status(404).json({
-            error: e.message
+            error: "Token is expired or user not found!"
         });
     }
 }
 
 const loginUser = async (req, res) => {
     try {
-        const {email, password} = req.body;
+        const { email, password } = req.body;
 
         // Checking if user exists with the email
-        const userExists = await User.findOne({email});
+        const userExists = await User.findOne({ email });
 
         // If user not found
-        if(!userExists) {
+        if (!userExists) {
             res.status(404).json({
                 error: "The email doesn't exist"
             });
         }
 
-        // Check if the user is verified
-        if(!userExists.verified) {
-            return res.status(400).json({
-                error: "You are not verified. Please verify your email!"
-            });
+        // Check if the user is not verified
+        if (!userExists.verified) {
+            // Check if the user's verification token is expired
+            if (userExists.verificationTokenExpiry && userExists.verificationTokenExpiry < new Date()) {
+                const reVerificationToken = jwtToken({ id: userExists._id.toString() }, "15m");
+                const reVerificationTokenExpiry = new Date(Date.now() + 15 * 60 * 1000);
+                const reVerificationURL = `${process.env.BASE_URL}/verify/${reVerificationToken}`;
+
+                sendVerificationEmail(userExists.email, reVerificationURL);
+
+                userExists.verificationTokenExpiry = reVerificationTokenExpiry;
+                await userExists.save();
+
+                return res.send({
+                    message: "You are not verified. Another verification mail is sent to you! Check your mail."
+                });
+            }
+            else {
+                return res.status(400).json({
+                    error: "You are not verified. Please verify your email!"
+                });
+            }
         }
 
         // If found then check if the password matches
         const isPasswordMatched = await bcrypt.compare(password, userExists.password);
 
-        if(!isPasswordMatched) {
+        if (!isPasswordMatched) {
             return res.status(404).json({
                 error: "The password is invalid"
             });
         }
 
-        const token = jwtToken({id: userExists._id.toString()}, "7d");
-        
+        const token = jwtToken({ id: userExists._id.toString() }, "7d");
+
         res.send({
             id: userExists._id,
+            email: userExists.email,
             username: userExists.username,
             profilePicture: userExists.profilePicture,
             firstname: userExists.firstname,
@@ -201,4 +225,14 @@ const loginUser = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser };
+const reVerification = async (req, res) => {
+    try {
+
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        })
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, reVerification };

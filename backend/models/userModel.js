@@ -62,6 +62,10 @@ const UserModel = new Schema({
         type: Boolean,
         default: false
     },
+    verificationTokenExpiry: {
+        type: Date,
+        default: null
+    },
     friends: [
         {
             type: ObjectId,

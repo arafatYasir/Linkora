@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    userInfo: null
+    userInfo: JSON.parse(localStorage.getItem("userInfo")) || null,
 }
 
 export const authSlice = createSlice({
@@ -10,11 +10,14 @@ export const authSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             state.userInfo = action.payload;
+        },
+        logOutUser: (state) => {
+            state.userInfo = null;
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser } = authSlice.actions
+export const { setUser, logOutUser } = authSlice.actions
 
 export default authSlice.reducer
