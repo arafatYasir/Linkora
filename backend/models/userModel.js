@@ -69,32 +69,32 @@ const UserModel = new Schema({
     friends: [
         {
             type: ObjectId,
-            ref: "UserModel"
+            ref: "User"
         }
     ],
     followers: [
         {
             type: ObjectId,
-            ref: "UserModel",
+            ref: "User",
         }
     ],
     following: [
         {
             type: ObjectId,
-            ref: "UserModel",
+            ref: "User",
         }
     ],
     friendRequests: [
         {
             type: ObjectId,
-            ref: "UserModel",
+            ref: "User",
         }
     ],
     search: [
         {
             user: {
                 type: ObjectId,
-                ref: "UserModel",
+                ref: "User",
                 require: true,
                 text: true
             },

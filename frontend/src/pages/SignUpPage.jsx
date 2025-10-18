@@ -104,7 +104,7 @@ const SignUpPage = () => {
           </select>
         </div>
 
-        <button type="submit" className="bg-[dodgerblue] py-3 px-5 rounded ml-5">{isLoading ? "Creating..." : "Create an Account"}</button>
+        <button type="submit" className="bg-[dodgerblue] py-3 px-5 rounded ml-5 cursor-pointer">{isLoading ? "Creating..." : "Create an Account"}</button>
       </form>
 
       <p>Already have an account? <Link to="/login" className="text-[green]">Login</Link></p>

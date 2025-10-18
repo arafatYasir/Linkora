@@ -1,9 +1,11 @@
-const sendVerificationEmail = require("../helpers/mailer");
+const {sendVerificationEmail, sendPasswordResetCode} = require("../helpers/mailer");
 const jwtToken = require("../helpers/token");
 const jwt = require("jsonwebtoken");
 const { validateEmail, validateLength, generateValideUsername } = require("../helpers/validation");
 const User = require("../models/userModel");
+const Code = require("../models/code");
 const bcrypt = require("bcrypt");
+const generateCode = require("../helpers/generateCode");
 
 const newUser = async (req, res) => {
     try {
@@ -225,14 +227,100 @@ const loginUser = async (req, res) => {
     }
 }
 
-const reVerification = async (req, res) => {
+const findUser = async (req, res) => {
     try {
+        const {email} = req.body;
+        const userExists = await User.findOne({email}).select("-password");
+
+        if(!userExists) {
+            return res.status(404).json({
+                error: "The email is not found!"
+            });
+        }
+
+        res.send({
+            email: userExists.email,
+            profilePicture: userExists.profilePicture
+        })
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+const resetCode = async (req, res) => {
+    try {
+        const {email} = req.body;
+        const user = await User.findOne({email}).select("-password");
+
+        await Code.findOneAndDelete({userId: user._id});
+
+        const code = generateCode(6);
+
+        const newCode = new Code({
+            code,
+            userId: user._id
+        });
+
+        await newCode.save();
+
+        sendPasswordResetCode(user.email, code);
+
+        res.send({
+            message: "Password reset code is sent to your mail!"
+        });
 
     } catch (e) {
         res.status(400).json({
             error: e.message
-        })
+        });
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, reVerification };
+const verifyCode = async (req, res) => {
+    try {
+        const {email, code} = req.body;
+        const user = await User.findOne({email});
+        const userCode = await Code.findOne({userId: user._id});
+
+        console.log(email);
+        console.log(user._id);
+        console.log(userCode.code);
+        console.log(code)
+
+        if(userCode.code !== code) {
+            return res.status(404).json({
+                error: "The code is invalid!"
+            });
+        }
+        
+        res.send({
+            status: "OK"
+        })
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+const newPassword = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+        const encryptedPassword = await bcrypt.hash(password, 10);
+        
+        await User.findOneAndUpdate({email}, {password: encryptedPassword});
+
+        res.send({
+            message: "Password reset successful!",
+            status: "OK"
+        })
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword };

@@ -24,8 +24,36 @@ export const authApi = createApi({
                 method: "POST",
                 body: {token},
             })
+        }),
+        findUser: build.mutation({
+            query: (email) => ({
+                url: "/api/v1/findUser",
+                method: "POST",
+                body: {email},
+            })
+        }),
+        sendResetCode: build.mutation({
+            query: (email) => ({
+                url: "/api/v1/reset-code",
+                method: "POST",
+                body: {email},
+            })
+        }),
+        verifyResetCode: build.mutation({
+            query: ({email, code}) => ({
+                url: "/api/v1/verify-code",
+                method: "POST",
+                body: {email, code}
+            })
+        }),
+        newPassword: build.mutation({
+            query: ({email, password}) => ({
+                url: "/api/v1/new-password",
+                method: "POST",
+                body: {email, password}
+            })
         })
     }),
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation } = authApi;
+export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation } = authApi;

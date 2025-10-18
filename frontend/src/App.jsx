@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import UserLoggedIn from "./components/UserLoggedIn";
 import UserNotLoggedIn from "./components/UserNotLoggedIn";
 import VerificationPage from "./pages/VerificationPage";
+import ForgotPassword from "./pages/ForgotPassword";
 
 const App = () => {
 
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/verify/:token" element={<VerificationPage />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
           </Route>
         </Route>
       </Routes>

@@ -39,8 +39,6 @@ const LoginPage = () => {
                 setFormData({ email: "", password: "" });
             }
         }
-
-
     }
 
     return (
@@ -59,10 +57,12 @@ const LoginPage = () => {
                     value={formData.password} onChange={handleChange}
                 />
 
-                <button type="submit" className="bg-[dodgerblue] py-3 px-5 rounded ml-5">{isLoading ? "Logging..." : "Login"}</button>
+                <button type="submit" className="bg-[dodgerblue] py-3 px-5 rounded ml-5 cursor-pointer">{isLoading ? "Logging..." : "Login"}</button>
             </form>
 
             <p className="mt-8">Doesn't have an account? <Link to="/signup" className="text-[green]">Sign Up</Link></p>
+
+            <p className="mt-8"><Link to="/forgot-password" className="text-[green]">Forgot Password?</Link></p>
         </div>
     )
 }
