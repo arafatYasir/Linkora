@@ -284,11 +284,6 @@ const verifyCode = async (req, res) => {
         const user = await User.findOne({email});
         const userCode = await Code.findOne({userId: user._id});
 
-        console.log(email);
-        console.log(user._id);
-        console.log(userCode.code);
-        console.log(code)
-
         if(userCode.code !== code) {
             return res.status(404).json({
                 error: "The code is invalid!"

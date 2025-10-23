@@ -79,4 +79,4 @@ const sendPasswordResetCode = (email, code) => {
 
 
 
-module.exports = {sendVerificationEmail, sendPasswordResetCode}
+module.exports = {sendVerificationEmail, sendPasswordResetCode};
