@@ -2,7 +2,7 @@
 
 @theme {
   /* Light Theme Colors */
-  --color-primary: #00c26d;
+  --color-primary: #34B27B;
   --color-primary-hover: #00a85f;
   --color-bg: #f9fafb;
   --color-surface: #ffffff;
@@ -13,7 +13,7 @@
   --color-success: #16a34a;
 
   /* Dark Theme Colors */
-  --dark-color-primary: #00e07b;
+  --dark-color-primary: #32bf81;
   --dark-color-primary-hover: #00c46a;
   --dark-color-bg: #0d1117;
   --dark-color-surface: #161b22;

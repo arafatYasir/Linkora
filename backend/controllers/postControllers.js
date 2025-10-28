@@ -6,6 +6,7 @@ const createPost = async (req, res) => {
 
         res.send({
             message: "Post created successfully",
+            status: "OK",
             ...post
         })
     } catch (e) {
@@ -15,4 +16,8 @@ const createPost = async (req, res) => {
     }
 }
 
-module.exports = {createPost};
+const getAllPosts = async (req, res) => {
+    
+}
+
+module.exports = {createPost, getAllPosts};

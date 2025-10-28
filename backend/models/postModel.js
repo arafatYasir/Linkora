@@ -4,7 +4,7 @@ const {ObjectId} = mongoose.Schema;
 const postSchema = new mongoose.Schema({
     type: {
         type: String,
-        enum: ["profilePicture", "coverPhoto", null],
+        enum: ["profile-picture", "cover-photo", "text-post", "image-post", "background-post", null],
         default: null
     },
     images: {

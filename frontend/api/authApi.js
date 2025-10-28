@@ -52,8 +52,28 @@ export const authApi = createApi({
                 method: "POST",
                 body: {email, password}
             })
+        }),
+        createPost: build.mutation({
+            query: ({type, images, text, background, userId, token}) => ({
+                url: "/api/v1/posts/create-post",
+                method: "POST",
+                body: {type, images, text, background, userId},
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+        }),
+        uploadImage: build.mutation({
+            query: ({formData, token}) => ({
+                url: "/api/v1/upload/image",
+                method: "POST",
+                body: formData,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
         })
     }),
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation } = authApi;
+export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation } = authApi;
