@@ -2,8 +2,8 @@ const jwt = require("jsonwebtoken");
 
 const authMiddleware = async (req, res, next) => {
     try {
-        let temp = req.headers["Authorization"];
-        const token = temp ? temp.split(" ")[1] : " ";
+        let temp = req.headers.authorization;
+        const token = temp ? temp.split(" ")[1] : "";
 
         // If no token found
         if(!token) {

@@ -37,7 +37,7 @@ const PostModal = ({ onClose }) => {
                     text,
                     background,
                     userId: userInfo.id,
-                    token: userInfo.token
+                    token: userInfo.accessToken
                 }).unwrap();
 
                 if (res.status === "OK") {
@@ -71,7 +71,7 @@ const PostModal = ({ onClose }) => {
                     // upload images first to cloudinary
                     const uploadResponse = await uploadImage({
                         formData,
-                        token: userInfo.token
+                        token: userInfo.accessToken
                     }).unwrap();
 
                     imageUrls = uploadResponse.images.map(img => img.url);
@@ -84,7 +84,7 @@ const PostModal = ({ onClose }) => {
                     text,
                     background: null,
                     userId: userInfo.id,
-                    token: userInfo.token
+                    token: userInfo.accessToken
                 }).unwrap();
 
                 console.log("Post creation response with images: ", res);

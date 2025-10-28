@@ -4,11 +4,17 @@ import { logOutUser } from "../slices/authSlice";
 import { useState } from "react";
 import CreatePost from "../components/post/CreatePost";
 import PostModal from "../components/post/PostModal";
+import { useGetAllPostsQuery } from "../../api/authApi";
 
 const HomePage = () => {
     const { userInfo } = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+
+    // Fetching posts
+    const {data} = useGetAllPostsQuery();
+
+    console.log(data);
 
     const openPostModal = () => {
         setIsPostModalOpen(true);
@@ -46,6 +52,11 @@ const HomePage = () => {
                 <CreatePost onOpenModal={openPostModal} user={userInfo} />
 
                 {isPostModalOpen && <PostModal onClose={closePostModal} />}
+            </div>
+
+            {/* ---- All Posts ---- */}
+            <div>
+
             </div>
         </div>
     )

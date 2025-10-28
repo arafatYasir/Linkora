@@ -1,4 +1,4 @@
-const {sendVerificationEmail, sendPasswordResetCode} = require("../helpers/mailer");
+const { sendVerificationEmail, sendPasswordResetCode } = require("../helpers/mailer");
 const jwtToken = require("../helpers/token");
 const jwt = require("jsonwebtoken");
 const { validateEmail, validateLength, generateValideUsername } = require("../helpers/validation");
@@ -102,9 +102,6 @@ const newUser = async (req, res) => {
         // Sending verification email
         sendVerificationEmail(user.email, verificationURL);
 
-        // Creating a access token
-        const token = jwtToken({ id: user._id.toString() }, "7d");
-
         // Sending user data response
         res.send({
             id: user._id,
@@ -115,7 +112,6 @@ const newUser = async (req, res) => {
             lastname: user.lastname,
             verified: user.verified,
             message: "Registration successful! Please verify your email.",
-            token,
         });
     } catch (e) {
         console.log(e.message);
@@ -206,9 +202,25 @@ const loginUser = async (req, res) => {
             });
         }
 
-        const token = jwtToken({ id: userExists._id.toString() }, "7d");
+        // Generating access & refresh token
+        const accessToken = jwtToken({ id: userExists._id.toString() }, "15m");
+        const refreshToken = jwtToken({ id: userExists._id.toString() }, "365d");
+
+        // Putting refresh token on user data
+        userExists.refreshToken = refreshToken;
+
+        await userExists.save();
+
+        // Sending refresh token as cookie
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "strict",
+            maxAge: 365 * 24 * 60 * 60 * 1000 // 1 year validation of refresh token
+        });
 
         res.send({
+            message: "Login successful",
             id: userExists._id,
             email: userExists.email,
             username: userExists.username,
@@ -216,8 +228,7 @@ const loginUser = async (req, res) => {
             firstname: userExists.firstname,
             lastname: userExists.lastname,
             verified: userExists.verified,
-            message: "Login successful",
-            token,
+            accessToken: accessToken,
         });
     }
     catch (e) {
@@ -226,13 +237,51 @@ const loginUser = async (req, res) => {
         });
     }
 }
+// So let's say the refresh token expirty is 1 year. Then after 1 year it will be expired and accessToken can no longer be refreshed. If that is so then user can't perform anything. So how do I sign out the user?
+
+const refreshToken = async (req, res) => {
+    try {
+        const token = req.headers.refreshtoken;
+
+        if (!token || token.trim() === "") {
+            res.status(400).json({
+                error: "Token not found!"
+            });
+        }
+
+        const decoded = jwt.verify(token, process.env.SECRET);
+        if (!decoded) {
+            res.status(404).json({
+                error: "Invalid token!"
+            });
+        }
+
+        const user = await User.findById(decoded.id);
+        if (!user) {
+            res.status(404).json({
+                error: "No such user exists with this token"
+            });
+        }
+
+        const newAccessToken = jwtToken({ id: user._id.toString() }, "15m");
+
+        res.send({
+            accessToken: newAccessToken
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({
+            error: e.message
+        })
+    }
+}
 
 const findUser = async (req, res) => {
     try {
-        const {email} = req.body;
-        const userExists = await User.findOne({email}).select("-password");
+        const { email } = req.body;
+        const userExists = await User.findOne({ email }).select("-password");
 
-        if(!userExists) {
+        if (!userExists) {
             return res.status(404).json({
                 error: "The email is not found!"
             });
@@ -251,10 +300,10 @@ const findUser = async (req, res) => {
 
 const resetCode = async (req, res) => {
     try {
-        const {email} = req.body;
-        const user = await User.findOne({email}).select("-password");
+        const { email } = req.body;
+        const user = await User.findOne({ email }).select("-password");
 
-        await Code.findOneAndDelete({userId: user._id});
+        await Code.findOneAndDelete({ userId: user._id });
 
         const code = generateCode(6);
 
@@ -280,16 +329,16 @@ const resetCode = async (req, res) => {
 
 const verifyCode = async (req, res) => {
     try {
-        const {email, code} = req.body;
-        const user = await User.findOne({email});
-        const userCode = await Code.findOne({userId: user._id});
+        const { email, code } = req.body;
+        const user = await User.findOne({ email });
+        const userCode = await Code.findOne({ userId: user._id });
 
-        if(userCode.code !== code) {
+        if (userCode.code !== code) {
             return res.status(404).json({
                 error: "The code is invalid!"
             });
         }
-        
+
         res.send({
             status: "OK"
         })
@@ -302,10 +351,10 @@ const verifyCode = async (req, res) => {
 
 const newPassword = async (req, res) => {
     try {
-        const {email, password} = req.body;
+        const { email, password } = req.body;
         const encryptedPassword = await bcrypt.hash(password, 10);
-        
-        await User.findOneAndUpdate({email}, {password: encryptedPassword});
+
+        await User.findOneAndUpdate({ email }, { password: encryptedPassword });
 
         res.send({
             message: "Password reset successful!",
@@ -318,4 +367,4 @@ const newPassword = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword };
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken };

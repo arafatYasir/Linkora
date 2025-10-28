@@ -154,7 +154,10 @@ const UserModel = new Schema({
                 require: true
             }
         }
-    ]
+    ],
+    refreshToken: {
+        type: String
+    }
 }, {
     timestamps: true
 });

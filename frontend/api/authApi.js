@@ -2,7 +2,16 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 export const authApi = createApi({
     reducerPath: "authApi",
-    baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BACKEND_URL }),
+    baseQuery: fetchBaseQuery({ 
+        baseUrl: import.meta.env.VITE_BACKEND_URL,
+        prepareHeaders: (headers) => {
+            const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+            if(userInfo && userInfo.accessToken) {
+                headers.set("Authorization", `Bearer ${userInfo.accessToken}`)
+            }
+        }
+    }),
     endpoints: (build) => ({
         addUser: build.mutation({
             query: (body) => ({
@@ -72,8 +81,11 @@ export const authApi = createApi({
                     Authorization: `Bearer ${token}`
                 }
             })
+        }),
+        getAllPosts: build.query({
+            query: () => "/api/v1/posts/get-all-posts"
         })
     }),
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation } = authApi;
+export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery } = authApi;
