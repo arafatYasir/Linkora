@@ -2,19 +2,27 @@ import { useState } from "react";
 import { FaTimes, FaImage, FaVideo, FaFileAlt } from "react-icons/fa";
 import { backgrounds } from "../../constants/postBackgrounds";
 import { useCreatePostMutation, useUploadImageMutation } from "../../../api/authApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import dataURIToBlob from "../../helpers/dataURIToBlob";
+import { refreshToken } from "../../../api/refreshToken";
+import { setUser } from "../../slices/authSlice";
 
 const PostModal = ({ onClose }) => {
+    // States
     const [text, setText] = useState("");
     const [files, setFiles] = useState([]);
     const [background, setBackground] = useState("");
     const [showBackgrounds, setShowBackgrounds] = useState(false);
 
+    // Redux states
+    const { userInfo } = useSelector(state => state.auth);
+
+    // Extra hooks
+    const dispatch = useDispatch();
+
+    // RTK Query
     const [createPost, { isLoading }] = useCreatePostMutation();
     const [uploadImage, { isLoading: isUploading }] = useUploadImageMutation();
-
-    const { userInfo } = useSelector(state => state.auth);
 
     const handleFileChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
@@ -28,6 +36,9 @@ const PostModal = ({ onClose }) => {
     const handleSubmit = async () => {
         try {
             let res;
+
+            // refreshing token it it is expired
+            await refreshToken();
 
             // If a post has a background then create a background post
             if (background) {

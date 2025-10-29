@@ -5,6 +5,7 @@ const app = express();
 const cors = require("cors");
 const path = require("path");
 const fileUpload = require("express-fileupload");
+const cookieParser = require("cookie-parser");
 const routes = require("./routes/index");
 const databaseConfig = require("./database/databaseConfig");
 const port = process.env.PORT;
@@ -21,6 +22,7 @@ app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: path.join(__dirname, "tmp")
 }));
+app.use(cookieParser())
 app.use(express.json());
 
 // Routes

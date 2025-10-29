@@ -203,7 +203,7 @@ const loginUser = async (req, res) => {
         }
 
         // Generating access & refresh token
-        const accessToken = jwtToken({ id: userExists._id.toString() }, "15m");
+        const accessToken = jwtToken({ id: userExists._id.toString() }, "15s");
         const refreshToken = jwtToken({ id: userExists._id.toString() }, "365d");
 
         // Putting refresh token on user data
@@ -241,7 +241,7 @@ const loginUser = async (req, res) => {
 
 const refreshToken = async (req, res) => {
     try {
-        const token = req.headers.refreshtoken;
+        const token = req.cookies.refreshToken;
 
         if (!token || token.trim() === "") {
             res.status(400).json({
@@ -263,7 +263,7 @@ const refreshToken = async (req, res) => {
             });
         }
 
-        const newAccessToken = jwtToken({ id: user._id.toString() }, "15m");
+        const newAccessToken = jwtToken({ id: user._id.toString() }, "15s");
 
         res.send({
             accessToken: newAccessToken

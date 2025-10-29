@@ -4,12 +4,15 @@ export const authApi = createApi({
     reducerPath: "authApi",
     baseQuery: fetchBaseQuery({ 
         baseUrl: import.meta.env.VITE_BACKEND_URL,
+        credentials: "include",
         prepareHeaders: (headers) => {
             const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
             if(userInfo && userInfo.accessToken) {
                 headers.set("Authorization", `Bearer ${userInfo.accessToken}`)
             }
+
+            return headers;
         }
     }),
     endpoints: (build) => ({

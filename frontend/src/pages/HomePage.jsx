@@ -31,7 +31,6 @@ const HomePage = () => {
         }, 100)
     }
 
-
     return (
         <div className="container mx-auto">
             <div className="flex gap-x-5 mb-10">
