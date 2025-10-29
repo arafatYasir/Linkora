@@ -14,7 +14,7 @@ const authMiddleware = async (req, res, next) => {
 
         jwt.verify(token, process.env.SECRET, (err, decoded) => {
             if(err) {
-                return res.status(400).json({
+                return res.status(401).json({
                     error: "Invalid token!"
                 });
             }

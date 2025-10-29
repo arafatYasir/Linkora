@@ -203,7 +203,7 @@ const loginUser = async (req, res) => {
         }
 
         // Generating access & refresh token
-        const accessToken = jwtToken({ id: userExists._id.toString() }, "15s");
+        const accessToken = jwtToken({ id: userExists._id.toString() }, "15m");
         const refreshToken = jwtToken({ id: userExists._id.toString() }, "365d");
 
         // Putting refresh token on user data
@@ -237,7 +237,6 @@ const loginUser = async (req, res) => {
         });
     }
 }
-// So let's say the refresh token expirty is 1 year. Then after 1 year it will be expired and accessToken can no longer be refreshed. If that is so then user can't perform anything. So how do I sign out the user?
 
 const refreshToken = async (req, res) => {
     try {
@@ -263,7 +262,7 @@ const refreshToken = async (req, res) => {
             });
         }
 
-        const newAccessToken = jwtToken({ id: user._id.toString() }, "15s");
+        const newAccessToken = jwtToken({ id: user._id.toString() }, "15m");
 
         res.send({
             accessToken: newAccessToken

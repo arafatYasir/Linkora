@@ -37,9 +37,6 @@ const PostModal = ({ onClose }) => {
         try {
             let res;
 
-            // refreshing token it it is expired
-            await refreshToken();
-
             // If a post has a background then create a background post
             if (background) {
                 res = await createPost({
@@ -48,7 +45,6 @@ const PostModal = ({ onClose }) => {
                     text,
                     background,
                     userId: userInfo.id,
-                    token: userInfo.accessToken
                 }).unwrap();
 
                 if (res.status === "OK") {
@@ -82,7 +78,6 @@ const PostModal = ({ onClose }) => {
                     // upload images first to cloudinary
                     const uploadResponse = await uploadImage({
                         formData,
-                        token: userInfo.accessToken
                     }).unwrap();
 
                     imageUrls = uploadResponse.images.map(img => img.url);
@@ -95,7 +90,6 @@ const PostModal = ({ onClose }) => {
                     text,
                     background: null,
                     userId: userInfo.id,
-                    token: userInfo.accessToken
                 }).unwrap();
 
                 console.log("Post creation response with images: ", res);

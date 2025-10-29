@@ -1,20 +1,9 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { createApi } from "@reduxjs/toolkit/query/react"
+import { baseQueryWithReauth } from "./baseQueryWithReauth";
 
 export const authApi = createApi({
     reducerPath: "authApi",
-    baseQuery: fetchBaseQuery({ 
-        baseUrl: import.meta.env.VITE_BACKEND_URL,
-        credentials: "include",
-        prepareHeaders: (headers) => {
-            const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-            if(userInfo && userInfo.accessToken) {
-                headers.set("Authorization", `Bearer ${userInfo.accessToken}`)
-            }
-
-            return headers;
-        }
-    }),
+    baseQuery: baseQueryWithReauth,
     endpoints: (build) => ({
         addUser: build.mutation({
             query: (body) => ({
@@ -66,23 +55,17 @@ export const authApi = createApi({
             })
         }),
         createPost: build.mutation({
-            query: ({type, images, text, background, userId, token}) => ({
+            query: ({type, images, text, background, userId}) => ({
                 url: "/api/v1/posts/create-post",
                 method: "POST",
                 body: {type, images, text, background, userId},
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
             })
         }),
         uploadImage: build.mutation({
-            query: ({formData, token}) => ({
+            query: ({formData}) => ({
                 url: "/api/v1/upload/image",
                 method: "POST",
                 body: formData,
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
             })
         }),
         getAllPosts: build.query({

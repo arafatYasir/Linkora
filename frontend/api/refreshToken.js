@@ -1,6 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { store } from "../src/store"
-import { setUser } from "../src/slices/authSlice";
+import { logOutUser, setUser } from "../src/slices/authSlice";
 
 const isTokenExpired = (accessToken) => {
     try {
@@ -15,7 +14,7 @@ const isTokenExpired = (accessToken) => {
     }
 }
 
-export const refreshToken = async () => {
+export const refreshToken = async (api) => {
     const user = JSON.parse(localStorage.getItem("userInfo")) || null;
 
     if (!user) {
@@ -30,12 +29,23 @@ export const refreshToken = async () => {
                 credentials: "include",
             });
             const newAccessToken = await res.json();
-            user.accessToken = newAccessToken.accessToken;
 
-            localStorage.setItem("userInfo", JSON.stringify(user));
-            store.dispatch(setUser(user));
+            if (!newAccessToken.error) {
+                user.accessToken = newAccessToken.accessToken;
+
+                localStorage.setItem("userInfo", JSON.stringify(user));
+                api.dispatch(setUser(user));
+                return newAccessToken.accessToken;
+            }
+            else {
+                // Log out if not refreshed the token
+                localStorage.removeItem("userInfo");
+                api.dispatch(logOutUser());
+                return null;
+            }
+            
         } catch (e) {
-            console.log(e.message)
+            console.error("Error refreshing the token: ", e.message);
         }
     }
 }
