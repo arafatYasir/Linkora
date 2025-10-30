@@ -2,10 +2,8 @@ import { useState } from "react";
 import { FaTimes, FaImage, FaVideo, FaFileAlt } from "react-icons/fa";
 import { backgrounds } from "../../constants/postBackgrounds";
 import { useCreatePostMutation, useUploadImageMutation } from "../../../api/authApi";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import dataURIToBlob from "../../helpers/dataURIToBlob";
-import { refreshToken } from "../../../api/refreshToken";
-import { setUser } from "../../slices/authSlice";
 
 const PostModal = ({ onClose }) => {
     // States
@@ -16,9 +14,6 @@ const PostModal = ({ onClose }) => {
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
-
-    // Extra hooks
-    const dispatch = useDispatch();
 
     // RTK Query
     const [createPost, { isLoading }] = useCreatePostMutation();

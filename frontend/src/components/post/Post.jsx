@@ -5,11 +5,16 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { FaRegThumbsUp } from "react-icons/fa";
 import { IoMdShareAlt } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa";
+import Reacts from "./Reacts";
+import { useState } from "react";
+import { useRef } from "react";
 
 const Post = ({ post }) => {
+    const [showReacts, setShowReacts] = useState(false);
     const { text, type, user, background, comments, images } = post;
 
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
+    const timerRef = useRef(null);
 
     return (
         <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
@@ -60,7 +65,7 @@ const Post = ({ post }) => {
                             {images && images.length > 0 && (
                                 <div className="flex flex-wrap mt-4">
                                     {images.map((image, index) => (
-                                        <img 
+                                        <img
                                             key={index}
                                             src={image}
                                             alt={`${user.firstname} ${user.lastname} post image ${index + 1}`}
@@ -76,7 +81,20 @@ const Post = ({ post }) => {
 
             {/* ---- Post Footer ---- */}
             <div className="flex items-center justify-between border-t pt-2 mt-4 border-t-[var(--color-border)]">
-                <div className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/10 p-2 rounded-lg transition-all">
+                <div
+                    className="flex items-center justify-center gap-2 relative w-1/3 text-center cursor-pointer hover:bg-primary/10 p-2 rounded-lg transition-all"
+                    onMouseOver={() => {
+                        clearTimeout(timerRef.current);
+                        timerRef.current = setTimeout(() => setShowReacts(true), 200)
+                    }}
+                    onMouseLeave={() => {
+                        timerRef.current = setTimeout(() => setShowReacts(false), 500)
+                    }}
+                >
+
+                    {/* ---- Reactions on hover ---- */}
+                    {showReacts && <Reacts setShowReacts={setShowReacts} timerRef={timerRef} />}
+
                     <FaRegThumbsUp />
                     <span>Like</span>
                 </div>
@@ -91,6 +109,8 @@ const Post = ({ post }) => {
                     <span>Shares</span>
                 </div>
             </div>
+
+
         </div>
     )
 }
