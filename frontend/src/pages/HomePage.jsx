@@ -4,6 +4,7 @@ import { logOutUser } from "../slices/authSlice";
 import { useState } from "react";
 import CreatePost from "../components/post/CreatePost";
 import PostModal from "../components/post/PostModal";
+import AllPosts from "../components/post/AllPosts";
 import { useGetAllPostsQuery } from "../../api/authApi";
 
 const HomePage = () => {
@@ -13,7 +14,6 @@ const HomePage = () => {
 
     // Fetching posts
     const {data} = useGetAllPostsQuery();
-
     console.log(data);
 
     const openPostModal = () => {
@@ -54,9 +54,9 @@ const HomePage = () => {
             </div>
 
             {/* ---- All Posts ---- */}
-            <div>
-
-            </div>
+            {
+                data && <AllPosts posts={data} />
+            }
         </div>
     )
 }

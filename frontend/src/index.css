@@ -67,5 +67,4 @@ body {
   background: var(--color-bg);
   color: var(--color-text-primary);
   font-smooth: always;
-  height: 100vh;
 }

@@ -44,7 +44,7 @@ const PostModal = ({ onClose }) => {
                     images: null,
                     text,
                     background,
-                    userId: userInfo.id,
+                    user: userInfo.id,
                 }).unwrap();
 
                 if (res.status === "OK") {
@@ -89,10 +89,8 @@ const PostModal = ({ onClose }) => {
                     images: imageUrls.length > 0 ? imageUrls : null,
                     text,
                     background: null,
-                    userId: userInfo.id,
+                    user: userInfo.id,
                 }).unwrap();
-
-                console.log("Post creation response with images: ", res);
 
                 if (res.status === "OK") {
                     alert(res.message);

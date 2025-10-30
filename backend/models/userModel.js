@@ -38,6 +38,7 @@ const UserModel = new Schema({
     },
     coverPhoto: {
         type: String,
+        default: ""
     },
     day: {
         type: Number,

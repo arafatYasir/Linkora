@@ -100,17 +100,10 @@ const newUser = async (req, res) => {
         await user.save();
 
         // Sending verification email
-        sendVerificationEmail(user.email, verificationURL);
+        await sendVerificationEmail(user.email, verificationURL);
 
         // Sending user data response
         res.send({
-            id: user._id,
-            email: user.email,
-            username: user.username,
-            profilePicture: user.profilePicture,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            verified: user.verified,
             message: "Registration successful! Please verify your email.",
         });
     } catch (e) {
@@ -225,10 +218,21 @@ const loginUser = async (req, res) => {
             email: userExists.email,
             username: userExists.username,
             profilePicture: userExists.profilePicture,
+            coverPhoto: userExists.coverPhoto,
             firstname: userExists.firstname,
             lastname: userExists.lastname,
             verified: userExists.verified,
-            accessToken: accessToken,
+            day: userExists.day,
+            month: userExists.month,
+            year: userExists.year,
+            gender: userExists.gender,
+            friends: userExists.friends,
+            followers: userExists.followers,
+            following: userExists.following,
+            friendRequests: userExists.friendRequests,
+            details: userExists.details,
+            savedPosts: userExists.savedPosts,
+            accessToken,
         });
     }
     catch (e) {

@@ -55,10 +55,10 @@ export const authApi = createApi({
             })
         }),
         createPost: build.mutation({
-            query: ({type, images, text, background, userId}) => ({
+            query: ({type, images, text, background, user}) => ({
                 url: "/api/v1/posts/create-post",
                 method: "POST",
-                body: {type, images, text, background, userId},
+                body: {type, images, text, background, user},
             })
         }),
         uploadImage: build.mutation({

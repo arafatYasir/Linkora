@@ -16,9 +16,9 @@ const postSchema = new mongoose.Schema({
     background: {
         type: String,
     },
-    userId: {
+    user: {
         type: ObjectId,
-        ref: "user"
+        ref: "User"
     },
     comments: [
         {
@@ -30,7 +30,7 @@ const postSchema = new mongoose.Schema({
             },
             commentedBy: {
                 type: ObjectId,
-                ref: "user"
+                ref: "User"
             },
             commentedAt: {
                 type: Date,
