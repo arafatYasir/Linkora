@@ -6,15 +6,29 @@ import { FaRegThumbsUp } from "react-icons/fa";
 import { IoMdShareAlt } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa";
 import Reacts from "./Reacts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRef } from "react";
+import CreateComment from "./CreateComment";
 
 const Post = ({ post }) => {
+    // States
     const [showReacts, setShowReacts] = useState(false);
+    const [showComments, setShowComments] = useState(false);
+    const [comment, setComment] = useState("");
+    const [commentFile, setCommentFile] = useState(null);
+
+    // Extra hooks
+    const commentRef = useRef(null);
+    const timerRef = useRef(null);
+
+    // Extracting data from post
     const { text, type, user, background, comments, images } = post;
 
+    useEffect(() => {
+        if(showComments) commentRef.current.focus();
+    }, [showComments]);
+
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
-    const timerRef = useRef(null);
 
     return (
         <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
@@ -99,7 +113,12 @@ const Post = ({ post }) => {
                     <span>Like</span>
                 </div>
 
-                <div className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/10 p-2 rounded-lg transition-all">
+                <div 
+                    className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/10 p-2 rounded-lg transition-all"
+                    onClick={() => {
+                        setShowComments(prev => !prev);
+                    }}
+                >   
                     <FaRegComment />
                     <span>Comments</span>
                 </div>
@@ -110,7 +129,10 @@ const Post = ({ post }) => {
                 </div>
             </div>
 
-
+            {/* ---- Comments ---- */}
+            {
+                showComments && <CreateComment comment={comment} setComment={setComment} commentFile={commentFile} setCommentFile={setCommentFile} commentRef={commentRef} />
+            }
         </div>
     )
 }

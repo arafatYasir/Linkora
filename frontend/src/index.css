@@ -67,4 +67,5 @@ body {
   background: var(--color-bg);
   color: var(--color-text-primary);
   font-smooth: always;
+  min-height: 100vh;
 }

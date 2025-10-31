@@ -168,7 +168,7 @@ const PostModal = ({ onClose }) => {
                 <hr />
 
 
-                {/* File Previews */}
+                {/* ---- File Previews ---- */}
                 {files.length > 0 && (
                     <div className="mb-4 flex flex-wrap gap-2">
                         {files.map((file, idx) => (
