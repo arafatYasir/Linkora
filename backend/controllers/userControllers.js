@@ -375,6 +375,13 @@ const getUser = async (req, res) => {
         const {username} = req.params;
 
         const user = await User.findOne({username}).select("-password");
+
+        if(!user) {
+            return res.json({
+                status: "Not Found"
+            });
+        }
+
         res.send(user);
     } catch (e) {
         res.status(400).json({

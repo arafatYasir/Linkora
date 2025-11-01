@@ -70,8 +70,11 @@ export const authApi = createApi({
         }),
         getAllPosts: build.query({
             query: () => "/api/v1/posts/get-all-posts"
+        }),
+        getUser: build.query({
+            query: (username) => `/api/v1/get-user/${username}`
         })
     }),
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery } = authApi;
+export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserQuery } = authApi;

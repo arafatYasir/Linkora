@@ -14,7 +14,6 @@ const HomePage = () => {
 
     // Fetching posts
     const {data} = useGetAllPostsQuery();
-    console.log(data);
 
     const openPostModal = () => {
         setIsPostModalOpen(true);

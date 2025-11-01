@@ -33,7 +33,7 @@ const Post = ({ post }) => {
 
     useEffect(() => {
         const handleCloseOptions = (e) => {
-            if(optionsRef.current && !optionsRef.current.contains(e.target)) {
+            if (optionsRef.current && !optionsRef.current.contains(e.target)) {
                 setShowOptions(false);
             }
         }
@@ -46,8 +46,6 @@ const Post = ({ post }) => {
     }, [])
 
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
-
-        console.log(user);
 
     return (
         <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
@@ -70,7 +68,7 @@ const Post = ({ post }) => {
                     </div>
                 </div>
                 <div className="relative">
-                    <div 
+                    <div
                         className="w-8 h-8 flex items-center justify-center cursor-pointer rounded-full hover:bg-text-secondary"
                         onClick={() => setShowOptions(prev => !prev)}
                     >

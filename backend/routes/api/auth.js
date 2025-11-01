@@ -12,6 +12,6 @@ router.post("/findUser", findUser);
 router.post("/reset-code", resetCode);
 router.post("/verify-code", verifyCode);
 router.post("/new-password", newPassword);
-router.get("/get-user/:username", getUser);
+router.get("/get-user/:username", authMiddleware, getUser);
 
 module.exports = router;
