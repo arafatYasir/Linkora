@@ -2,11 +2,11 @@ import { IoIosCamera } from "react-icons/io"
 import { editOptions } from "../../constants/coverPhoto"
 import PostOption from "../post/PostOption"
 
-const CoverPhoto = ({data, defaultCover, coverOptionsRef, showCoverOptions, setShowCoverOptions}) => {
+const CoverPhoto = ({user, defaultCover, coverOptionsRef, showCoverOptions, setShowCoverOptions}) => {
     return (
         <div className="pt-10">
             <div className="relative w-full h-[400px] mx-auto bg-border rounded-lg overflow-hidden">
-                <img src={data.coverPhoto || defaultCover} alt="Cover Photo" className="w-full h-full object-cover" />
+                <img src={user.coverPhoto || defaultCover} alt="Cover Photo" className="w-full h-full object-cover" />
 
                 <div ref={coverOptionsRef}>
                     {/* ---- Edit Cover ---- */}

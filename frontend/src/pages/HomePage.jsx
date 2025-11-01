@@ -45,8 +45,8 @@ const HomePage = () => {
                 {userInfo && <button onClick={handleLogOut} className="bg-[tomato] px-3 py-1 rounded-lg cursor-pointer hover:bg-orange-800 transition">Log Out</button>}
             </div>
 
-            {/* ---- Post ---- */}
-            <div>
+            {/* ---- Post Creation ---- */}
+            <div className="w-1/2">
                 <CreatePost onOpenModal={openPostModal} user={userInfo} />
 
                 {isPostModalOpen && <PostModal onClose={closePostModal} />}

@@ -1,6 +1,6 @@
 const CreatePost = ({ onOpenModal, user, }) => {
     return (
-        <div className="w-1/2 bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] cursor-pointer hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
+        <div className="w-full bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] cursor-pointer hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
 
             {/* Input area */}
             <div onClick={onOpenModal} className="flex items-center gap-3">

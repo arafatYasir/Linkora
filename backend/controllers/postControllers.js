@@ -1,4 +1,5 @@
 const Post = require("../models/postModel");
+const User = require("../models/userModel");
 
 const createPost = async (req, res) => {
     try {
@@ -29,4 +30,25 @@ const getAllPosts = async (req, res) => {
     }
 }
 
-module.exports = {createPost, getAllPosts};
+const getUsersPost = async (req, res) => {
+    try {
+        const {userId} = req.params;
+        const user = await User.findOne({_id: userId});
+
+        if(!user) {
+            res.status(404).json({
+                error: "No user found with this username"
+            });
+        }
+
+        const userPosts = await Post.find({user: userId});
+
+        res.send(userPosts);
+    } catch (e) {
+         res.status(404).json({
+            error: e.message
+        })  
+    }
+}
+
+module.exports = {createPost, getAllPosts, getUsersPost};
