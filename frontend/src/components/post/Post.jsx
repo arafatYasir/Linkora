@@ -48,7 +48,7 @@ const Post = ({ post }) => {
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
 
     return (
-        <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
+        <li className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
             {/* ---- Post Heading ---- */}
             <div className="flex items-center justify-between border-b pb-2 border-b-[var(--color-border)]">
                 <div className="flex items-center gap-x-3">
@@ -159,7 +159,7 @@ const Post = ({ post }) => {
             {
                 showComments && <CreateComment comment={comment} setComment={setComment} commentFile={commentFile} setCommentFile={setCommentFile} commentRef={commentRef} />
             }
-        </div>
+        </li>
     )
 }
 

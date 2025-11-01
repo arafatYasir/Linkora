@@ -41,7 +41,7 @@ const getUsersPost = async (req, res) => {
             });
         }
 
-        const userPosts = await Post.find({user: userId});
+        const userPosts = await Post.find({user: userId}).populate("user", "firstname lastname username profilePicture cover").sort({createdAt: -1});
 
         res.send(userPosts);
     } catch (e) {
