@@ -96,7 +96,7 @@ const Post = ({ post }) => {
                                 backgroundPositionX: "center",
                                 backgroundPositionY: "center"
                             }}
-                            className="h-[400px] w-full flex items-center justify-center text-3xl font-bold rounded-[var(--radius-card)]"
+                            className="h-[400px] w-full text-center flex items-center justify-center text-3xl font-bold rounded-[var(--radius-card)]"
                         >
                             {text}
                         </div>
@@ -111,7 +111,7 @@ const Post = ({ post }) => {
                                             key={index}
                                             src={image}
                                             alt={`${user.firstname} ${user.lastname} post image ${index + 1}`}
-                                            className="w-1/2 h-[300px] object-cover p-1"
+                                            className="w-full max-h-[400px] object-cover rounded-xl p-1"
                                         />
                                     ))}
                                 </div>

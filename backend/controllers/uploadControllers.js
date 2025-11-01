@@ -32,6 +32,24 @@ const uploadImage = async (req, res) => {
     }
 }
 
+const listImages = async (req, res) => {
+    try {
+        const {path, sorting, maxLimit} = req.body;
+
+        const images = await cloudinary.v2.search
+        .expression(path)
+        .sort_by("public_id", sorting)
+        .max_results(maxLimit)
+        .execute()
+
+        res.send(images);
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        })
+    }
+}
+
 const uploadToCloudinary = async (file, path) => {
     return new Promise((resolve, reject) => {
         cloudinary.v2.uploader.upload(file.tempFilePath, {
@@ -58,4 +76,4 @@ const removeFile = (path) => {
     })
 }
 
-module.exports = { uploadImage }
+module.exports = { uploadImage, listImages }

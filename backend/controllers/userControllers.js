@@ -370,4 +370,17 @@ const newPassword = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken };
+const getUser = async (req, res) => {
+    try {
+        const {username} = req.params;
+
+        const user = await User.findOne({username}).select("-password");
+        res.send(user);
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser };
