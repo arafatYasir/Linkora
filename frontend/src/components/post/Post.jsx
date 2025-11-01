@@ -9,26 +9,45 @@ import Reacts from "./Reacts";
 import { useEffect, useState } from "react";
 import { useRef } from "react";
 import CreateComment from "./CreateComment";
+import PostOptions from "./PostOptions";
 
 const Post = ({ post }) => {
     // States
     const [showReacts, setShowReacts] = useState(false);
     const [showComments, setShowComments] = useState(false);
+    const [showOptions, setShowOptions] = useState(false);
     const [comment, setComment] = useState("");
     const [commentFile, setCommentFile] = useState(null);
 
     // Extra hooks
     const commentRef = useRef(null);
     const timerRef = useRef(null);
+    const optionsRef = useRef(null);
 
     // Extracting data from post
     const { text, type, user, background, comments, images } = post;
 
     useEffect(() => {
-        if(showComments) commentRef.current.focus();
+        if (showComments) commentRef.current.focus();
     }, [showComments]);
 
+    useEffect(() => {
+        const handleCloseOptions = (e) => {
+            if(optionsRef.current && !optionsRef.current.contains(e.target)) {
+                setShowOptions(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleCloseOptions);
+
+        return () => {
+            document.removeEventListener("mousedown", handleCloseOptions);
+        }
+    }, [])
+
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
+
+        console.log(user);
 
     return (
         <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
@@ -50,8 +69,17 @@ const Post = ({ post }) => {
                         <span className="block text-sm text-primary">{postedTime}</span>
                     </div>
                 </div>
-                <div className="w-8 h-8 flex items-center justify-center cursor-pointer rounded-full hover:bg-text-secondary">
-                    <HiDotsHorizontal className="cursor-pointer text-xl" />
+                <div className="relative">
+                    <div 
+                        className="w-8 h-8 flex items-center justify-center cursor-pointer rounded-full hover:bg-text-secondary"
+                        onClick={() => setShowOptions(prev => !prev)}
+                    >
+                        <HiDotsHorizontal className="cursor-pointer text-xl" />
+                    </div>
+                    {/* ---- Post Options ---- */}
+                    {
+                        showOptions && <PostOptions user={user} optionsRef={optionsRef} />
+                    }
                 </div>
             </div>
 
@@ -113,12 +141,12 @@ const Post = ({ post }) => {
                     <span>Like</span>
                 </div>
 
-                <div 
+                <div
                     className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/10 p-2 rounded-lg transition-all"
                     onClick={() => {
                         setShowComments(prev => !prev);
                     }}
-                >   
+                >
                     <FaRegComment />
                     <span>Comments</span>
                 </div>
