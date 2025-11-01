@@ -40,7 +40,7 @@ const HomePage = () => {
                     </>
                 }
 
-                <p className="border p-2 rounded-lg">User: {userInfo.firstname + " " + userInfo.lastname} </p>
+                <Link to="/profile" className="border p-2 rounded-lg">User: {userInfo.firstname + " " + userInfo.lastname} </Link>
 
                 {userInfo && <button onClick={handleLogOut} className="bg-[tomato] px-3 py-1 rounded-lg cursor-pointer hover:bg-orange-800 transition">Log Out</button>}
             </div>

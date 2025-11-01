@@ -3,8 +3,10 @@ import { useParams } from "react-router-dom"
 import { useGetUserQuery } from "../../api/authApi";
 import NotFound from "../components/NotFound";
 import defaultCover from "../../public/default images/defaultcover.jpg"
+import defaultPhoto from "../../public/default images/avatar.png"
 import { useEffect, useRef, useState } from "react";
 import CoverPhoto from "../components/profile/CoverPhoto";
+import ProfilePictureInfos from "../components/profile/ProfilePictureInfos";
 
 const UserProfilePage = () => {
     // States
@@ -31,7 +33,7 @@ const UserProfilePage = () => {
     useEffect(() => {
         const handleCloseDropdowns = (e) => {
             // cover options dropdown
-            if(coverOptionsRef.current && !coverOptionsRef.current.contains(e.target)) {
+            if (coverOptionsRef.current && !coverOptionsRef.current.contains(e.target)) {
                 setShowCoverOptions(false);
             }
         }
@@ -45,8 +47,16 @@ const UserProfilePage = () => {
 
     return (
         <div className="container mx-auto">
-            {/* ---- Cover Photo ---- */}
-            {data.status === "Not Found" ? <NotFound /> : <CoverPhoto data={data} defaultCover={defaultCover} coverOptionsRef={coverOptionsRef} showCoverOptions={showCoverOptions} setShowCoverOptions={setShowCoverOptions} />}
+
+            {data.status === "Not Found" ? <NotFound /> : (
+                <div className="relative">
+                    {/* ---- Cover Photo ---- */}
+                    <CoverPhoto data={data} defaultCover={defaultCover} coverOptionsRef={coverOptionsRef} showCoverOptions={showCoverOptions} setShowCoverOptions={setShowCoverOptions} />
+
+                    {/* ---- Profile Picture & Infos ---- */}
+                    <ProfilePictureInfos data={data} defaultPhoto={defaultPhoto} />
+                </div>
+            )}
         </div>
     )
 }
