@@ -1,12 +1,20 @@
-const ProfilePictureInfos = ({user, defaultPhoto}) => {
+import { IoIosCamera } from "react-icons/io"
+
+const ProfilePictureInfos = ({ user, defaultPhoto }) => {
     return (
         <div className="flex items-end gap-x-4 absolute -bottom-28 left-10">
-            <div className="w-44 h-44 rounded-full border-4 border-bg overflow-hidden">
-                <img 
-                    src={user.profilePicture || defaultPhoto} 
-                    alt={`${user.firstname} ${user.lastname}'s Profile Picture | ${user.username}`}
-                    className="w-full h-full object-cover"
-                />
+            <div className="relative">
+                <div className="w-44 h-44 rounded-full border-4 border-bg overflow-hidden">
+                    <img
+                        src={user.profilePicture || defaultPhoto}
+                        alt={`${user.firstname} ${user.lastname}'s Profile Picture | ${user.username}`}
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+
+                <button className="absolute bottom-5 right-2 bg-border p-1 rounded-full hover:bg-primary transition-all duration-250 cursor-pointer">
+                    <IoIosCamera size={24} />
+                </button>
             </div>
 
             <div className="flex flex-col gap-y-4 mb-5">
