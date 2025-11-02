@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import { useGetUserPostsQuery } from "../../../api/authApi"
 import { useEffect, useState } from "react";
 import CreatePost from "../post/CreatePost";
 import PostModal from "../post/PostModal";
@@ -8,8 +7,6 @@ import AllPosts from "../post/AllPosts";
 import PostViewControl from "../post/PostViewControl";
 
 const ProfileItemsRight = ({ user }) => {
-    const { data: posts } = useGetUserPostsQuery(user._id);
-
     // States
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
     const [viewMethod, setViewMethod] = useState("list");
@@ -57,7 +54,7 @@ const ProfileItemsRight = ({ user }) => {
 
             {/* ---- User Posts ---- */}
             {
-                posts && <AllPosts posts={posts} />
+                user.posts && <AllPosts posts={user.posts} />
             }
         </div>
     )

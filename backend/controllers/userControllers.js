@@ -3,9 +3,11 @@ const jwtToken = require("../helpers/token");
 const jwt = require("jsonwebtoken");
 const { validateEmail, validateLength, generateValideUsername } = require("../helpers/validation");
 const User = require("../models/userModel");
+const Post = require("../models/postModel");
 const Code = require("../models/code");
 const bcrypt = require("bcrypt");
 const generateCode = require("../helpers/generateCode");
+
 
 const newUser = async (req, res) => {
     try {
@@ -377,12 +379,14 @@ const getUser = async (req, res) => {
         const user = await User.findOne({username}).select("-password");
 
         if(!user) {
-            return res.json({
+            return res.status(404).json({
                 status: "Not Found"
             });
         }
 
-        res.send(user);
+        const posts = await Post.find({user: user._id}).populate("user");
+
+        res.json({...user.toObject(), posts});
     } catch (e) {
         res.status(400).json({
             error: e.message
