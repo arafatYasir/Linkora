@@ -54,7 +54,7 @@ const ProfileItemsRight = ({ user }) => {
 
             {/* ---- User Posts ---- */}
             {
-                user.posts && <AllPosts posts={user.posts} />
+                user.posts && user.posts.length > 0 ? <AllPosts posts={user.posts} /> : <h2 className="text-xl text-center">No posts available for this user</h2>
             }
         </div>
     )
