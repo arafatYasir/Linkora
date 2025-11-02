@@ -5,6 +5,7 @@ import PostModal from "../post/PostModal";
 import Post from "../post/Post"
 import AllPosts from "../post/AllPosts";
 import PostViewControl from "../post/PostViewControl";
+import GridPosts from "../post/GridPosts";
 
 const ProfileItemsRight = ({ user }) => {
     // States
@@ -53,8 +54,14 @@ const ProfileItemsRight = ({ user }) => {
             }
 
             {/* ---- User Posts ---- */}
+
             {
-                user.posts && user.posts.length > 0 ? <AllPosts posts={user.posts} /> : <h2 className="text-xl text-center">No posts available for this user</h2>
+                ((user.posts && user.posts.length > 0) && viewMethod === "list") ? (
+                    <AllPosts posts={user.posts} />
+                )
+                : ((user.posts && user.posts.length > 0) && viewMethod === "grid") ? (
+                    <GridPosts posts={user.posts} />
+                ) : <h2 className="text-xl text-center">No posts available for this user</h2>
             }
         </div>
     )
