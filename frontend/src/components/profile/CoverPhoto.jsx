@@ -20,7 +20,7 @@ const CoverPhoto = ({user, defaultCover, coverOptionsRef, showCoverOptions, setS
 
                     {/* ---- Edit Cover Options ---- */}
                     {showCoverOptions && (
-                        <ul className="flex flex-col absolute bottom-20 right-10 bg-border px-3 py-2 rounded-lg">
+                        <ul className="flex flex-col absolute bottom-20 right-10 bg-border px-3 py-2 rounded-lg transition-all">
                             {editOptions.map(option => (
                                 <PostOption key={option.id} option={option} />
                             ))}

@@ -1,15 +1,18 @@
 import { useSelector } from "react-redux";
 import { useGetUserPostsQuery } from "../../../api/authApi"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreatePost from "../post/CreatePost";
 import PostModal from "../post/PostModal";
 import Post from "../post/Post"
+import AllPosts from "../post/AllPosts";
+import PostViewControl from "../post/PostViewControl";
 
 const ProfileItemsRight = ({ user }) => {
     const { data: posts } = useGetUserPostsQuery(user._id);
 
     // States
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+    const [viewMethod, setViewMethod] = useState("list");
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
@@ -23,6 +26,17 @@ const ProfileItemsRight = ({ user }) => {
         setIsPostModalOpen(false);
     }
 
+    useEffect(() => {
+        const body = document.querySelector("body");
+
+        if (isPostModalOpen) {
+            body.style.overflow = "hidden";
+        }
+        else {
+            body.style.overflowY = "scroll";
+        }
+    }, [isPostModalOpen])
+
     return (
         <div className="col-span-2">
             {/* ---- Post Creation feature only if the same user profile ---- */}
@@ -32,21 +46,18 @@ const ProfileItemsRight = ({ user }) => {
                         <CreatePost onOpenModal={openPostModal} user={userInfo} />
 
                         {isPostModalOpen && <PostModal onClose={closePostModal} />}
+
+                        {/* ---- Post View ---- */}
+                        <div className="mt-5">
+                            <PostViewControl viewMethod={viewMethod} setViewMethod={setViewMethod} />
+                        </div>
                     </div>
                 )
             }
 
             {/* ---- User Posts ---- */}
             {
-                posts && (
-                    <ul className="space-y-5">
-                        {
-                            posts.map(post => (
-                                <Post key={post._id} post={post} />
-                            ))
-                        }
-                    </ul>
-                )
+                posts && <AllPosts posts={posts} />
             }
         </div>
     )

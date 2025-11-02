@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { logOutUser } from "../slices/authSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreatePost from "../components/post/CreatePost";
 import PostModal from "../components/post/PostModal";
 import AllPosts from "../components/post/AllPosts";
@@ -30,6 +30,17 @@ const HomePage = () => {
         }, 100)
     }
 
+    useEffect(() => {
+        const body = document.querySelector("body");
+
+        if(isPostModalOpen) {
+            body.style.overflow = "hidden";
+        }
+        else {
+            body.style.overflowY = "scroll";
+        }
+    }, [isPostModalOpen])
+
     return (
         <div className="container mx-auto">
             <div className="flex gap-x-5 mb-10">
@@ -46,7 +57,7 @@ const HomePage = () => {
             </div>
 
             {/* ---- Post Creation ---- */}
-            <div className="w-1/2">
+            <div className="w-1/2 mb-5">
                 <CreatePost onOpenModal={openPostModal} user={userInfo} />
 
                 {isPostModalOpen && <PostModal onClose={closePostModal} />}
