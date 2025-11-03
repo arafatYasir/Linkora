@@ -34,10 +34,10 @@ const uploadImage = async (req, res) => {
 
 const listImages = async (req, res) => {
     try {
-        const {path, sorting, maxLimit} = req.body;
+        const {path, sorting, maxLimit} = req.query;
 
         const images = await cloudinary.v2.search
-        .expression(path)
+        .expression(`folder:${path}/*`)
         .sort_by("public_id", sorting)
         .max_results(maxLimit)
         .execute()

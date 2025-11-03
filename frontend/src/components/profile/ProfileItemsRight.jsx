@@ -36,7 +36,7 @@ const ProfileItemsRight = ({ user }) => {
     }, [isPostModalOpen])
 
     return (
-        <div className="col-span-2">
+        <div className="col-span-3">
             {/* ---- Post Creation feature only if the same user profile ---- */}
             {
                 userInfo.id === user._id && (

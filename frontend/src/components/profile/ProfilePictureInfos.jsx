@@ -1,6 +1,10 @@
 import { IoIosCamera } from "react-icons/io"
+import { useSelector } from "react-redux"
 
 const ProfilePictureInfos = ({ user, defaultPhoto }) => {
+    const { userInfo } = useSelector(state => state.auth);
+
+
     return (
         <div className="flex items-end gap-x-4 absolute -bottom-28 left-10">
             <div className="relative">
@@ -12,9 +16,14 @@ const ProfilePictureInfos = ({ user, defaultPhoto }) => {
                     />
                 </div>
 
-                <button className="absolute bottom-5 right-2 bg-border p-1 rounded-full hover:bg-primary transition-all duration-250 cursor-pointer">
-                    <IoIosCamera size={24} />
-                </button>
+                {/* ---- Change Profile Picture ---- */}
+                {
+                    userInfo.id === user._id && (
+                        <button className="absolute bottom-5 right-2 bg-border p-1 rounded-full hover:bg-primary transition-all duration-250 cursor-pointer">
+                            <IoIosCamera size={24} />
+                        </button>
+                    )
+                }
             </div>
 
             <div className="flex flex-col gap-y-4 mb-5">

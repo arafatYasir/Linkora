@@ -47,7 +47,7 @@ const UserProfilePage = () => {
     if (isLoading) return <div className="text-3xl text-center">Loading...</div>
 
     return (
-        <div className="max-w-[940px] mx-auto">
+        <div className="max-w-[1100px] mx-auto">
 
             {user.status === "Not Found" ? <NotFound /> : (
                 <div>

@@ -61,6 +61,12 @@ export const authApi = createApi({
                 body: {type, images, text, background, user},
             })
         }),
+        getAllPosts: build.query({
+            query: () => "/api/v1/posts/get-all-posts"
+        }),
+        getUser: build.query({
+            query: (username) => `/api/v1/get-user/${username}`
+        }),
         uploadImage: build.mutation({
             query: ({formData}) => ({
                 url: "/api/v1/upload/image",
@@ -68,13 +74,14 @@ export const authApi = createApi({
                 body: formData,
             })
         }),
-        getAllPosts: build.query({
-            query: () => "/api/v1/posts/get-all-posts"
-        }),
-        getUser: build.query({
-            query: (username) => `/api/v1/get-user/${username}`
-        }),
+        listImages: build.query({
+            query: ({path, sorting, maxLimit}) => ({
+                url: "/api/v1/upload/list-images",
+                method: "GET",
+                params: {path, sorting, maxLimit}
+            })
+        })
     }),
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserQuery } = authApi;
+export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserQuery, useListImagesQuery } = authApi;
