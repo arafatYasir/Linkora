@@ -7,7 +7,7 @@ const ProfilePhotosFallbackUI = () => {
             {placeholders.map((_, index) => (
                 <div
                     key={index}
-                    className="w-[120px] h-[120px] rounded-[12px] bg-[var(--color-border)] relative overflow-hidden"
+                    className="w-[120px] h-[120px] bg-border relative overflow-hidden"
                 >
                     <div className="absolute inset-0 shimmer" />
                 </div>
