@@ -198,7 +198,7 @@ const PostModal = ({ onClose }) => {
                     </div>
                 )}
 
-                {/* Upload buttons */}
+                {/* ---- Upload buttons ---- */}
                 <div className="flex items-center justify-between my-4 text-[var(--color-text-secondary)]">
                     <label className="flex items-center gap-2 cursor-pointer text-blue-400 hover:text-[var(--color-primary-hover)] transition-[var(--transition-default)]">
                         <FaImage size={20} />

@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { IoIosCamera } from "react-icons/io"
 import { useSelector } from "react-redux"
+import ChangeProfilePicture from "./ChangeProfilePicture";
 
 const ProfilePictureInfos = ({ user, defaultPhoto }) => {
+    const [showUploadModal, setShowUploadModal] = useState(false);
     const { userInfo } = useSelector(state => state.auth);
 
 
@@ -19,10 +22,16 @@ const ProfilePictureInfos = ({ user, defaultPhoto }) => {
                 {/* ---- Change Profile Picture ---- */}
                 {
                     userInfo.id === user._id && (
-                        <button className="absolute bottom-5 right-2 bg-border p-1 rounded-full hover:bg-primary transition-all duration-250 cursor-pointer">
+                        <button 
+                            className="absolute bottom-5 right-2 bg-border p-1 rounded-full hover:bg-primary transition-all duration-250 cursor-pointer"
+                            onClick={() => setShowUploadModal(true)}
+                        >
                             <IoIosCamera size={24} />
                         </button>
                     )
+                }
+                {
+                    showUploadModal && <ChangeProfilePicture setShowUploadModal={setShowUploadModal} />
                 }
             </div>
 
