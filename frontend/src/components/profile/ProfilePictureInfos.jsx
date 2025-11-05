@@ -7,7 +7,6 @@ const ProfilePictureInfos = ({ user, defaultPhoto }) => {
     const [showUploadModal, setShowUploadModal] = useState(false);
     const { userInfo } = useSelector(state => state.auth);
 
-
     return (
         <div className="flex items-end gap-x-4 absolute -bottom-28 left-10">
             <div className="relative">

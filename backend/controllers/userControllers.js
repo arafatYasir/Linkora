@@ -384,7 +384,7 @@ const getUser = async (req, res) => {
             });
         }
 
-        const posts = await Post.find({user: user._id}).populate("user");
+        const posts = await Post.find({user: user._id}).sort({createdAt: -1}).populate("user");
 
         res.json({...user.toObject(), posts});
     } catch (e) {
