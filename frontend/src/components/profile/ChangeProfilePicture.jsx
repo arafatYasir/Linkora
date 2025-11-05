@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { IoMdClose, IoMdAdd } from 'react-icons/io';
+import { IoMdClose, IoMdAdd, IoMdRemove } from 'react-icons/io';
 import Cropper from 'react-easy-crop'
 import { MdEdit } from "react-icons/md";
 import { PiFrameCorners } from "react-icons/pi";
@@ -26,7 +26,7 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     }, []);
 
     useEffect(() => {
-        if(picture) {
+        if (picture) {
             const url = URL.createObjectURL(picture);
             setPictureUrl(url);
 
@@ -38,8 +38,8 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     }, [picture]);
 
     useEffect(() => {
-        const  handleCloseUploadModal = (e) => {
-            if(uploadModalRef.current && !uploadModalRef.current.contains(e.target)) {
+        const handleCloseUploadModal = (e) => {
+            if (uploadModalRef.current && !uploadModalRef.current.contains(e.target)) {
                 setShowUploadModal(false)
             }
         }
@@ -51,8 +51,8 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
 
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-            <div ref={uploadModalRef} className="w-full max-w-2xl rounded-xl shadow-lg overflow-hidden bg-surface border border-border">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-scroll">
+            <div ref={uploadModalRef} className={`w-full max-w-2xl rounded-xl shadow-lg overflow-hidden bg-surface border border-border ${picture ? "mt-26" : "mt-0"}`}>
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-border">
                     <h2 className="text-xl font-semibold text-text-primary">
@@ -88,7 +88,7 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
                 {/* ---- Image Preview ---- */}
                 {
                     picture && (
-                        <div className="w-full h-[400px] relative overflow-hidden mt-4 border-b">
+                        <div className="w-full h-[400px] relative overflow-hidden mt-8">
                             <Cropper
                                 image={pictureUrl}
                                 crop={crop}
@@ -99,6 +99,24 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
                                 onCropComplete={onCropComplete}
                                 onZoomChange={setZoom}
                             />
+                        </div>
+                    )
+                }
+
+                {/* ---- Image zoom in and zoom out slider ---- */}
+                {
+                    picture && (
+                        <div className="flex items-center justify-center my-8">
+                            <button className="p-2 hover:bg-border rounded-full cursor-pointer text-white">
+                                <IoMdRemove size={25} />
+                            </button>
+                            <input
+                                type="range"
+                                className="w-[400px] h-[3px] cursor-pointer"
+                            />
+                            <button className="p-2 hover:bg-border rounded-full cursor-pointer text-white">
+                                <IoMdAdd size={25} />
+                            </button>
                         </div>
                     )
                 }

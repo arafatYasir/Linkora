@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosCamera } from "react-icons/io"
 import { useSelector } from "react-redux"
 import ChangeProfilePicture from "./ChangeProfilePicture";
@@ -6,6 +6,17 @@ import ChangeProfilePicture from "./ChangeProfilePicture";
 const ProfilePictureInfos = ({ user, defaultPhoto }) => {
     const [showUploadModal, setShowUploadModal] = useState(false);
     const { userInfo } = useSelector(state => state.auth);
+
+    // Locking the scroll when modal is open
+    useEffect(() => {
+        const body = document.querySelector("body");
+        if(showUploadModal) {
+            body.style.overflow = "hidden";
+        }
+        else {
+            body.style.overflowY = "scroll";
+        }
+    }, [showUploadModal]);
 
     return (
         <div className="flex items-end gap-x-4 absolute -bottom-28 left-10">
