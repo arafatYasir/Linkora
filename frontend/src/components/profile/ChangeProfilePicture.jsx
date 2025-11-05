@@ -15,6 +15,12 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     // Extra hooks
     const fileInputRef = useRef(null);
     const uploadModalRef = useRef(null);
+    const rangeInputRef = useRef(null);
+
+    // Constants
+    const MIN = 1;
+    const MAX = 2;
+    const STEPS = 0.01;
 
     // Functions
     const handleFileChange = (e) => {
@@ -24,6 +30,22 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
         console.log(croppedArea, croppedAreaPixels)
     }, []);
+
+    const zoomOut = () => {
+        // if (zoom - STEPS >= 1) {
+        //     setZoom(prev => prev - STEPS);
+        // }
+        rangeInputRef.current.stepDown();
+        setZoom(rangeInputRef.current.value);
+    }
+
+    const zoomIn = () => {
+        // if (zoom + STEPS <= 3) {
+        //     setZoom(prev => prev + STEPS);
+        // }
+        rangeInputRef.current.stepUp();
+        setZoom(rangeInputRef.current.value);
+    }
 
     useEffect(() => {
         if (picture) {
@@ -106,15 +128,31 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
                 {/* ---- Image zoom in and zoom out slider ---- */}
                 {
                     picture && (
-                        <div className="flex items-center justify-center my-8">
-                            <button className="p-2 hover:bg-border rounded-full cursor-pointer text-white">
+                        <div className="flex items-center justify-center my-8 gap-x-1">
+                            <button
+                                onClick={zoomOut}
+                                className="p-2 hover:bg-border transition-all duration-250 rounded-full cursor-pointer"
+                            >
                                 <IoMdRemove size={25} />
                             </button>
                             <input
+                                ref={rangeInputRef}
                                 type="range"
-                                className="w-[400px] h-[3px] cursor-pointer"
+                                className="cursor-pointer zoom-range"
+                                value={zoom}
+                                onChange={(e) => setZoom(e.target.value)}
+                                min={MIN}
+                                max={MAX}
+                                step={STEPS}
+                                style={{
+                                    width: "400px",
+                                    background: `linear-gradient(to right, var(--color-primary) ${((zoom - MIN) / (MAX - MIN)) * 100}%, var(--color-border) ${((zoom - MIN) / (MAX - MIN)) * 100}%)`
+                                }}
                             />
-                            <button className="p-2 hover:bg-border rounded-full cursor-pointer text-white">
+                            <button
+                                onClick={zoomIn}
+                                className="p-2 hover:bg-border transition-all duration-250 rounded-full cursor-pointer"
+                            >
                                 <IoMdAdd size={25} />
                             </button>
                         </div>
@@ -127,12 +165,12 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
                         <div className="px-6 py-4 flex items-center justify-end gap-4">
                             <button
                                 onClick={() => setPicture(null)}
-                                className="w-[15%] py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer text-white hover:bg-border"
+                                className="w-[15%] py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer  hover:bg-border"
                             >
                                 Cancel
                             </button>
                             <button
-                                className="w-[20%] py-2 px-5 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary text-white hover:bg-primary-hover"
+                                className="w-[20%] py-2 px-5 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary  hover:bg-primary-hover"
                             >
                                 Save
                             </button>
@@ -143,7 +181,7 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
                             <div className="w-[44%]">
                                 <button
                                     onClick={() => fileInputRef.current.click()}
-                                    className="w-full py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary/50 text-white hover:bg-primary-hover"
+                                    className="w-full py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary/50  hover:bg-primary-hover"
                                 >
                                     <IoMdAdd size={20} />
                                     <span>Upload</span>
@@ -162,7 +200,7 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
                             {/* ---- Add Frame Btn ---- */}
                             <div className="w-[44%]">
                                 <button
-                                    className="w-full py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-border hover:bg-primary/50 text-white"
+                                    className="w-full py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-border hover:bg-primary/50 "
                                 >
                                     <PiFrameCorners size={20} />
                                     <span>Add Frame</span>
@@ -171,7 +209,7 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
 
                             <div>
                                 <button
-                                    className="py-2.5 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-border hover:bg-primary/50 text-white"
+                                    className="py-2.5 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-border hover:bg-primary/50 "
                                 >
                                     <MdEdit size={20} />
                                 </button>
