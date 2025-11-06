@@ -3,12 +3,14 @@ import { IoMdClose, IoMdAdd, IoMdRemove } from 'react-icons/io';
 import Cropper from 'react-easy-crop'
 import { MdEdit } from "react-icons/md";
 import { PiFrameCorners } from "react-icons/pi";
+import { getCroppedImage } from '../../helpers/cropImage';
 
 const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     // States
     const [picture, setPicture] = useState(null);
     const [pictureUrl, setPictureUrl] = useState(null);
     const [caption, setCaption] = useState("");
+    const [pixelCrop, setPixelCrop] = useState(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
 
@@ -28,23 +30,23 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     }
 
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-        console.log(croppedArea, croppedAreaPixels)
+        console.log(croppedArea, croppedAreaPixels);
+        setPixelCrop(croppedAreaPixels);
     }, []);
 
     const zoomOut = () => {
-        // if (zoom - STEPS >= 1) {
-        //     setZoom(prev => prev - STEPS);
-        // }
         rangeInputRef.current.stepDown();
         setZoom(rangeInputRef.current.value);
     }
 
     const zoomIn = () => {
-        // if (zoom + STEPS <= 3) {
-        //     setZoom(prev => prev + STEPS);
-        // }
         rangeInputRef.current.stepUp();
         setZoom(rangeInputRef.current.value);
+    }
+
+    const saveImage = async () => {
+        const image = await getCroppedImage(pictureUrl, pixelCrop);
+        setPicture(image);
     }
 
     useEffect(() => {
@@ -59,6 +61,8 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
         }
     }, [picture]);
 
+    console.log(pictureUrl);
+
     useEffect(() => {
         const handleCloseUploadModal = (e) => {
             if (uploadModalRef.current && !uploadModalRef.current.contains(e.target)) {
@@ -69,8 +73,7 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
         document.addEventListener("mousedown", handleCloseUploadModal);
 
         return () => document.removeEventListener("mousedown", handleCloseUploadModal);
-    }, [])
-
+    }, []);
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-scroll">
@@ -170,7 +173,8 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
                                 Cancel
                             </button>
                             <button
-                                className="w-[20%] py-2 px-5 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary  hover:bg-primary-hover"
+                                onClick={saveImage}
+                                className="w-[20%] py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary hover:bg-primary-hover"
                             >
                                 Save
                             </button>
