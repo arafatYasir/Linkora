@@ -4,6 +4,7 @@ import Cropper from 'react-easy-crop'
 import { MdEdit } from "react-icons/md";
 import { PiFrameCorners } from "react-icons/pi";
 import { getCroppedImage } from '../../helpers/cropImage';
+import { FaUpload } from "react-icons/fa6";
 
 const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     // States
@@ -11,6 +12,7 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     const [pictureUrl, setPictureUrl] = useState(null);
     const [caption, setCaption] = useState("");
     const [pixelCrop, setPixelCrop] = useState(null);
+    const [imageSaved, setImageSaved] = useState(false);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
 
@@ -27,6 +29,21 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     // Functions
     const handleFileChange = (e) => {
         setPicture(e.target.files[0]);
+    }
+
+    const handleAddOrUpload = () => {
+        if(!picture && !imageSaved) {
+            fileInputRef.current.click();
+        }
+        else if(picture && imageSaved) {
+            console.log("Uploading the file!!!");
+        }
+    }
+
+    const handleCancel = () => {
+        setPicture(null);
+        setCrop({x: 0, y: 0});
+        setZoom(1);
     }
 
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
@@ -47,6 +64,13 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     const saveImage = async () => {
         const image = await getCroppedImage(pictureUrl, pixelCrop);
         setPicture(image);
+        setCrop({ x: 0, y: 0 });
+        setZoom(1);
+        setImageSaved(true);
+    }
+
+    const handleSwitchEditMode = () => {
+        setImageSaved(false);
     }
 
     useEffect(() => {
@@ -77,9 +101,9 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-scroll">
-            <div ref={uploadModalRef} className={`w-full max-w-2xl rounded-xl shadow-lg overflow-hidden bg-surface border border-border ${picture ? "mt-26" : "mt-0"}`}>
+            <div ref={uploadModalRef} className={`w-full max-w-2xl rounded-xl shadow-lg overflow-hidden bg-surface border border-border ${picture ? "mt-26" : "mt-0"} py-4`}>
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+                <div className="flex items-center justify-between px-6 border-b border-border">
                     <h2 className="text-xl font-semibold text-text-primary">
                         Choose Profile Picture
                     </h2>
@@ -110,27 +134,38 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
                     )
                 }
 
-                {/* ---- Image Preview ---- */}
+                {/* ---- Image Preview (on editing mode) ---- */}
                 {
-                    picture && (
+                    (picture && !imageSaved) && (
                         <div className="w-full h-[400px] relative overflow-hidden mt-8">
                             <Cropper
                                 image={pictureUrl}
                                 crop={crop}
                                 zoom={zoom}
+                                zoomWithScroll={false}
                                 cropShape="round"
                                 aspect={1 / 1}
                                 onCropChange={setCrop}
                                 onCropComplete={onCropComplete}
                                 onZoomChange={setZoom}
+                            // showGrid={false}
                             />
+                        </div>
+                    )
+                }
+
+                {/* ---- Image Preview (after saving the image) ---- */}
+                {
+                    (picture && imageSaved) && (
+                        <div className="w-[400px] h-[400px] mx-auto relative overflow-hidden rounded-full my-8">
+                            <img src={pictureUrl} alt="Profile Picture" className="w-full h-full object-cover" />
                         </div>
                     )
                 }
 
                 {/* ---- Image zoom in and zoom out slider ---- */}
                 {
-                    picture && (
+                    (picture && !imageSaved) && (
                         <div className="flex items-center justify-center my-8 gap-x-1">
                             <button
                                 onClick={zoomOut}
@@ -164,10 +199,10 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
 
                 {/* ---- All Initial Buttons (Upload, Frame, Edit) - Conditionally Rendering (Cancel, Save) ---- */}
                 {
-                    picture ? (
-                        <div className="px-6 py-4 flex items-center justify-end gap-4">
+                    (picture && !imageSaved) ? (
+                        <div className="px-6 flex items-center justify-end gap-4">
                             <button
-                                onClick={() => setPicture(null)}
+                                onClick={handleCancel}
                                 className="w-[15%] py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer  hover:bg-border"
                             >
                                 Cancel
@@ -180,15 +215,17 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
                             </button>
                         </div>
                     ) : (
-                        <div className="px-6 py-4 flex items-center justify-between">
+                        <div className="px-6 pt-4 flex items-center justify-between">
                             {/* ---- Upload Btn ---- */}
                             <div className="w-[44%]">
                                 <button
-                                    onClick={() => fileInputRef.current.click()}
-                                    className="w-full py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary/50  hover:bg-primary-hover"
+                                    onClick={handleAddOrUpload}
+                                    className="w-full py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary/50 hover:bg-primary-hover"
                                 >
-                                    <IoMdAdd size={20} />
-                                    <span>Upload</span>
+                                    {(!picture && !imageSaved) ? <IoMdAdd size={20} /> : <FaUpload />}
+                                    <span>
+                                        {(!picture && !imageSaved) ? "Add Image" : "Upload"}
+                                    </span>
                                 </button>
 
                                 {/* ---- File Input ---- */}
@@ -213,6 +250,7 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
 
                             <div>
                                 <button
+                                    onClick={handleSwitchEditMode}
                                     className="py-2.5 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-border hover:bg-primary/50 "
                                 >
                                     <MdEdit size={20} />

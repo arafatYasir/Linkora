@@ -394,4 +394,17 @@ const getUser = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser };
+const updateProfilePicture = async (req, res) => {
+    try {
+        const {url} = req.body;
+        await User.findByIdAndUpdate(req.user.id, {profilePicture: url});
+        
+        res.send(url);
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture };
