@@ -8,12 +8,17 @@ import AllPosts from "../components/post/AllPosts";
 import { useGetAllPostsQuery } from "../../api/authApi";
 
 const HomePage = () => {
-    const { userInfo } = useSelector(state => state.auth);
-    const dispatch = useDispatch();
+    // States
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
 
+    // Redux states
+    const { userInfo } = useSelector(state => state.auth);
+
+    // Extra hooks
+    const dispatch = useDispatch();
+
     // Fetching posts
-    const {data} = useGetAllPostsQuery();
+    const { data } = useGetAllPostsQuery();
 
     const openPostModal = () => {
         setIsPostModalOpen(true);
@@ -33,7 +38,7 @@ const HomePage = () => {
     useEffect(() => {
         const body = document.querySelector("body");
 
-        if(isPostModalOpen) {
+        if (isPostModalOpen) {
             body.style.overflow = "hidden";
         }
         else {

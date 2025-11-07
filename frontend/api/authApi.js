@@ -23,42 +23,42 @@ export const authApi = createApi({
             query: (token) => ({
                 url: "/api/v1/verify",
                 method: "POST",
-                body: {token},
+                body: { token },
             })
         }),
         findUser: build.mutation({
             query: (email) => ({
                 url: "/api/v1/findUser",
                 method: "POST",
-                body: {email},
+                body: { email },
             })
         }),
         sendResetCode: build.mutation({
             query: (email) => ({
                 url: "/api/v1/reset-code",
                 method: "POST",
-                body: {email},
+                body: { email },
             })
         }),
         verifyResetCode: build.mutation({
-            query: ({email, code}) => ({
+            query: ({ email, code }) => ({
                 url: "/api/v1/verify-code",
                 method: "POST",
-                body: {email, code}
+                body: { email, code }
             })
         }),
         newPassword: build.mutation({
-            query: ({email, password}) => ({
+            query: ({ email, password }) => ({
                 url: "/api/v1/new-password",
                 method: "POST",
-                body: {email, password}
+                body: { email, password }
             })
         }),
         createPost: build.mutation({
-            query: ({type, images, text, background, user}) => ({
+            query: ({ type, images, text, background, user }) => ({
                 url: "/api/v1/posts/create-post",
                 method: "POST",
-                body: {type, images, text, background, user},
+                body: { type, images, text, background, user },
             })
         }),
         getAllPosts: build.query({
@@ -68,20 +68,27 @@ export const authApi = createApi({
             query: (username) => `/api/v1/get-user/${username}`
         }),
         uploadImage: build.mutation({
-            query: ({formData}) => ({
+            query: ({ formData }) => ({
                 url: "/api/v1/upload/image",
                 method: "POST",
                 body: formData,
             })
         }),
         listImages: build.query({
-            query: ({path, sorting, maxLimit}) => ({
+            query: ({ path, sorting, maxLimit }) => ({
                 url: "/api/v1/upload/list-images",
                 method: "GET",
-                params: {path, sorting, maxLimit}
+                params: { path, sorting, maxLimit }
+            })
+        }),
+        updateProfilePicture: build.mutation({
+            query: ({ url }) => ({
+                url: "/api/v1/update-profile-picture",
+                method: "PUT",
+                body: {url: url}
             })
         })
     }),
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserQuery, useListImagesQuery } = authApi;
+export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserQuery, useListImagesQuery, useUpdateProfilePictureMutation } = authApi;

@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSelector } from "react-redux";
 import { IoMdClose, IoMdAdd, IoMdRemove } from 'react-icons/io';
 import Cropper from 'react-easy-crop'
 import { MdEdit } from "react-icons/md";
 import { PiFrameCorners } from "react-icons/pi";
 import { getCroppedImage } from '../../helpers/cropImage';
 import { FaUpload } from "react-icons/fa6";
+import dataURIToBlob from "../../helpers/dataURIToBlob"
+import { useCreatePostMutation, useUpdateProfilePictureMutation, useUploadImageMutation } from '../../../api/authApi';
 
-const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
+const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchProfile }) => {
     // States
     const [picture, setPicture] = useState(null);
     const [pictureUrl, setPictureUrl] = useState(null);
@@ -14,13 +17,22 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     const [pixelCrop, setPixelCrop] = useState(null);
     const [imageSaved, setImageSaved] = useState(false);
     const [editingMode, setEditingMode] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
+
+    // Redux state
+    const { userInfo } = useSelector(state => state.auth);
 
     // Extra hooks
     const fileInputRef = useRef(null);
     const uploadModalRef = useRef(null);
     const rangeInputRef = useRef(null);
+
+    // API calling
+    const [uploadImage] = useUploadImageMutation();
+    const [updateProfilePicture] = useUpdateProfilePictureMutation();
+    const [createPost, { data }] = useCreatePostMutation();
 
     // Constants
     const MIN = 1;
@@ -32,30 +44,70 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
         setPicture(e.target.files[0]);
     }
 
-    const handleAddOrUpload = () => {
-        if(!picture && !imageSaved) {
+    const handleAddOrUpload = async () => {
+        if (!picture && !imageSaved) {
             fileInputRef.current.click();
         }
-        else if(picture && imageSaved) {
-            console.log("Uploading the file!!!");
+        else if (picture && imageSaved) {
+            try {
+                setLoading(true);
+                const blob = await dataURIToBlob(picture);
+                const path = `${userInfo.username}/profile_pictures`;
+                const formData = new FormData();
+
+                formData.append("path", path);
+                formData.append("files", blob);
+
+                // upload profile picture first to cloudinary and get the live url
+                const profilePictureResponse = await uploadImage({
+                    formData,
+                }).unwrap();
+
+                // Extracting the url
+                const url = profilePictureResponse.images[0].url;
+
+                // Save the live url to database
+                const updateResponse = await updateProfilePicture({ url }).unwrap();
+
+                // Creating a post for profile picture update
+                const postResponse = await createPost({
+                    type: "profile-picture",
+                    images: [url],
+                    text: caption,
+                    background: null,
+                    user: userInfo.id
+                }).unwrap();
+
+                if (postResponse.status === "OK") {
+                    setShowUploadModal(false);
+                    setPicture(null);
+                    setCaption("");
+                    setPixelCrop(null);
+                    setCrop({ x: 0, y: 0 });
+                    setZoom(1);
+                    refetchProfile();
+                }
+
+            } catch (e) {
+                console.log("Error while uploading the profile picture: ", e.message);
+            } finally {
+                setLoading(false);
+            }
         }
     }
 
     const handleCancel = () => {
-        if(editingMode) {
+        if (editingMode) {
             setImageSaved(true);
         }
         else {
             setPicture(null);
         }
-
-
-        setCrop({x: 0, y: 0});
+        setCrop({ x: 0, y: 0 });
         setZoom(1);
     }
 
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-        console.log(croppedArea, croppedAreaPixels);
         setPixelCrop(croppedAreaPixels);
     }, []);
 
@@ -111,7 +163,7 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-scroll">
             <div ref={uploadModalRef} className={`w-full max-w-2xl rounded-xl shadow-lg overflow-hidden bg-surface border border-border ${picture ? "mt-26" : "mt-0"} py-4`}>
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 border-b border-border">
+                <div className="flex items-center justify-between px-6 pb-4 border-b border-border">
                     <h2 className="text-xl font-semibold text-text-primary">
                         Choose Profile Picture
                     </h2>
@@ -232,7 +284,13 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
                                 >
                                     {(!picture && !imageSaved) ? <IoMdAdd size={20} /> : <FaUpload />}
                                     <span>
-                                        {(!picture && !imageSaved) ? "Add Image" : "Upload"}
+                                        {
+                                            !loading ? (
+                                                (!picture && !imageSaved) ? "Add Image" : "Upload"
+                                            ) : (
+                                                "Uploading..."
+                                            )
+                                        }
                                     </span>
                                 </button>
 

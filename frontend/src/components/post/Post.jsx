@@ -62,7 +62,13 @@ const Post = ({ post }) => {
                     </div>
 
                     <div>
-                        <Link to={`/profile/${user.username}`}>{user.firstname + " " + user.lastname}</Link>
+                        <Link
+                            to={`/profile/${user.username}`}
+                            className="hover:underline"
+                        >
+                            <span>{user.firstname + " " + user.lastname}</span>
+                            <span>{type === "profile-picture" && " changed profile picture"}</span>
+                        </Link>
 
                         <span className="block text-sm text-primary">{postedTime}</span>
                     </div>
@@ -107,7 +113,7 @@ const Post = ({ post }) => {
                                             key={index}
                                             src={image}
                                             alt={`${user.firstname} ${user.lastname} post image ${index + 1}`}
-                                            className="w-full max-h-[400px] object-cover rounded-xl p-1"
+                                            className={`${type === "profile-picture" ? "w-[400px] h-[400px] mx-auto rounded-full" : "w-full max-h-[400px] rounded-xl"} object-cover p-1`}
                                         />
                                     ))}
                                 </div>

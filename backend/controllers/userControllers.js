@@ -376,7 +376,7 @@ const getUser = async (req, res) => {
     try {
         const {username} = req.params;
 
-        const user = await User.findOne({username}).select("-password");
+        const user = await User.findOne({username}).select("-password -refreshToken -verificationTokenExpiry");
 
         if(!user) {
             return res.status(404).json({
@@ -399,7 +399,10 @@ const updateProfilePicture = async (req, res) => {
         const {url} = req.body;
         await User.findByIdAndUpdate(req.user.id, {profilePicture: url});
         
-        res.send(url);
+        res.send({
+            status: "OK",
+            url
+        });
     } catch (e) {
         res.status(400).json({
             error: e.message

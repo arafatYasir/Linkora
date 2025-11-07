@@ -41,7 +41,7 @@ const ProfileItemsRight = ({ user }) => {
             {
                 userInfo.id === user._id && (
                     <div className="w-full mb-5">
-                        <CreatePost onOpenModal={openPostModal} user={userInfo} />
+                        <CreatePost onOpenModal={openPostModal} user={user} />
 
                         {isPostModalOpen && <PostModal onClose={closePostModal} />}
 

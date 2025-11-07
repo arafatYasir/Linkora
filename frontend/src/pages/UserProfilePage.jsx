@@ -26,9 +26,7 @@ const UserProfilePage = () => {
     const USERNAME = username ? username : userInfo.username;
 
     // RTK Query
-    const { data: user, isLoading } = useGetUserQuery(USERNAME);
-    console.log(user);
-
+    const { data: user, isLoading, refetch: refetchProfile } = useGetUserQuery(USERNAME, {refetchOnMountOrArgChange: 20});
 
     // useEffect to close dropdowns
     useEffect(() => {
@@ -56,7 +54,7 @@ const UserProfilePage = () => {
                         <CoverPhoto user={user} defaultCover={defaultCover} coverOptionsRef={coverOptionsRef} showCoverOptions={showCoverOptions} setShowCoverOptions={setShowCoverOptions} />
 
                         {/* ---- Profile Picture & Infos ---- */}
-                        <ProfilePictureInfos user={user} defaultPhoto={defaultPhoto} />
+                        <ProfilePictureInfos user={user} defaultPhoto={defaultPhoto} refetchProfile={refetchProfile} />
                     </div>
 
                     {/* ---- Profile Items ---- */}
