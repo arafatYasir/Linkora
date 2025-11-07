@@ -13,6 +13,7 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     const [caption, setCaption] = useState("");
     const [pixelCrop, setPixelCrop] = useState(null);
     const [imageSaved, setImageSaved] = useState(false);
+    const [editingMode, setEditingMode] = useState(false);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
 
@@ -41,7 +42,14 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
     }
 
     const handleCancel = () => {
-        setPicture(null);
+        if(editingMode) {
+            setImageSaved(true);
+        }
+        else {
+            setPicture(null);
+        }
+
+
         setCrop({x: 0, y: 0});
         setZoom(1);
     }
@@ -67,9 +75,11 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
         setCrop({ x: 0, y: 0 });
         setZoom(1);
         setImageSaved(true);
+        setEditingMode(false);
     }
 
     const handleSwitchEditMode = () => {
+        setEditingMode(true);
         setImageSaved(false);
     }
 
@@ -84,8 +94,6 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal }) => {
             setPictureUrl(null);
         }
     }, [picture]);
-
-    console.log(pictureUrl);
 
     useEffect(() => {
         const handleCloseUploadModal = (e) => {
