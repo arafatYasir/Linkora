@@ -201,7 +201,8 @@ const loginUser = async (req, res) => {
         const accessToken = jwtToken({ id: userExists._id.toString() }, "15m");
         const refreshToken = jwtToken({ id: userExists._id.toString() }, "365d");
 
-        // Putting refresh token on user data
+        // Putting tokens on user data
+        userExists.accessToken = accessToken;
         userExists.refreshToken = refreshToken;
 
         await userExists.save();
@@ -262,6 +263,7 @@ const refreshToken = async (req, res) => {
         }
 
         const user = await User.findById(decoded.id);
+
         if (!user) {
             res.status(404).json({
                 error: "No such user exists with this token"
@@ -269,6 +271,10 @@ const refreshToken = async (req, res) => {
         }
 
         const newAccessToken = jwtToken({ id: user._id.toString() }, "15m");
+
+        user.accessToken = newAccessToken;
+        
+        await user.save();
 
         res.send({
             accessToken: newAccessToken

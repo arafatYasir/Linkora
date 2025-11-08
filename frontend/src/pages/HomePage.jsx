@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { logOutUser } from "../slices/authSlice";
+import { logOutUser, setUser } from "../slices/authSlice";
 import { useEffect, useState } from "react";
 import CreatePost from "../components/post/CreatePost";
 import PostModal from "../components/post/PostModal";
 import AllPosts from "../components/post/AllPosts";
-import { useGetAllPostsQuery } from "../../api/authApi";
+import { useGetAllPostsQuery, useGetUserQuery } from "../../api/authApi";
 
 const HomePage = () => {
     // States
@@ -16,6 +16,9 @@ const HomePage = () => {
 
     // Extra hooks
     const dispatch = useDispatch();
+
+    // Fetching user
+    const {data: user} = useGetUserQuery(userInfo.username);
 
     // Fetching posts
     const { data } = useGetAllPostsQuery();
@@ -44,7 +47,17 @@ const HomePage = () => {
         else {
             body.style.overflowY = "scroll";
         }
-    }, [isPostModalOpen])
+    }, [isPostModalOpen]);
+
+    useEffect(() => {
+        if(user) {
+            // Set the user in redux
+            dispatch(setUser(user));
+
+            // Set the user in localstorage
+            localStorage.setItem("userInfo", JSON.stringify(user));
+        }
+    }, [user, dispatch]);
 
     return (
         <div className="container mx-auto">

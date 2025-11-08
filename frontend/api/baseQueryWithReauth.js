@@ -8,7 +8,7 @@ const baseQuery = fetchBaseQuery({
         const userInfo = JSON.parse(localStorage.getItem("userInfo")) || null;
 
         if (userInfo && userInfo.accessToken) {
-            headers.set("Authorization", `Bearer ${userInfo.accessToken}`)
+            headers.set("Authorization", `Bearer ${userInfo.accessToken}`);
         }
 
         return headers;

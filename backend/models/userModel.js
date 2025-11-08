@@ -156,6 +156,9 @@ const UserModel = new Schema({
             }
         }
     ],
+    accessToken: {
+        type: String
+    },
     refreshToken: {
         type: String
     }
