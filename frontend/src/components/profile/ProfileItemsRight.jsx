@@ -39,7 +39,7 @@ const ProfileItemsRight = ({ user }) => {
         <div className="col-span-3">
             {/* ---- Post Creation feature only if the same user profile ---- */}
             {
-                userInfo.id === user._id && (
+                userInfo._id === user._id && (
                     <div className="w-full mb-5">
                         <CreatePost onOpenModal={openPostModal} user={user} />
 

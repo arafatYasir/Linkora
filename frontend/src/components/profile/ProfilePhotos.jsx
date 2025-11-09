@@ -10,8 +10,6 @@ const ProfilePhotos = ({ user }) => {
     // Calling api to get all the photos
     const { data, isLoading } = useListImagesQuery({ path, sorting, maxLimit });
 
-    console.log(data);
-
     return (
         <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
             {/* ---- Header ---- */}

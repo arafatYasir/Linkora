@@ -31,7 +31,7 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchProfile }) => {
 
                 {/* ---- Change Profile Picture ---- */}
                 {
-                    userInfo.id === user._id && (
+                    userInfo._id === user._id && (
                         <button 
                             className="absolute bottom-5 right-2 bg-border p-1 rounded-full hover:bg-primary transition-all duration-250 cursor-pointer"
                             onClick={() => setShowUploadModal(true)}

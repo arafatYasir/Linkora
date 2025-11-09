@@ -5,10 +5,10 @@ const createPost = async (req, res) => {
     try {
         const post = await new Post(req.body).save();
 
-        res.send({
+        res.json({
             message: "Post created successfully",
             status: "OK",
-            ...post
+            post
         })
     } catch (e) {
         res.status(400).json({

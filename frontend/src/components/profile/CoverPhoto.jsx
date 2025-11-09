@@ -5,6 +5,7 @@ import { useSelector } from "react-redux"
 
 const CoverPhoto = ({ user, defaultCover, coverOptionsRef, showCoverOptions, setShowCoverOptions }) => {
     const { userInfo } = useSelector(state => state.auth);
+
     return (
         <div className="pt-10">
             <div className="relative w-full h-[400px] mx-auto bg-border rounded-lg overflow-hidden">
@@ -12,7 +13,7 @@ const CoverPhoto = ({ user, defaultCover, coverOptionsRef, showCoverOptions, set
 
                 {/* ---- If it is the same user then let him edit ---- */}
                 {
-                    userInfo.id === user._id && (
+                    userInfo._id === user._id && (
                         <div ref={coverOptionsRef}>
                             {/* ---- Edit Cover ---- */}
                             <button

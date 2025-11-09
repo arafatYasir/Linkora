@@ -21,7 +21,7 @@ const HomePage = () => {
     const {data: user} = useGetUserQuery(userInfo.username);
 
     // Fetching posts
-    const { data } = useGetAllPostsQuery();
+    const { data: posts, refetch: refetchPosts } = useGetAllPostsQuery();
 
     const openPostModal = () => {
         setIsPostModalOpen(true);
@@ -78,12 +78,12 @@ const HomePage = () => {
             <div className="w-1/2 mb-5">
                 <CreatePost onOpenModal={openPostModal} user={userInfo} />
 
-                {isPostModalOpen && <PostModal onClose={closePostModal} />}
+                {isPostModalOpen && <PostModal onClose={closePostModal} refetchPosts={refetchPosts} />}
             </div>
 
             {/* ---- All Posts ---- */}
             {
-                data && <AllPosts posts={data} />
+                posts && <AllPosts posts={posts} />
             }
         </div>
     )

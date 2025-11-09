@@ -217,7 +217,7 @@ const loginUser = async (req, res) => {
 
         res.send({
             message: "Login successful",
-            id: userExists._id,
+            _id: userExists._id,
             email: userExists.email,
             username: userExists.username,
             profilePicture: userExists.profilePicture,

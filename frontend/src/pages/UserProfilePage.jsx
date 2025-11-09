@@ -22,11 +22,21 @@ const UserProfilePage = () => {
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
 
-    // Determining which username to use
-    const USERNAME = username ? username : userInfo.username;
+    // Checking if the username is the same logged user's username
+    let isOwnProfile = true;
 
-    // RTK Query
-    const { data: user, isLoading, refetch: refetchProfile } = useGetUserQuery(USERNAME, {refetchOnMountOrArgChange: 20});
+    if (username && username.trim() !== "" && username !== userInfo.username) {
+        isOwnProfile = false;
+    }
+
+    // Fetching user data if that is another user's profile
+    const { data: user, isLoading, refetch: refetchProfile } = useGetUserQuery(username, {skip: isOwnProfile});
+
+    // Choosing the profile data to show
+    const userProfile = isOwnProfile ? userInfo : user;
+
+    console.log("is your profile: ", isOwnProfile);
+    console.log(userProfile);
 
     // useEffect to close dropdowns
     useEffect(() => {
@@ -47,18 +57,18 @@ const UserProfilePage = () => {
     return (
         <div className="max-w-[1100px] mx-auto">
 
-            {user.status === "Not Found" ? <NotFound /> : (
+            {(!isOwnProfile) && user.status === "Not Found" ? <NotFound /> : (
                 <div>
                     <div className="relative">
                         {/* ---- Cover Photo ---- */}
-                        <CoverPhoto user={user} defaultCover={defaultCover} coverOptionsRef={coverOptionsRef} showCoverOptions={showCoverOptions} setShowCoverOptions={setShowCoverOptions} />
+                        <CoverPhoto user={userProfile} defaultCover={defaultCover} coverOptionsRef={coverOptionsRef} showCoverOptions={showCoverOptions} setShowCoverOptions={setShowCoverOptions} />
 
                         {/* ---- Profile Picture & Infos ---- */}
-                        <ProfilePictureInfos user={user} defaultPhoto={defaultPhoto} refetchProfile={refetchProfile} />
+                        <ProfilePictureInfos user={userProfile} defaultPhoto={defaultPhoto} refetchProfile={refetchProfile} />
                     </div>
 
                     {/* ---- Profile Items ---- */}
-                    <ProfileItems user={user} />
+                    <ProfileItems user={userProfile} />
                 </div>
             )}
         </div>

@@ -11,7 +11,7 @@ const PostOptions = ({ user, optionsRef }) => {
             ref={optionsRef}
         >
             {
-                userInfo.id === user._id ? (
+                userInfo._id === user._id ? (
                     postOptions.creator.map(option => (
                         <PostOption key={option.id} option={option} />
                     ))

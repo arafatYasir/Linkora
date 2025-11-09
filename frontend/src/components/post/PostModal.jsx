@@ -2,8 +2,9 @@ import { useState } from "react";
 import { FaTimes, FaImage, FaVideo, FaFileAlt } from "react-icons/fa";
 import { backgrounds } from "../../constants/postBackgrounds";
 import { useCreatePostMutation, useUploadImageMutation } from "../../../api/authApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import dataURIToBlob from "../../helpers/dataURIToBlob";
+import { addPost } from "../../slices/authSlice";
 
 const PostModal = ({ onClose }) => {
     // States
@@ -11,14 +12,19 @@ const PostModal = ({ onClose }) => {
     const [files, setFiles] = useState([]);
     const [background, setBackground] = useState("");
     const [showBackgrounds, setShowBackgrounds] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
 
     // RTK Query
-    const [createPost, { isLoading }] = useCreatePostMutation();
-    const [uploadImage, { isLoading: isUploading }] = useUploadImageMutation();
+    const [createPost] = useCreatePostMutation();
+    const [uploadImage] = useUploadImageMutation();
 
+    // Extra hooks
+    const dispatch = useDispatch();
+
+    // Functions
     const handleFileChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
         setFiles((prev) => [...prev, ...selectedFiles]);
@@ -28,8 +34,20 @@ const PostModal = ({ onClose }) => {
         setFiles((prev) => prev.filter((_, i) => i !== index));
     };
 
+    const savePostInLocal = (post) => {        
+        // Set in redux
+        dispatch(addPost(post));
+
+        // Set in localstorage
+        const userData = JSON.parse(localStorage.getItem("userInfo"));
+        userData.posts = [...userData.posts, post];
+
+        localStorage.setItem("userInfo", JSON.stringify(userData));
+    }
+
     const handleSubmit = async () => {
         try {
+            setLoading(true);
             let res;
 
             // If a post has a background then create a background post
@@ -39,7 +57,7 @@ const PostModal = ({ onClose }) => {
                     images: null,
                     text,
                     background,
-                    user: userInfo.id,
+                    user: userInfo._id,
                 }).unwrap();
 
                 if (res.status === "OK") {
@@ -84,7 +102,7 @@ const PostModal = ({ onClose }) => {
                     images: imageUrls.length > 0 ? imageUrls : null,
                     text,
                     background: null,
-                    user: userInfo.id,
+                    user: userInfo._id,
                 }).unwrap();
 
                 if (res.status === "OK") {
@@ -96,8 +114,17 @@ const PostModal = ({ onClose }) => {
                     onClose();
                 }
             }
+
+            // Extracting post and pushing the userinfo on the post
+            const post = {...res.post};
+            post.user = userInfo;
+
+            // Saving that post
+            savePostInLocal(post);
         } catch (e) {
             console.log("ERROR on submission to post: ", e.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -242,7 +269,7 @@ const PostModal = ({ onClose }) => {
                     disabled={text === "" && files.length === 0 && !background}
                     className="w-full py-3 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white font-semibold rounded-lg transition-[var(--transition-default)] disabled:bg-gray-300"
                 >
-                    {isLoading || isUploading ? "Posting..." : "Post"}
+                    {loading ? "Posting..." : "Post"}
                 </button>
             </div>
         </div>
