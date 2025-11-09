@@ -34,7 +34,8 @@ const PostModal = ({ onClose }) => {
         setFiles((prev) => prev.filter((_, i) => i !== index));
     };
 
-    const savePostInLocal = (post) => {        
+    const savePostInLocal = (post) => {
+        console.log("I am here to save the post");
         // Set in redux
         dispatch(addPost(post));
 
