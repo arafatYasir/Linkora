@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IoMdClose, IoMdAdd, IoMdRemove } from 'react-icons/io';
 import Cropper from 'react-easy-crop'
 import { MdEdit } from "react-icons/md";
@@ -8,8 +8,9 @@ import { getCroppedImage } from '../../helpers/cropImage';
 import { FaUpload } from "react-icons/fa6";
 import dataURIToBlob from "../../helpers/dataURIToBlob"
 import { useCreatePostMutation, useUpdateProfilePictureMutation, useUploadImageMutation } from '../../../api/authApi';
+import { addPost, setProfilePicture } from '../../slices/authSlice';
 
-const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchProfile }) => {
+const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchPosts }) => {
     // States
     const [picture, setPicture] = useState(null);
     const [pictureUrl, setPictureUrl] = useState(null);
@@ -28,11 +29,12 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchProfile 
     const fileInputRef = useRef(null);
     const uploadModalRef = useRef(null);
     const rangeInputRef = useRef(null);
+    const dispatch = useDispatch();
 
     // API calling
     const [uploadImage] = useUploadImageMutation();
     const [updateProfilePicture] = useUpdateProfilePictureMutation();
-    const [createPost, { data }] = useCreatePostMutation();
+    const [createPost] = useCreatePostMutation();
 
     // Constants
     const MIN = 1;
@@ -42,6 +44,31 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchProfile 
     // Functions
     const handleFileChange = (e) => {
         setPicture(e.target.files[0]);
+    }
+
+    const saveProfilePictureInLocal = (url) => {
+        // Set in redux
+        dispatch(setProfilePicture(url));
+
+        // Set in localstorage
+        const userData = JSON.parse(localStorage.getItem("userInfo"));
+        userData.profilePicture = url;
+
+        localStorage.setItem("userInfo", JSON.stringify(userData));
+
+        // Re-fetch posts to remove old profile picture url from posts
+        refetchPosts();
+    }
+
+    const savePostInLocal = (post) => {
+        // Set in redux
+        dispatch(addPost(post));
+
+        // Set in localstorage
+        const userData = JSON.parse(localStorage.getItem("userInfo"));
+        userData.posts = [...userData.posts, post];
+
+        localStorage.setItem("userInfo", JSON.stringify(userData));
     }
 
     const handleAddOrUpload = async () => {
@@ -75,7 +102,7 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchProfile 
                     images: [url],
                     text: caption,
                     background: null,
-                    user: userInfo.id
+                    user: userInfo._id
                 }).unwrap();
 
                 if (postResponse.status === "OK") {
@@ -85,11 +112,20 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchProfile 
                     setPixelCrop(null);
                     setCrop({ x: 0, y: 0 });
                     setZoom(1);
-                    refetchProfile();
                 }
 
+                // Saving that profile picture url in local
+                const profilePictureUrl = updateResponse.url;
+                console.log(profilePictureUrl);
+                saveProfilePictureInLocal(profilePictureUrl);
+
+                // Saving that profile picture changing post in local
+                const post = { ...postResponse.post };
+                post.user = userInfo;
+
+                savePostInLocal(post);
             } catch (e) {
-                console.log("Error while uploading the profile picture: ", e.message);
+                console.log("Error while uploading the profile picture: ", e);
             } finally {
                 setLoading(false);
             }

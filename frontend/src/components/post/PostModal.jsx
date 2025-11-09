@@ -35,7 +35,6 @@ const PostModal = ({ onClose }) => {
     };
 
     const savePostInLocal = (post) => {
-        console.log("I am here to save the post");
         // Set in redux
         dispatch(addPost(post));
 

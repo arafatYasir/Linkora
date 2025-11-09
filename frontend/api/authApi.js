@@ -62,7 +62,7 @@ export const authApi = createApi({
             })
         }),
         getAllPosts: build.query({
-            query: () => "/api/v1/posts/get-all-posts"
+            query: (dummy) => "/api/v1/posts/get-all-posts"
         }),
         getUser: build.query({
             query: (username) => `/api/v1/get-user/${username}`

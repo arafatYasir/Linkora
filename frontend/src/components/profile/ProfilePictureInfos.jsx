@@ -3,7 +3,7 @@ import { IoIosCamera } from "react-icons/io"
 import { useSelector } from "react-redux"
 import ChangeProfilePicture from "./ChangeProfilePicture";
 
-const ProfilePictureInfos = ({ user, defaultPhoto, refetchProfile }) => {
+const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts }) => {
     const [showUploadModal, setShowUploadModal] = useState(false);
     const { userInfo } = useSelector(state => state.auth);
 
@@ -41,7 +41,7 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchProfile }) => {
                     )
                 }
                 {
-                    showUploadModal && <ChangeProfilePicture setShowUploadModal={setShowUploadModal} refetchProfile={refetchProfile} />
+                    showUploadModal && <ChangeProfilePicture setShowUploadModal={setShowUploadModal} refetchPosts={refetchPosts} />
                 }
             </div>
 

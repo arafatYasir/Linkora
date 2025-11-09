@@ -60,7 +60,7 @@ const HomePage = () => {
         }
     }, [user, dispatch]);
 
-    // Mergin posts (fetched + local)
+    // Merging posts (fetched + local)
     useEffect(() => {
         if(posts && posts.length > 0) {
             const localPosts = userInfo?.posts || [];

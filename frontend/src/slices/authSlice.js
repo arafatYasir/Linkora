@@ -14,6 +14,12 @@ export const authSlice = createSlice({
         addPost: (state, action) => {
             state.userInfo.posts = [...state.userInfo.posts, action.payload];
         },
+        updatePosts: (state, action) => {
+            state.userInfo.posts = [...action.payload];
+        },
+        setProfilePicture: (state, action) => {
+            state.userInfo.profilePicture = action.payload;
+        },
         logOutUser: (state) => {
             state.userInfo = null;
         }
@@ -21,6 +27,6 @@ export const authSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser, addPost, logOutUser } = authSlice.actions
+export const { setUser, addPost, updatePosts, setProfilePicture, logOutUser } = authSlice.actions
 
 export default authSlice.reducer
