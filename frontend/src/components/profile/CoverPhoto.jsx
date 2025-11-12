@@ -1,10 +1,35 @@
 import { IoIosCamera } from "react-icons/io"
 import { editOptions } from "../../constants/coverPhoto"
-import PostOption from "../post/PostOption"
 import { useSelector } from "react-redux"
+import CoverOption from "./CoverOption"
+import { useEffect, useRef, useState } from "react"
 
-const CoverPhoto = ({ user, defaultCover, coverOptionsRef, showCoverOptions, setShowCoverOptions }) => {
+const CoverPhoto = ({ user, defaultCover }) => {
+    // States
+    const [showCoverOptions, setShowCoverOptions] = useState(false);
+    const [picture, setPicture] = useState(null);
+    const [pictureUrl, setPictureUrl] = useState(null);
+
+    // Redux States
     const { userInfo } = useSelector(state => state.auth);
+
+    // Extra hooks
+    const coverOptionsRef = useRef(null);
+    const fileInputRef = useRef(null);
+
+    // useEffect to close dropdowns
+    useEffect(() => {
+        const handleCloseDropdowns = (e) => {
+            // cover options dropdown
+            if (coverOptionsRef.current && !coverOptionsRef.current.contains(e.target)) {
+                setShowCoverOptions(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleCloseDropdowns);
+
+        return () => document.removeEventListener("mousedown", handleCloseDropdowns);
+    }, []);
 
     return (
         <div className="pt-10">
@@ -28,7 +53,7 @@ const CoverPhoto = ({ user, defaultCover, coverOptionsRef, showCoverOptions, set
                             {showCoverOptions && (
                                 <ul className="flex flex-col absolute bottom-20 right-10 bg-border px-3 py-2 rounded-lg transition-all">
                                     {editOptions.map(option => (
-                                        <PostOption key={option.id} option={option} />
+                                        <CoverOption key={option.id} option={option} />
                                     ))}
                                 </ul>
                             )}

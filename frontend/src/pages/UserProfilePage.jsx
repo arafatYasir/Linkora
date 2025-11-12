@@ -9,16 +9,17 @@ import CoverPhoto from "../components/profile/CoverPhoto";
 import ProfilePictureInfos from "../components/profile/ProfilePictureInfos";
 import ProfileItems from "../components/profile/ProfileItems";
 import { updatePosts } from "../slices/authSlice";
+import { MdOutlineLightMode } from "react-icons/md";
+import { MdOutlineNightlight } from "react-icons/md";
 
 const UserProfilePage = () => {
     // States
-    const [showCoverOptions, setShowCoverOptions] = useState(false);
+    const [theme, setTheme] = useState(JSON.parse(localStorage.getItem("theme")) || "dark");
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
 
     // Extra hooks
-    const coverOptionsRef = useRef(null);
     const dispatch = useDispatch();
 
     // Taking username from the url params
@@ -47,20 +48,6 @@ const UserProfilePage = () => {
 
     const { data: images, isImagesLoading } = useListImagesQuery({ path, sorting, maxLimit });
 
-    // useEffect to close dropdowns
-    useEffect(() => {
-        const handleCloseDropdowns = (e) => {
-            // cover options dropdown
-            if (coverOptionsRef.current && !coverOptionsRef.current.contains(e.target)) {
-                setShowCoverOptions(false);
-            }
-        }
-
-        document.addEventListener("mousedown", handleCloseDropdowns);
-
-        return () => document.removeEventListener("mousedown", handleCloseDropdowns);
-    }, []);
-
     // useEffect to handle re-fetched data
     useEffect(() => {
         if (posts && posts.length > 0) {
@@ -72,16 +59,37 @@ const UserProfilePage = () => {
         }
     }, [posts, dispatch]);
 
+    // useEffect to control body color theme
+    useEffect(() => {
+        const body = document.querySelector("body");
+
+        if(theme === "light") {
+            body.classList.remove("dark");
+            localStorage.setItem("theme", JSON.stringify("light"));
+        }
+        else {
+            body.classList.add("dark");
+            localStorage.setItem("theme", JSON.stringify("dark"));
+        }
+    }, [theme]);
+
     if (isLoading) return <div className="text-3xl text-center">Loading...</div>
 
     return (
         <div className="max-w-[1100px] mx-auto">
+            {/* Light/Dark Theme Toggle Button */}
+            <button onClick={() => {
+                if(theme === "dark") setTheme("light");
+                else setTheme("dark");
+            }} className="absolute top-10 right-10 w-10 h-10 flex items-center justify-center hover:bg-primary/50 rounded-full cursor-pointer transition-all duration-250">
+                {theme === "dark" ? <MdOutlineLightMode size={20} /> : <MdOutlineNightlight size={20} />}
+            </button>
 
             {(!isOwnProfile) && user.status === "Not Found" ? <NotFound /> : (
                 <div>
                     <div className="relative">
                         {/* ---- Cover Photo ---- */}
-                        <CoverPhoto user={userProfile} defaultCover={defaultCover} coverOptionsRef={coverOptionsRef} showCoverOptions={showCoverOptions} setShowCoverOptions={setShowCoverOptions} />
+                        <CoverPhoto user={userProfile} defaultCover={defaultCover} />
 
                         {/* ---- Profile Picture & Infos ---- */}
                         <ProfilePictureInfos user={userProfile} defaultPhoto={defaultPhoto} refetchPosts={refetchPosts} isImagesLoading={isImagesLoading} images={images} />
