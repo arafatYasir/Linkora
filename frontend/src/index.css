@@ -126,3 +126,10 @@ li {
   background: var(--color-primary);
   border-radius: 2px;
 }
+
+/* React easy crop styles */
+.cover-photo .reactEasyCrop_Image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

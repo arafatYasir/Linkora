@@ -71,8 +71,6 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, isImagesLoadin
         localStorage.setItem("userInfo", JSON.stringify(userData));
     }
 
-    console.log(picture)
-
     const handleAddOrUpload = async () => {
         if (!picture && !imageSaved) {
             fileInputRef.current.click();
