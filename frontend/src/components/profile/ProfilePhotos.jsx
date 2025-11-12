@@ -8,7 +8,7 @@ const ProfilePhotos = ({ isImagesLoading, images }) => {
         <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
             {/* ---- Header ---- */}
             <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold leading-6">Photos</h3>
+                <h3 className="text-xl font-bold leading-6">Photos ({images?.resources?.length || 0})</h3>
                 <Link to="/photos" className="text-primary p-2 rounded-lg hover:text-text-primary hover:bg-primary/50 transition-all duration-250">See all photos</Link>
             </div>
 

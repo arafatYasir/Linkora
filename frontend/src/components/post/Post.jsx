@@ -62,13 +62,15 @@ const Post = ({ post }) => {
                     </div>
 
                     <div>
-                        <Link
-                            to={`/profile/${user.username}`}
-                            className="hover:underline"
-                        >
-                            <span>{user.firstname + " " + user.lastname}</span>
-                            <span>{type === "profile-picture" && " changed profile picture"}</span>
-                        </Link>
+                        <p>
+                            <Link
+                                to={`/profile/${user.username}`}
+                                className="hover:underline"
+                            >
+                                {user.firstname + " " + user.lastname}
+                            </Link>
+                            <span className="text-gray-400">{type === "profile-picture" && ` updated ${user.gender === "Male" ? "his" : "her"} profile picture.`}</span>
+                        </p>
 
                         <span className="block text-sm text-primary">{postedTime}</span>
                     </div>
