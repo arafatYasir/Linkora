@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
-import ProfilePhotosFallbackUI from "./ProfilePhotosFallbackUI";
 
 const ProfilePhotos = ({ isImagesLoading, images }) => {
-
-
     return (
         <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
             {/* ---- Header ---- */}
@@ -14,7 +11,7 @@ const ProfilePhotos = ({ isImagesLoading, images }) => {
 
             {/* ---- Images ---- */}
             {
-                (!images || isImagesLoading) ? <ProfilePhotosFallbackUI /> : (
+                (!images || isImagesLoading) ? <></> : (
                     <div className="grid grid-cols-[120px_120px_120px] justify-between gap-y-2.5 mt-2">
                         {
                             images.resources.map(image => (
