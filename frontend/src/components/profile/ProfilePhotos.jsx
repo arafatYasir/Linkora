@@ -1,14 +1,8 @@
 import { Link } from "react-router-dom";
-import { useListImagesQuery } from "../../../api/authApi";
 import ProfilePhotosFallbackUI from "./ProfilePhotosFallbackUI";
 
-const ProfilePhotos = ({ user }) => {
-    const path = user.username;
-    const sorting = "desc";
-    const maxLimit = 30;
+const ProfilePhotos = ({ isImagesLoading, images }) => {
 
-    // Calling api to get all the photos
-    const { data, isLoading } = useListImagesQuery({ path, sorting, maxLimit });
 
     return (
         <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
@@ -20,16 +14,16 @@ const ProfilePhotos = ({ user }) => {
 
             {/* ---- Images ---- */}
             {
-                isLoading ? <ProfilePhotosFallbackUI /> : (
-                    <div className="flex flex-wrap justify-between gap-y-2.5 mt-2">
+                (!images || isImagesLoading) ? <ProfilePhotosFallbackUI /> : (
+                    <div className="grid grid-cols-[120px_120px_120px] justify-between gap-y-2.5 mt-2">
                         {
-                            data.resources.map(item => (
+                            images.resources.map(image => (
                                 <div
-                                    key={item.asset_id}
+                                    key={image.asset_id}
                                     className="w-[120px] h-[120px] overflow-hidden cursor-pointer hover:opacity-70 transition-all duration-250"
                                 >
                                     <img
-                                        src={item.secure_url}
+                                        src={image.secure_url}
                                         alt="Yasir Arafat Image"
                                         className="w-full h-full object-cover"
                                     />

@@ -6,14 +6,14 @@ import { MdEdit } from "react-icons/md";
 import { PiFrameCorners } from "react-icons/pi";
 import { getCroppedImage } from '../../helpers/cropImage';
 import { FaUpload } from "react-icons/fa6";
-import dataURIToBlob from "../../helpers/dataURIToBlob"
 import { useCreatePostMutation, useUpdateProfilePictureMutation, useUploadImageMutation } from '../../../api/authApi';
 import { addPost, setProfilePicture } from '../../slices/authSlice';
 
-const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchPosts }) => {
+const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, isImagesLoading, images = [] }) => {
     // States
     const [picture, setPicture] = useState(null);
     const [pictureUrl, setPictureUrl] = useState(null);
+    const [isPreviousImage, setIsPreviousImage] = useState(false);
     const [caption, setCaption] = useState("");
     const [pixelCrop, setPixelCrop] = useState(null);
     const [imageSaved, setImageSaved] = useState(false);
@@ -71,6 +71,8 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchPosts })
         localStorage.setItem("userInfo", JSON.stringify(userData));
     }
 
+    console.log(picture)
+
     const handleAddOrUpload = async () => {
         if (!picture && !imageSaved) {
             fileInputRef.current.click();
@@ -78,7 +80,16 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchPosts })
         else if (picture && imageSaved) {
             try {
                 setLoading(true);
-                const blob = await dataURIToBlob(picture);
+                let blob;
+
+                if (isPreviousImage) {
+                    const res = await fetch(picture);
+                    blob = await res.blob();
+                }
+                else {
+                    blob = picture;
+                }
+
                 const path = `${userInfo.username}/profile_pictures`;
                 const formData = new FormData();
 
@@ -116,7 +127,6 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchPosts })
 
                 // Saving that profile picture url in local
                 const profilePictureUrl = updateResponse.url;
-                console.log(profilePictureUrl);
                 saveProfilePictureInLocal(profilePictureUrl);
 
                 // Saving that profile picture changing post in local
@@ -158,12 +168,19 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchPosts })
     }
 
     const saveImage = async () => {
-        const image = await getCroppedImage(pictureUrl, pixelCrop);
-        setPicture(image);
-        setCrop({ x: 0, y: 0 });
-        setZoom(1);
-        setImageSaved(true);
-        setEditingMode(false);
+        try {
+            const croppedImageBlob = await getCroppedImage(pictureUrl, pixelCrop);
+            const croppedImageBlobPreview = URL.createObjectURL(croppedImageBlob);
+
+            setPicture(croppedImageBlob);
+            setPictureUrl(croppedImageBlobPreview);
+            setCrop({ x: 0, y: 0 });
+            setZoom(1);
+            setImageSaved(true);
+            setEditingMode(false);
+        } catch (e) {
+            console.log("Error cropping image: ", e);
+        }
     }
 
     const handleSwitchEditMode = () => {
@@ -173,15 +190,26 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchPosts })
 
     useEffect(() => {
         if (picture) {
-            const url = URL.createObjectURL(picture);
-            setPictureUrl(url);
+            if (typeof picture === "string") {
+                setPictureUrl(picture);
+                setIsPreviousImage(true);
+            }
+            else {
+                const url = URL.createObjectURL(picture);
+                setPictureUrl(url);
+                setIsPreviousImage(false);
 
-            return () => URL.revokeObjectURL(url);
+                return () => URL.revokeObjectURL(url);
+            }
         }
         else {
+            if(pictureUrl && !isPreviousImage) {
+                URL.revokeObjectURL(pictureUrl);
+            }
             setPictureUrl(null);
+            setIsPreviousImage(false);
         }
-    }, [picture]);
+    }, [picture, pictureUrl, isPreviousImage]);
 
     useEffect(() => {
         const handleCloseUploadModal = (e) => {
@@ -244,7 +272,6 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchPosts })
                                 onCropChange={setCrop}
                                 onCropComplete={onCropComplete}
                                 onZoomChange={setZoom}
-                            // showGrid={false}
                             />
                         </div>
                     )
@@ -363,22 +390,55 @@ const ChangeProfilePicture = ({ images = [], setShowUploadModal, refetchPosts })
                 }
 
                 {/* ---- Other Images ---- */}
-                {images && images.length > 0 && (
-                    <div className="flex flex-wrap justify-between gap-y-2.5 mt-4">
-                        {images.map((item) => (
-                            <div
-                                key={item.asset_id}
-                                className="w-[120px] h-[120px] overflow-hidden cursor-pointer rounded-lg transition-all duration-250 border border-border hover:opacity-50"
-                            >
-                                <img
-                                    src={item.secure_url}
-                                    alt="Profile Picture Option"
-                                    className="w-full h-full object-cover"
-                                />
+                {
+                    !picture && (
+                        <div className="px-6 mt-4 font-[Inter]">
+                            {/* ---- Profile Pictures ---- */}
+                            <div>
+                                <h4>Profile Pictures</h4>
+                                <div className="grid grid-cols-[120px_120px_120px_120px_120px] justify-between gap-x-1 gap-y-2.5 mt-2">
+                                    {
+                                        images?.resources?.filter(image => image.asset_folder.includes("profile_pictures")).map(image => (
+                                            <div
+                                                key={image.asset_id}
+                                                className="w-full h-[120px] overflow-hidden cursor-pointer transition-all duration-250 border border-border hover:opacity-50"
+                                            >
+                                                <img
+                                                    src={image.secure_url}
+                                                    alt="Select Photo"
+                                                    className="w-full h-full object-cover"
+                                                    onClick={() => setPicture(image.secure_url)}
+                                                />
+                                            </div>
+                                        ))
+                                    }
+                                </div>
                             </div>
-                        ))}
-                    </div>
-                )}
+
+                            {/* ---- Uploads ---- */}
+                            <div className="mt-2">
+                                <h4>Uploads</h4>
+                                <div className="grid grid-cols-[120px_120px_120px_120px_120px] justify-between gap-x-1 gap-y-2.5 mt-2">
+                                    {
+                                        images?.resources?.filter(image => image.asset_folder.includes("posts")).map(image => (
+                                            <div
+                                                key={image.asset_id}
+                                                className="w-full h-[120px] overflow-hidden cursor-pointer transition-all duration-250 border border-border hover:opacity-50"
+                                            >
+                                                <img
+                                                    src={image.secure_url}
+                                                    alt="Select Photo"
+                                                    className="w-full h-full object-cover"
+                                                    onClick={() => setPicture(image.secure_url)}
+                                                />
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
             </div>
         </div>
     );

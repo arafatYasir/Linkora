@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom"
-import { useGetAllPostsQuery, useGetUserQuery } from "../../api/authApi";
+import { useGetAllPostsQuery, useGetUserQuery, useListImagesQuery } from "../../api/authApi";
 import NotFound from "../components/NotFound";
 import defaultCover from "../../public/default images/defaultcover.jpg"
 import defaultPhoto from "../../public/default images/avatar.png"
@@ -16,9 +16,6 @@ const UserProfilePage = () => {
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
-
-    // Post fetching api
-    const { data: posts, refetch: refetchPosts } = useGetAllPostsQuery(null, {skip: userInfo.profilePicture !== userInfo.posts[0].user.profilePicture ? false : true});
 
     // Extra hooks
     const coverOptionsRef = useRef(null);
@@ -37,8 +34,18 @@ const UserProfilePage = () => {
     // Fetching user data if that is another user's profile
     const { data: user, isLoading } = useGetUserQuery(username, { skip: isOwnProfile });
 
+    // Post fetching api
+    const { data: posts, refetch: refetchPosts } = useGetAllPostsQuery(null, { skip: userInfo.profilePicture !== userInfo.posts[0].user.profilePicture ? false : true });
+
     // Choosing the profile data to show
     const userProfile = isOwnProfile ? userInfo : user;
+
+    // Image fetching api
+    const path = userProfile?.username;
+    const sorting = "desc";
+    const maxLimit = 30;
+
+    const { data: images, isImagesLoading } = useListImagesQuery({ path, sorting, maxLimit });
 
     // useEffect to close dropdowns
     useEffect(() => {
@@ -56,7 +63,7 @@ const UserProfilePage = () => {
 
     // useEffect to handle re-fetched data
     useEffect(() => {
-        if(posts && posts.length > 0) {
+        if (posts && posts.length > 0) {
             dispatch(updatePosts(posts));
 
             const userData = JSON.parse(localStorage.getItem("userInfo"));
@@ -77,11 +84,11 @@ const UserProfilePage = () => {
                         <CoverPhoto user={userProfile} defaultCover={defaultCover} coverOptionsRef={coverOptionsRef} showCoverOptions={showCoverOptions} setShowCoverOptions={setShowCoverOptions} />
 
                         {/* ---- Profile Picture & Infos ---- */}
-                        <ProfilePictureInfos user={userProfile} defaultPhoto={defaultPhoto} refetchPosts={refetchPosts} />
+                        <ProfilePictureInfos user={userProfile} defaultPhoto={defaultPhoto} refetchPosts={refetchPosts} isImagesLoading={isImagesLoading} images={images} />
                     </div>
 
                     {/* ---- Profile Items ---- */}
-                    <ProfileItems user={userProfile} />
+                    <ProfileItems user={userProfile} isImagesLoading={isImagesLoading} images={images} />
                 </div>
             )}
         </div>

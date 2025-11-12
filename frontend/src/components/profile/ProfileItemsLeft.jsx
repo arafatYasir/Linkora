@@ -1,10 +1,10 @@
 import ProfilePhotos from "./ProfilePhotos"
 
-const ProfileItemsLeft = ({user}) => {
+const ProfileItemsLeft = ({user, isImagesLoading, images}) => {
 
     return (
         <div className="col-span-2">
-            <ProfilePhotos user={user} />
+            <ProfilePhotos user={user} isImagesLoading={isImagesLoading} images={images} />
         </div>
     )
 }

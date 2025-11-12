@@ -98,7 +98,7 @@ const Post = ({ post }) => {
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
                             }}
-                            className="h-[400px] w-full text-center flex items-center justify-center text-3xl font-bold rounded-[var(--radius-card)]"
+                            className="h-[400px] w-full text-center flex items-center justify-center text-3xl font-bold"
                         >
                             {text}
                         </div>
@@ -113,7 +113,7 @@ const Post = ({ post }) => {
                                             key={index}
                                             src={image}
                                             alt={`${user.firstname} ${user.lastname} post image ${index + 1}`}
-                                            className={`${type === "profile-picture" ? "w-[400px] h-[400px] mx-auto rounded-full" : "w-full max-h-[400px] rounded-xl"} object-cover p-1`}
+                                            className={`${type === "profile-picture" ? "w-[400px] h-[400px] mx-auto rounded-full" : "w-full max-h-[600px]"} object-cover p-1`}
                                         />
                                     ))}
                                 </div>

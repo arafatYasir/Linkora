@@ -3,6 +3,10 @@ const createImage = (url) => {
     return new Promise((resolve, reject) => {
         const image = new Image();
 
+        if(url.startsWith("http")) {
+            image.crossOrigin = "anonymous";
+        }
+
         image.addEventListener("load", () => {
             resolve(image);
         });
