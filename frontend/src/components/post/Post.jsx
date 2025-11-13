@@ -48,9 +48,9 @@ const Post = ({ post }) => {
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
 
     return (
-        <li className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
+        <li className="w-full max-w-[640px] bg-[var(--color-surface)]  rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
             {/* ---- Post Heading ---- */}
-            <div className="flex items-center justify-between border-b pb-2 border-b-[var(--color-border)]">
+            <div className="flex items-center justify-between border-b pb-2 px-4 pt-4 border-b-[var(--color-border)]">
                 <div className="flex items-center gap-x-3">
                     <div className="w-12 h-12 rounded-full overflow-hidden">
                         <Link to={`/profile/${user.username}`}>
@@ -110,7 +110,7 @@ const Post = ({ post }) => {
                         </div>
                     ) : (
                         <div className="text-lg leading-[1]">
-                            <p>{text}</p>
+                            <p className="px-4">{text}</p>
 
                             {images && images.length > 0 && (
                                 <div className="flex flex-wrap mt-4">
@@ -119,7 +119,7 @@ const Post = ({ post }) => {
                                             key={index}
                                             src={image}
                                             alt={`${user.firstname} ${user.lastname} post image ${index + 1}`}
-                                            className={`${type === "profile-picture" ? "w-[400px] h-[400px] mx-auto rounded-full" : "w-full max-h-[600px]"} object-cover p-1`}
+                                            className={`${type === "profile-picture" ? "w-[400px] h-[400px] mx-auto rounded-full" : "w-full max-h-[600px]"} object-cover`}
                                         />
                                     ))}
                                 </div>
@@ -130,7 +130,7 @@ const Post = ({ post }) => {
             </div>
 
             {/* ---- Post Footer ---- */}
-            <div className="flex items-center justify-between border-t pt-2 mt-4 border-t-[var(--color-border)]">
+            <div className="flex items-center justify-between border-t pt-2 px-4 pb-4 mt-4 border-t-[var(--color-border)]">
                 <div
                     className="flex items-center justify-center gap-2 relative w-1/3 text-center cursor-pointer hover:bg-primary/30 p-2 rounded-lg transition-all duration-250"
                     onMouseOver={() => {
