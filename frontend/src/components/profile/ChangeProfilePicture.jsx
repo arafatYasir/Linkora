@@ -8,6 +8,7 @@ import { getCroppedImage } from '../../helpers/cropImage';
 import { FaUpload } from "react-icons/fa6";
 import { useCreatePostMutation, useUpdateProfilePictureMutation, useUploadImageMutation } from '../../../api/authApi';
 import { addPost, setProfilePicture } from '../../slices/authSlice';
+import PhotosGroup from './PhotosGroup';
 
 const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, images = [] }) => {
     // States
@@ -21,6 +22,10 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, images = [] })
     const [loading, setLoading] = useState(false);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
+
+    const [profilePictures, setProfilePictures] = useState([]);
+    const [coverPhotos, setCoverPhotos] = useState([]);
+    const [uploads, setUploads] = useState([]);
 
     // Redux state
     const { userInfo } = useSelector(state => state.auth);
@@ -40,6 +45,67 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, images = [] })
     const MIN = 1;
     const MAX = 2;
     const STEPS = 0.01;
+
+    useEffect(() => {
+        const profiles = [], covers = [], otherUploads = [];
+
+        images.resources.map(image => {
+            if (image.asset_folder.includes("profile_pictures")) {
+                profiles.push(image.secure_url);
+            }
+            else if (image.asset_folder.includes("cover_photo")) {
+                covers.push(image.secure_url);
+            }
+            else {
+                otherUploads.push(image.secure_url);
+            }
+        });
+
+        if (profiles.length > 0) {
+            setProfilePictures(profiles);
+        }
+        if (covers.length > 0) {
+            setCoverPhotos(covers);
+        }
+        if (otherUploads.length > 0) {
+            setUploads(otherUploads);
+        }
+    }, [images]);
+
+    useEffect(() => {
+        if (picture) {
+            if (typeof picture === "string") {
+                setPictureUrl(picture);
+                setIsPreviousImage(true);
+            }
+            else {
+                const url = URL.createObjectURL(picture);
+                setPictureUrl(url);
+                setIsPreviousImage(false);
+
+                return () => URL.revokeObjectURL(url);
+            }
+        }
+        else {
+            if (pictureUrl && !isPreviousImage) {
+                URL.revokeObjectURL(pictureUrl);
+            }
+            setPictureUrl(null);
+            setIsPreviousImage(false);
+        }
+    }, [picture, pictureUrl, isPreviousImage]);
+
+    useEffect(() => {
+        const handleCloseUploadModal = (e) => {
+            if (uploadModalRef.current && !uploadModalRef.current.contains(e.target)) {
+                setShowUploadModal(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleCloseUploadModal);
+
+        return () => document.removeEventListener("mousedown", handleCloseUploadModal);
+    }, []);
 
     // Functions
     const handleFileChange = (e) => {
@@ -185,41 +251,6 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, images = [] })
         setEditingMode(true);
         setImageSaved(false);
     }
-
-    useEffect(() => {
-        if (picture) {
-            if (typeof picture === "string") {
-                setPictureUrl(picture);
-                setIsPreviousImage(true);
-            }
-            else {
-                const url = URL.createObjectURL(picture);
-                setPictureUrl(url);
-                setIsPreviousImage(false);
-
-                return () => URL.revokeObjectURL(url);
-            }
-        }
-        else {
-            if(pictureUrl && !isPreviousImage) {
-                URL.revokeObjectURL(pictureUrl);
-            }
-            setPictureUrl(null);
-            setIsPreviousImage(false);
-        }
-    }, [picture, pictureUrl, isPreviousImage]);
-
-    useEffect(() => {
-        const handleCloseUploadModal = (e) => {
-            if (uploadModalRef.current && !uploadModalRef.current.contains(e.target)) {
-                setShowUploadModal(false)
-            }
-        }
-
-        document.addEventListener("mousedown", handleCloseUploadModal);
-
-        return () => document.removeEventListener("mousedown", handleCloseUploadModal);
-    }, []);
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-scroll">
@@ -392,48 +423,19 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, images = [] })
                     !picture && (
                         <div className="px-6 mt-4 flex flex-col gap-y-2 font-[Inter]">
                             {/* ---- Profile Pictures ---- */}
-                            <div>
-                                <h4>Profile Pictures</h4>
-                                <div className="grid grid-cols-[120px_120px_120px_120px_120px] justify-between gap-x-1 gap-y-2.5 mt-2">
-                                    {
-                                        images?.resources?.filter(image => image.asset_folder.includes("profile_pictures")).map(image => (
-                                            <div
-                                                key={image.asset_id}
-                                                className="w-full h-[120px] overflow-hidden cursor-pointer transition-all duration-250 border border-border hover:opacity-50"
-                                            >
-                                                <img
-                                                    src={image.secure_url}
-                                                    alt="Select Photo"
-                                                    className="w-full h-full object-cover"
-                                                    onClick={() => setPicture(image.secure_url)}
-                                                />
-                                            </div>
-                                        ))
-                                    }
-                                </div>
-                            </div>
+                            {
+                                (profilePictures.length > 0) && <PhotosGroup groupName="Profile Pictures" images={profilePictures} select={true} setImage={setPicture} />
+                            }
+
+                            {/* ---- Cover Photos ---- */}
+                            {
+                                (coverPhotos.length > 0) && <PhotosGroup groupName="Cover Photos" images={coverPhotos} select={true} setImage={setPicture} />
+                            }
 
                             {/* ---- Uploads ---- */}
-                            <div>
-                                <h4>Uploads</h4>
-                                <div className="grid grid-cols-[120px_120px_120px_120px_120px] justify-between gap-x-1 gap-y-2.5 mt-2">
-                                    {
-                                        images?.resources?.filter(image => image.asset_folder.includes("posts")).map(image => (
-                                            <div
-                                                key={image.asset_id}
-                                                className="w-full h-[120px] overflow-hidden cursor-pointer transition-all duration-250 border border-border hover:opacity-50"
-                                            >
-                                                <img
-                                                    src={image.secure_url}
-                                                    alt="Select Photo"
-                                                    className="w-full h-full object-cover"
-                                                    onClick={() => setPicture(image.secure_url)}
-                                                />
-                                            </div>
-                                        ))
-                                    }
-                                </div>
-                            </div>
+                            {
+                                (uploads.length > 0) && <PhotosGroup groupName="Uploads" images={uploads} select={true} setImage={setPicture} />
+                            }
                         </div>
                     )
                 }

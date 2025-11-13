@@ -34,7 +34,6 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
         }
     }, [images]);
 
-    console.log(profilePictures, coverPhotos, uploads);
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
             <div ref={chooseModalRef} className={`w-full max-w-xl rounded-xl shadow-lg overflow-hidden bg-surface border border-border py-4`}>
@@ -58,14 +57,17 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
                     {
                         isImagesLoading ? <ChoosePhotosSkeleton /> : (
                             <>
+                                {/* ---- Profile Pictures ---- */}
                                 {
                                     (profilePictures.length > 0) && <PhotosGroup groupName="Profile Pictures" images={profilePictures} />
                                 }
 
+                                {/* ---- Cover Photos ---- */}
                                 {
                                     (coverPhotos.length > 0) && <PhotosGroup groupName="Cover Photos" images={coverPhotos} />
                                 }
 
+                                {/* ---- Uploads ---- */}
                                 {
                                     (uploads.length > 0) && <PhotosGroup groupName="Uploads" images={uploads} />
                                 }

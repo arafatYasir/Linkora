@@ -1,4 +1,4 @@
-const PhotosGroup = ({ groupName, images }) => {
+const PhotosGroup = ({ groupName, images, select, setImage }) => {
     return (
         <div>
             <h4>{groupName}</h4>
@@ -13,7 +13,7 @@ const PhotosGroup = ({ groupName, images }) => {
                                 src={image}
                                 alt="Select Photo"
                                 className="w-full h-full object-cover"
-                                onClick={() => {}}
+                                onClick={select ? () => setImage(image) : null}
                             />
                         </div>
                     ))
