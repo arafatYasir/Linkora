@@ -1,17 +1,19 @@
 import { IoIosCamera } from "react-icons/io"
-import { editOptions } from "../../constants/coverPhoto"
+import { editOptions } from "../../../constants/coverPhoto"
 import { useDispatch, useSelector } from "react-redux"
 import CoverOption from "./CoverOption"
 import { useCallback, useEffect, useRef, useState } from "react"
 import Cropper from "react-easy-crop"
 import { FaGlobe } from "react-icons/fa"
-import { useCreatePostMutation, useUpdateCoverPhotoMutation, useUploadImageMutation } from "../../../api/authApi"
-import { getCroppedImage } from "../../helpers/cropImage"
-import { addPost, setCoverPhoto } from "../../slices/authSlice"
+import { useCreatePostMutation, useUpdateCoverPhotoMutation, useUploadImageMutation } from "../../../../api/authApi"
+import { getCroppedImage } from "../../../helpers/cropImage"
+import { addPost, setCoverPhoto } from "../../../slices/authSlice"
+import ChooseCoverPhoto from "./ChooseCoverPhoto"
 
-const CoverPhoto = ({ user, defaultCover }) => {
+const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
     // States
     const [showCoverOptions, setShowCoverOptions] = useState(false);
+    const [showChooseModal, setShowChooseModal] = useState(false);
     const [image, setImage] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
     const [uploadingState, setUploadingState] = useState(null);
@@ -32,20 +34,26 @@ const CoverPhoto = ({ user, defaultCover }) => {
     const coverOptionsRef = useRef(null);
     const inputFileRef = useRef(null);
     const coverRef = useRef(null);
+    const chooseModalRef = useRef(null);
     const dispatch = useDispatch();
 
-    // useEffect to close dropdowns
+    // useEffect to close things
     useEffect(() => {
-        const handleCloseDropdowns = (e) => {
+        const handleClose = (e) => {
             // cover options dropdown
             if (coverOptionsRef.current && !coverOptionsRef.current.contains(e.target)) {
                 setShowCoverOptions(false);
             }
+
+            // choose modal
+            if (chooseModalRef.current && !chooseModalRef.current.contains(e.target)) {
+                setShowChooseModal(false);
+            }
         }
 
-        document.addEventListener("mousedown", handleCloseDropdowns);
+        document.addEventListener("mousedown", handleClose);
 
-        return () => document.removeEventListener("mousedown", handleCloseDropdowns);
+        return () => document.removeEventListener("mousedown", handleClose);
     }, []);
 
     // useEffect to create image url
@@ -248,7 +256,7 @@ const CoverPhoto = ({ user, defaultCover }) => {
                             {showCoverOptions && (
                                 <ul className="flex flex-col absolute bottom-20 right-10 bg-border px-3 py-2 rounded-lg transition-all">
                                     {editOptions.map(option => (
-                                        <CoverOption key={option.id} option={option} inputFileRef={inputFileRef} setShowCoverOptions={setShowCoverOptions} />
+                                        <CoverOption key={option.id} option={option} inputFileRef={inputFileRef} setShowCoverOptions={setShowCoverOptions} setShowChooseModal={setShowChooseModal} />
                                     ))}
                                 </ul>
                             )}
@@ -256,6 +264,11 @@ const CoverPhoto = ({ user, defaultCover }) => {
                     )
                 }
             </div>
+
+            {/* ---- Choose Cover Photo Modal ---- */}
+            {
+                showChooseModal && <ChooseCoverPhoto setImage={setImage} setShowChooseModal={setShowChooseModal} chooseModalRef={chooseModalRef} isImagesLoading={isImagesLoading} images={images} />
+            }
         </div>
     )
 }

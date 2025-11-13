@@ -1,11 +1,15 @@
-const CoverOption = ({option, setShowCoverOptions, inputFileRef}) => {
+const CoverOption = ({ option, setShowCoverOptions, setShowChooseModal, inputFileRef }) => {
     const handleClick = () => {
         setShowCoverOptions(false);
-        if(option.name.includes("Upload")) {
+
+        if (option.name.includes("Upload")) {
             inputFileRef.current.click();
         }
+        else if (option.name.includes("Choose")) {
+            setShowChooseModal(true);
+        }
     }
-    
+
     return (
         <button
             onClick={handleClick}

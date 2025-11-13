@@ -4,8 +4,8 @@ import { useGetAllPostsQuery, useGetUserQuery, useListImagesQuery } from "../../
 import NotFound from "../components/NotFound";
 import defaultCover from "../../public/default images/defaultcover.jpg"
 import defaultPhoto from "../../public/default images/avatar.png"
-import { useEffect, useRef, useState } from "react";
-import CoverPhoto from "../components/profile/CoverPhoto";
+import { useEffect, useState } from "react";
+import CoverPhoto from "../components/profile/cover/CoverPhoto";
 import ProfilePictureInfos from "../components/profile/ProfilePictureInfos";
 import ProfileItems from "../components/profile/ProfileItems";
 import { updatePosts } from "../slices/authSlice";
@@ -89,7 +89,7 @@ const UserProfilePage = () => {
                 <div>
                     <div className="relative">
                         {/* ---- Cover Photo ---- */}
-                        <CoverPhoto user={userProfile} defaultCover={defaultCover} />
+                        <CoverPhoto user={userProfile} defaultCover={defaultCover} isImagesLoading={isImagesLoading} images={images} />
 
                         {/* ---- Profile Picture & Infos ---- */}
                         <ProfilePictureInfos user={userProfile} defaultPhoto={defaultPhoto} refetchPosts={refetchPosts} isImagesLoading={isImagesLoading} images={images} />

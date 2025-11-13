@@ -14,7 +14,7 @@ const GridPost = ({ post }) => {
             {
                 (images && images.length > 0) ? (
                     <div className="w-full h-[180px] overflow-hidden cursor-pointer">
-                        <img src={post.images[0]} alt="Post Image" className="w-full h-full object-cover" />
+                        <img src={post.images[0]} alt="Post Image" className="w-full h-full object-cover hover:opacity-70 transition-all duration-250" />
                     </div>
                 ) : (background) ? (
                     <div
@@ -24,12 +24,12 @@ const GridPost = ({ post }) => {
                             backgroundSize: "cover",
                             backgroundPosition: "center"
                         }}
-                        className="w-full h-[180px] cursor-pointer flex items-center justify-center font-semibold text-center"
+                        className="w-full h-[180px] cursor-pointer flex items-center justify-center font-semibold text-center hover:opacity-70 transition-all duration-250"
                     >
                         {text}
                     </div>
                 ) : (
-                    <div className="w-full h-[180px] bg-border hover:bg-border/60 transition-all duration-250 cursor-pointer"></div>
+                    <div className="w-full h-[180px] bg-border hover:bg-border/70 transition-all duration-250 cursor-pointer"></div>
                 )
             }
 
@@ -42,7 +42,7 @@ const GridPost = ({ post }) => {
 
                 {/* ---- Text ---- */}
                 <div>
-                    <p className="text-xs font-semibold">{text.length > 30 ? `${text.slice(0, 30)}...` : text}</p>
+                    <p className="text-xs font-semibold">{(text && text?.length > 30) ? `${text?.slice(0, 30)}...` : text}</p>
                     <span className="text-[11px] font-semibold text-primary">{postedTime}</span>
                 </div>
             </div>

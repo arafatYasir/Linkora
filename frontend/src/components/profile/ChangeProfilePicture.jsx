@@ -9,7 +9,7 @@ import { FaUpload } from "react-icons/fa6";
 import { useCreatePostMutation, useUpdateProfilePictureMutation, useUploadImageMutation } from '../../../api/authApi';
 import { addPost, setProfilePicture } from '../../slices/authSlice';
 
-const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, isImagesLoading, images = [] }) => {
+const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, images = [] }) => {
     // States
     const [picture, setPicture] = useState(null);
     const [pictureUrl, setPictureUrl] = useState(null);
@@ -234,7 +234,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, isImagesLoadin
                             setPicture(null);
                             setShowUploadModal(false);
                         }}
-                        className="p-2 rounded-lg transition-all duration-250 cursor-pointer text-text-secondary bg-transparent hover:bg-border"
+                        className="p-2 rounded-full transition-all duration-250 cursor-pointer text-text-secondary bg-border hover:bg-primary/50"
                     >
                         <IoMdClose size={24} />
                     </button>
@@ -390,7 +390,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, isImagesLoadin
                 {/* ---- Other Images ---- */}
                 {
                     !picture && (
-                        <div className="px-6 mt-4 font-[Inter]">
+                        <div className="px-6 mt-4 flex flex-col gap-y-2 font-[Inter]">
                             {/* ---- Profile Pictures ---- */}
                             <div>
                                 <h4>Profile Pictures</h4>
@@ -414,7 +414,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, isImagesLoadin
                             </div>
 
                             {/* ---- Uploads ---- */}
-                            <div className="mt-2">
+                            <div>
                                 <h4>Uploads</h4>
                                 <div className="grid grid-cols-[120px_120px_120px_120px_120px] justify-between gap-x-1 gap-y-2.5 mt-2">
                                     {

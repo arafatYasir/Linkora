@@ -2,12 +2,12 @@ import { useSelector } from "react-redux";
 import defaultAvatar from "../../../public/default images/avatar.png"
 import { MdEmojiEmotions } from 'react-icons/md';
 import { LuFiles } from 'react-icons/lu';
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { FaTimes } from "react-icons/fa";
 
 const CreateComment = ({ comment, setComment, commentFile, setCommentFile, commentRef }) => {
     // States
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    // const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
@@ -29,7 +29,7 @@ const CreateComment = ({ comment, setComment, commentFile, setCommentFile, comme
     }
 
     return (
-        <div className="mt-4 border-t pt-2 border-[var(--color-border)]">
+        <div className="mt-1 border-t pt-2 px-4 pb-2 border-[var(--color-border)]">
             <div className="flex items-center justify-between">
                 <div className="w-10 h-10 rounded-full overflow-hidden">
                     <img
@@ -61,7 +61,7 @@ const CreateComment = ({ comment, setComment, commentFile, setCommentFile, comme
                         <MdEmojiEmotions
                             size={22}
                             className="cursor-pointer"
-                            onClick={() => setShowEmojiPicker(prev => !prev)}
+                            // onClick={() => setShowEmojiPicker(prev => !prev)}
                         />
 
                         <LuFiles

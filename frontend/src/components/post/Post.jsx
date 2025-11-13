@@ -130,7 +130,7 @@ const Post = ({ post }) => {
             </div>
 
             {/* ---- Post Footer ---- */}
-            <div className="flex items-center justify-between border-t pt-2 px-4 pb-4 mt-4 border-t-[var(--color-border)]">
+            <div className="flex items-center justify-between border-t pt-2 px-4 pb-1 mt-4 border-t-[var(--color-border)]">
                 <div
                     className="flex items-center justify-center gap-2 relative w-1/3 text-center cursor-pointer hover:bg-primary/30 p-2 rounded-lg transition-all duration-250"
                     onMouseOver={() => {
