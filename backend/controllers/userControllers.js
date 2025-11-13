@@ -273,7 +273,7 @@ const refreshToken = async (req, res) => {
         const newAccessToken = jwtToken({ id: user._id.toString() }, "15m");
 
         user.accessToken = newAccessToken;
-        
+
         await user.save();
 
         res.send({
@@ -380,19 +380,19 @@ const newPassword = async (req, res) => {
 
 const getUser = async (req, res) => {
     try {
-        const {username} = req.params;
+        const { username } = req.params;
 
-        const user = await User.findOne({username}).select("-password -refreshToken -verificationTokenExpiry");
+        const user = await User.findOne({ username }).select("-password -refreshToken -verificationTokenExpiry");
 
-        if(!user) {
+        if (!user) {
             return res.status(404).json({
                 status: "Not Found"
             });
         }
 
-        const posts = await Post.find({user: user._id}).populate("user").sort({createdAt: -1});
+        const posts = await Post.find({ user: user._id }).populate("user").sort({ createdAt: -1 });
 
-        res.json({...user.toObject(), posts});
+        res.json({ ...user.toObject(), posts });
     } catch (e) {
         res.status(400).json({
             error: e.message
@@ -402,9 +402,9 @@ const getUser = async (req, res) => {
 
 const updateProfilePicture = async (req, res) => {
     try {
-        const {url} = req.body;
-        await User.findByIdAndUpdate(req.user.id, {profilePicture: url});
-        
+        const { url } = req.body;
+        await User.findByIdAndUpdate(req.user.id, { profilePicture: url });
+
         res.send({
             status: "OK",
             url
@@ -416,4 +416,20 @@ const updateProfilePicture = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture };
+const updateCoverPhoto = async (req, res) => {
+    try {
+        const { url } = req.body;
+        await User.findByIdAndUpdate(req.user.id, { coverPhoto: url });
+
+        res.send({
+            status: "OK",
+            url
+        });
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto };

@@ -1,5 +1,5 @@
 const express = require("express");
-const { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture } = require("../../controllers/userControllers");
+const { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto } = require("../../controllers/userControllers");
 const authMiddleware = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
@@ -14,5 +14,6 @@ router.post("/verify-code", verifyCode);
 router.post("/new-password", newPassword);
 router.get("/get-user/:username", authMiddleware, getUser);
 router.put("/update-profile-picture", authMiddleware, updateProfilePicture);
+router.put("/update-cover-photo", authMiddleware, updateCoverPhoto);
 
 module.exports = router;
