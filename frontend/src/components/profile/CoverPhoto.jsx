@@ -4,6 +4,7 @@ import { useSelector } from "react-redux"
 import CoverOption from "./CoverOption"
 import { useCallback, useEffect, useRef, useState } from "react"
 import Cropper from "react-easy-crop"
+import { FaGlobe } from "react-icons/fa"
 
 const CoverPhoto = ({ user, defaultCover }) => {
     // States
@@ -39,7 +40,7 @@ const CoverPhoto = ({ user, defaultCover }) => {
 
     // useEffect to create image url
     useEffect(() => {
-        if(image) {
+        if (image) {
             const url = URL.createObjectURL(image);
 
             setImageUrl(url);
@@ -65,9 +66,41 @@ const CoverPhoto = ({ user, defaultCover }) => {
         setImage(imageFile);
     }
 
+    const handleCancel = () => {
+        setImage(null);
+    }
+
     return (
-        <div className="pt-10">
+        <div>
+            {/* ---- Cancel & Save Photo ---- */}
+            {
+                image && (
+                    <div className="absolute z-20 top-0 left-0 w-full flex items-center justify-between bg-black/10 px-4 py-3 backdrop-blur-[3px]">
+                        <p className="flex items-center gap-x-3">
+                            <FaGlobe size={19} />
+                            <span>Your cover photo is public.</span>
+                        </p>
+
+                        <div className="flex items-center justify-end gap-4">
+                            <button
+                                onClick={handleCancel}
+                                className="py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-text-primary/20 hover:bg-text-primary/40"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={() => { }}
+                                className="px-6 py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary hover:bg-primary-hover"
+                            >
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                )
+            }
+
             <div ref={coverRef} className="relative w-full h-[400px] mx-auto bg-border rounded-lg overflow-hidden">
+                {/* ---- Cover Photo ---- */}
                 <div className="w-full h-full cover-photo">
                     {
                         !image ? (
@@ -78,6 +111,7 @@ const CoverPhoto = ({ user, defaultCover }) => {
                                     image={imageUrl}
                                     crop={crop}
                                     zoom={zoom}
+                                    zoomWithScroll={false}
                                     aspect={width / 400}
                                     onCropChange={setCrop}
                                     onCropComplete={onCropComplete}
@@ -90,9 +124,9 @@ const CoverPhoto = ({ user, defaultCover }) => {
                 </div>
 
                 {/* ---- File Input ---- */}
-                <input 
+                <input
                     ref={inputFileRef}
-                    type="file" 
+                    type="file"
                     accept="image/jpeg, image/png, image/svg, image/webp, image/gif"
                     onChange={handleImageChange}
                 />
