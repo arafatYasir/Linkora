@@ -2,10 +2,16 @@ import { useSelector } from "react-redux";
 import Bio from "./Bio";
 import IntroButton from "./IntroButton";
 import { useEffect, useState } from "react";
+import Relation from "./Relation";
+import AddBio from "./AddBio";
 
 const ProfileIntro = ({ user, details }) => {
+    const {bio, college, university, school, relationShip, currentCity, job, workPlace, homeTown, pronouns, gmail, instagram, x, youtube, github} = details;
+
     // States
     const [isIntroEmpty, setIsIntroEmpty] = useState(true);
+    const [addBio, setAddBio] = useState(false);
+    const [bioText, setBioText] = useState(bio);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
@@ -22,7 +28,15 @@ const ProfileIntro = ({ user, details }) => {
         });
     }, [details]);
 
+    // Functions
+    const handleCancelBioAdding = () => {
+        setAddBio(false);
+        setBioText("");
+    }
+
     if(isIntroEmpty) return;
+
+    console.log(details);
 
     return (
         <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)] mb-5">
@@ -33,12 +47,16 @@ const ProfileIntro = ({ user, details }) => {
 
             {/* ---- Body ---- */}
             <div>
-                
+                {/* ---- Introduction ---- */}
+                <div className="mt-4">
+                    {relationShip && <Relation relationType={relationShip} />}
+                </div>
+
                 {/* ---- Intro Editing Section ---- */}
                 {user._id === userInfo._id && (
                     <div className="space-y-4 mt-4">
                         {
-                            details.bio ? <Bio text={details.bio} /> : <IntroButton buttonText="Add bio" />
+                            (bio && !addBio) ? <Bio text={bio} /> : addBio ? <AddBio bioText={bioText} setBioText={setBioText} onCancel={handleCancelBioAdding} /> : <IntroButton buttonText="Add bio" onClick={() => setAddBio(true)} />
                         }
 
                         <IntroButton buttonText="Edit details" />
