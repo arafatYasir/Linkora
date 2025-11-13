@@ -66,6 +66,7 @@
 body {
   background: var(--color-bg);
   color: var(--color-text-primary);
+  font-family: "Inter", sans-serif;
   font-smooth: always;
   min-height: 100vh;
 }

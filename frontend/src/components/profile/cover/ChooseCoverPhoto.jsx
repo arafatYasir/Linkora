@@ -53,7 +53,7 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
                 </div>
 
                 {/* Body */}
-                <div className="px-4 mt-4 flex flex-col gap-y-2">
+                <div className="px-6 mt-4 flex flex-col gap-y-2">
                     {
                         isImagesLoading ? <ChoosePhotosSkeleton /> : (
                             <>

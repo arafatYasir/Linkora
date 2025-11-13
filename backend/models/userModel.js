@@ -107,28 +107,40 @@ const UserModel = new Schema({
     ],
     details: {
         bio: {
-            type: String
+            type: String,
+            default: ""
         },
-        oterName: {
-            type: String
+        pronouns: {
+            type: Array,
+            default: []
         },
         job: {
-            type: String
+            type: String,
+            default: ""
         },
         currentCity: {
-            type: String
+            type: String,
+            default: ""
         },
         workPlace: {
-            type: String
-        },
-        college: {
-            type: String
+            type: String,
+            default: ""
         },
         school: {
-            type: String
+            type: String,
+            default: ""
+        },
+        college: {
+            type: String,
+            default: ""
+        },
+        university: {
+            type: String,
+            default: ""
         },
         homeTown: {
-            type: String
+            type: String,
+            default: ""
         },
         relationShip: {
             type: String,
@@ -136,12 +148,31 @@ const UserModel = new Schema({
                 "Single",
                 "In a Relationship",
                 "It's Complicated",
+                "Engaged",
                 "Married",
                 "Divorced"
-            ]
+            ],
+            default: "Single"
+        },
+        gmail: {
+            type: String,
+            default: ""
+        },
+        x: {
+            type: String,
+            default: ""
         },
         instagram: {
             type: String,
+            default: ""
+        },
+        github: {
+            type: String,
+            default: ""
+        },
+        youtube: {
+            type: String,
+            default: ""
         }
     },
     savedPosts: [

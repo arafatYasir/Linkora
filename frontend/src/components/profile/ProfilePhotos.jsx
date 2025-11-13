@@ -13,7 +13,7 @@ const ProfilePhotos = ({ isImagesLoading, images }) => {
             {/* ---- Images ---- */}
             {
                 (!images || isImagesLoading) ? <ProfilePhotosSkeleton /> : (
-                    <div className="grid grid-cols-[120px_120px_120px] justify-between gap-y-2.5 mt-2">
+                    <div className="grid grid-cols-[120px_120px_120px] justify-between gap-y-2.5 mt-4">
                         {
                             images.resources.map(image => (
                                 <div
