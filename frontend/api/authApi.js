@@ -64,6 +64,9 @@ export const authApi = createApi({
         getAllPosts: build.query({
             query: (dummy) => "/api/v1/posts/get-all-posts"
         }),
+        getUserPosts: build.query({
+            query: (id) => `/api/v1/posts/get-user-posts/${id}`
+        }),
         getUser: build.query({
             query: (username) => `/api/v1/get-user/${username}`
         }),
@@ -85,17 +88,17 @@ export const authApi = createApi({
             query: ({ url }) => ({
                 url: "/api/v1/update-profile-picture",
                 method: "PUT",
-                body: {url: url}
+                body: { url: url }
             })
         }),
         updateCoverPhoto: build.mutation({
             query: ({ url }) => ({
                 url: "/api/v1/update-cover-photo",
                 method: "PUT",
-                body: {url: url}
+                body: { url: url }
             })
         }),
     }),
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserQuery, useListImagesQuery, useUpdateProfilePictureMutation, useUpdateCoverPhotoMutation } = authApi;
+export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserPostsQuery, useGetUserQuery, useListImagesQuery, useUpdateProfilePictureMutation, useUpdateCoverPhotoMutation } = authApi;

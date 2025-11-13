@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom"
-import { useGetAllPostsQuery, useGetUserQuery, useListImagesQuery } from "../../api/authApi";
+import { useGetAllPostsQuery, useGetUserPostsQuery, useGetUserQuery, useListImagesQuery } from "../../api/authApi";
 import NotFound from "../components/NotFound";
 import defaultCover from "../../public/default images/defaultcover.jpg"
 import defaultPhoto from "../../public/default images/avatar.png"
@@ -36,7 +36,7 @@ const UserProfilePage = () => {
     const { data: user, isLoading } = useGetUserQuery(username, { skip: isOwnProfile });
 
     // Post fetching api
-    const { data: posts, refetch: refetchPosts } = useGetAllPostsQuery(null, { skip: userInfo.profilePicture !== userInfo.posts[0].user.profilePicture ? false : true });
+    const { data: posts, refetch: refetchPosts } = useGetUserPostsQuery(userInfo._id, { skip: userInfo.profilePicture !== userInfo.posts[0].user.profilePicture ? false : true });
 
     // Choosing the profile data to show
     const userProfile = isOwnProfile ? userInfo : user;
