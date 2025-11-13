@@ -1,20 +1,29 @@
 import { IoIosCamera } from "react-icons/io"
 import { editOptions } from "../../constants/coverPhoto"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import CoverOption from "./CoverOption"
 import { useCallback, useEffect, useRef, useState } from "react"
 import Cropper from "react-easy-crop"
 import { FaGlobe } from "react-icons/fa"
+import { useCreatePostMutation, useUpdateCoverPhotoMutation, useUploadImageMutation } from "../../../api/authApi"
+import { getCroppedImage } from "../../helpers/cropImage"
+import { addPost, setCoverPhoto } from "../../slices/authSlice"
 
 const CoverPhoto = ({ user, defaultCover }) => {
     // States
     const [showCoverOptions, setShowCoverOptions] = useState(false);
     const [image, setImage] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
+    const [uploadingState, setUploadingState] = useState(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
-    const [zoom, setZoom] = useState(1);
     const [pixelCrop, setPixelCrop] = useState(null);
     const [width, setWidth] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    // RTK api functions
+    const [uploadImage] = useUploadImageMutation();
+    const [updateCoverPhoto] = useUpdateCoverPhotoMutation();
+    const [createPost] = useCreatePostMutation();
 
     // Redux States
     const { userInfo } = useSelector(state => state.auth);
@@ -23,6 +32,7 @@ const CoverPhoto = ({ user, defaultCover }) => {
     const coverOptionsRef = useRef(null);
     const inputFileRef = useRef(null);
     const coverRef = useRef(null);
+    const dispatch = useDispatch();
 
     // useEffect to close dropdowns
     useEffect(() => {
@@ -44,6 +54,8 @@ const CoverPhoto = ({ user, defaultCover }) => {
             const url = URL.createObjectURL(image);
 
             setImageUrl(url);
+
+            if (!uploadingState) setUploadingState("editing");
 
             return () => URL.revokeObjectURL(image);
         }
@@ -68,6 +80,93 @@ const CoverPhoto = ({ user, defaultCover }) => {
 
     const handleCancel = () => {
         setImage(null);
+        setUploadingState(null);
+    }
+
+    const handleSave = async () => {
+        try {
+            const croppedCover = await getCroppedImage(imageUrl, pixelCrop);
+
+            setImage(croppedCover);
+            setCrop({ x: 0, y: 0 });
+            setUploadingState("saved");
+        } catch (e) {
+            console.log("Error cropping image: ", e)
+        }
+    }
+
+    const saveCoverPhotoInLocal = (url) => {
+        // Set in redux
+        dispatch(setCoverPhoto(url));
+
+        // Set in localstorage
+        const userData = JSON.parse(localStorage.getItem("userInfo"));
+        userData.coverPhoto = url;
+
+        localStorage.setItem("userInfo", JSON.stringify(userData));
+    }
+
+    const savePostInLocal = (post) => {
+        // Set in redux
+        dispatch(addPost(post));
+
+        // Set in localstorage
+        const userData = JSON.parse(localStorage.getItem("userInfo"));
+        userData.posts = [...userData.posts, post];
+
+        localStorage.setItem("userInfo", JSON.stringify(userData));
+    }
+
+    const handleUpload = async () => {
+        try {
+            setLoading(true);
+
+            const path = `${user.username}/cover_photo`;
+            const formData = new FormData();
+
+            formData.append("path", path);
+            formData.append("files", image);
+
+            // upload cover photo first to cloudinary and get the live url
+            const coverPhotoResponse = await uploadImage({
+                formData
+            }).unwrap();
+
+            // Extracting the url
+            const url = coverPhotoResponse.images[0].url;
+
+            // Save the live url to database
+            const updateResponse = await updateCoverPhoto({ url }).unwrap();
+
+            // Creating a post for cover photo update
+            const postResponse = await createPost({
+                type: "cover-photo",
+                images: [url],
+                text: null,
+                background: null,
+                user: userInfo._id
+            }).unwrap();
+
+            if (postResponse.status === "OK") {
+                setImage(null);
+                setPixelCrop(null);
+                setCrop({ x: 0, y: 0 });
+                setUploadingState(null);
+            }
+            // Saving that profile picture url in local
+            const coverPhotoUrl = updateResponse.url;
+            saveCoverPhotoInLocal(coverPhotoUrl);
+
+            // Saving that profile picture changing post in local
+            const post = { ...postResponse.post };
+            post.user = userInfo;
+
+            savePostInLocal(post);
+        } catch (e) {
+            console.log("Error while uploading cover photo: ", e);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -89,10 +188,12 @@ const CoverPhoto = ({ user, defaultCover }) => {
                                 Cancel
                             </button>
                             <button
-                                onClick={() => { }}
+                                onClick={uploadingState === "editing" ? handleSave : handleUpload}
                                 className="px-6 py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary hover:bg-primary-hover"
                             >
-                                Save Changes
+                                {
+                                    uploadingState === "editing" ? "Save Changes" : loading ? "Uploading..." : "Upload Photo"
+                                }
                             </button>
                         </div>
                     </div>
@@ -103,23 +204,22 @@ const CoverPhoto = ({ user, defaultCover }) => {
                 {/* ---- Cover Photo ---- */}
                 <div className="w-full h-full cover-photo">
                     {
-                        !image ? (
+                        (image && uploadingState === "editing") ? (
+                            <Cropper
+                                image={imageUrl}
+                                crop={crop}
+                                zoom={1}
+                                zoomWithScroll={false}
+                                aspect={width / 400}
+                                onCropChange={setCrop}
+                                onCropComplete={onCropComplete}
+                                objectFit="horizontal-cover"
+                            />
+                        ) : (image && uploadingState === "saved") ? (
+                            <img src={imageUrl} alt="Cover Photo" className="w-full h-full object-cover" />
+                        ) : (!image && !uploadingState) ? (
                             <img src={user.coverPhoto || defaultCover} alt="Cover Photo" className="w-full h-full object-cover" />
-                        ) : (
-                            <>
-                                <Cropper
-                                    image={imageUrl}
-                                    crop={crop}
-                                    zoom={zoom}
-                                    zoomWithScroll={false}
-                                    aspect={width / 400}
-                                    onCropChange={setCrop}
-                                    onCropComplete={onCropComplete}
-                                    onZoomChange={setZoom}
-                                    objectFit="horizontal-cover"
-                                />
-                            </>
-                        )
+                        ) : <></>
                     }
                 </div>
 

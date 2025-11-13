@@ -69,7 +69,11 @@ const Post = ({ post }) => {
                             >
                                 {user.firstname + " " + user.lastname}
                             </Link>
-                            <span className="text-gray-400">{type === "profile-picture" && ` updated ${user.gender === "Male" ? "his" : "her"} profile picture.`}</span>
+                            <span className="text-gray-400">
+                                {type === "profile-picture" && ` updated ${user.gender === "Male" ? "his" : "her"} profile picture.`}
+
+                                {type === "cover-photo" && ` updated ${user.gender === "Male" ? "his" : "her"} cover photo.`}
+                            </span>
                         </p>
 
                         <span className="block text-sm text-primary">{postedTime}</span>

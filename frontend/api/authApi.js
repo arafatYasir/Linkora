@@ -87,8 +87,15 @@ export const authApi = createApi({
                 method: "PUT",
                 body: {url: url}
             })
-        })
+        }),
+        updateCoverPhoto: build.mutation({
+            query: ({ url }) => ({
+                url: "/api/v1/update-profile-picture",
+                method: "PUT",
+                body: {url: url}
+            })
+        }),
     }),
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserQuery, useListImagesQuery, useUpdateProfilePictureMutation } = authApi;
+export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserQuery, useListImagesQuery, useUpdateProfilePictureMutation, useUpdateCoverPhotoMutation } = authApi;
