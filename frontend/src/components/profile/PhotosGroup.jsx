@@ -1,8 +1,13 @@
-const PhotosGroup = ({ groupName, images, select, setImage, closeModal, setCloseModal }) => {
+const PhotosGroup = ({ groupName, images, select, setImage, closeModal, setCloseModal, cols = 4 }) => {
     return (
         <div>
             <h4>{groupName}</h4>
-            <div className="grid grid-cols-[120px_120px_120px_120px_120px] justify-between gap-x-1 gap-y-2.5 mt-2">
+            <div 
+                className="grid justify-between gap-2.5 mt-2"
+                style={{
+                    gridTemplateColumns: `repeat(${cols}, 120px)`
+                }}
+            >
                 {
                     images?.map((image, index) => (
                         <div

@@ -434,17 +434,17 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, images = [] })
                         <div className="px-6 mt-4 flex flex-col gap-y-2 font-[Inter]">
                             {/* ---- Profile Pictures ---- */}
                             {
-                                (profilePictures.length > 0) && <PhotosGroup groupName="Profile Pictures" images={profilePictures} select={true} setImage={setPicture} />
+                                (profilePictures.length > 0) && <PhotosGroup groupName="Profile Pictures" images={profilePictures} select={true} setImage={setPicture} cols={5} />
                             }
 
                             {/* ---- Cover Photos ---- */}
                             {
-                                (coverPhotos.length > 0) && <PhotosGroup groupName="Cover Photos" images={coverPhotos} select={true} setImage={setPicture} />
+                                (coverPhotos.length > 0) && <PhotosGroup groupName="Cover Photos" images={coverPhotos} select={true} setImage={setPicture} cols={5} />
                             }
 
                             {/* ---- Uploads ---- */}
                             {
-                                (uploads.length > 0) && <PhotosGroup groupName="Uploads" images={uploads} select={true} setImage={setPicture} />
+                                (uploads.length > 0) && <PhotosGroup groupName="Uploads" images={uploads} select={true} setImage={setPicture} cols={5} />
                             }
                         </div>
                     )
