@@ -56,7 +56,7 @@ const Post = ({ post }) => {
                         <Link to={`/profile/${user.username}`}>
                             <img
                                 src={user.profilePicture || defaultAvatar}
-                                alt={user.firstname + " " + user.lastname} className="w-full object-cover"
+                                alt={user.firstname + " " + user.lastname} className="w-full h-full object-cover"
                             />
                         </Link>
                     </div>

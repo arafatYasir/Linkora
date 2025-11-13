@@ -90,7 +90,7 @@ export const authApi = createApi({
         }),
         updateCoverPhoto: build.mutation({
             query: ({ url }) => ({
-                url: "/api/v1/update-profile-picture",
+                url: "/api/v1/update-cover-photo",
                 method: "PUT",
                 body: {url: url}
             })
