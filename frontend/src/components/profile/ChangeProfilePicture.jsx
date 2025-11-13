@@ -198,6 +198,11 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, images = [] })
                 post.user = userInfo;
 
                 savePostInLocal(post);
+
+                // Reset input file value
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
             } catch (e) {
                 console.log("Error while uploading the profile picture: ", e);
             } finally {
@@ -215,6 +220,11 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, images = [] })
         }
         setCrop({ x: 0, y: 0 });
         setZoom(1);
+
+        // Reset input file value
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
     }
 
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {

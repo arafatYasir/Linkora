@@ -1,4 +1,4 @@
-const PhotosGroup = ({ groupName, images, select, setImage }) => {
+const PhotosGroup = ({ groupName, images, select, setImage, closeModal, setCloseModal }) => {
     return (
         <div>
             <h4>{groupName}</h4>
@@ -13,7 +13,13 @@ const PhotosGroup = ({ groupName, images, select, setImage }) => {
                                 src={image}
                                 alt="Select Photo"
                                 className="w-full h-full object-cover"
-                                onClick={select ? () => setImage(image) : null}
+                                onClick={select ? () => {
+                                    setImage(image);
+
+                                    if (closeModal) {
+                                        setCloseModal(false);
+                                    }
+                                } : null}
                             />
                         </div>
                     ))

@@ -59,17 +59,17 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
                             <>
                                 {/* ---- Profile Pictures ---- */}
                                 {
-                                    (profilePictures.length > 0) && <PhotosGroup groupName="Profile Pictures" images={profilePictures} />
+                                    (profilePictures.length > 0) && <PhotosGroup groupName="Profile Pictures" images={profilePictures} select={true} setImage={setImage} closeModal={true} setCloseModal={setShowChooseModal} />
                                 }
 
                                 {/* ---- Cover Photos ---- */}
                                 {
-                                    (coverPhotos.length > 0) && <PhotosGroup groupName="Cover Photos" images={coverPhotos} />
+                                    (coverPhotos.length > 0) && <PhotosGroup groupName="Cover Photos" images={coverPhotos} select={true} setImage={setImage} closeModal={true} setCloseModal={setShowChooseModal} />
                                 }
 
                                 {/* ---- Uploads ---- */}
                                 {
-                                    (uploads.length > 0) && <PhotosGroup groupName="Uploads" images={uploads} />
+                                    (uploads.length > 0) && <PhotosGroup groupName="Uploads" images={uploads} select={true} setImage={setImage} closeModal={true} setCloseModal={setShowChooseModal} />
                                 }
                             </>
                         )

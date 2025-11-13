@@ -59,18 +59,28 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
     // useEffect to create image url
     useEffect(() => {
         if (image) {
-            const url = URL.createObjectURL(image);
+            let url;
 
-            setImageUrl(url);
+            if (typeof image === "string") {
+                setImageUrl(image);
+            }
+            else {
+                url = URL.createObjectURL(image);
+                setImageUrl(url);
+            }
 
-            if (!uploadingState) setUploadingState("editing");
+            if (!uploadingState) {
+                setUploadingState("editing");
+            }
 
-            return () => URL.revokeObjectURL(image);
+            if (url) {
+                return () => URL.revokeObjectURL(image);
+            }
         }
         else {
             setImageUrl(null);
         }
-    }, [image]);
+    }, [image, uploadingState]);
 
     useEffect(() => {
         setWidth(coverRef.current.clientWidth);
@@ -82,6 +92,7 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
     }, []);
 
     const handleImageChange = (e) => {
+        console.log("Adding another one");
         const imageFile = e.target.files[0];
         setImage(imageFile);
     }
@@ -89,6 +100,12 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
     const handleCancel = () => {
         setImage(null);
         setUploadingState(null);
+        setCrop({ x: 0, y: 0 });
+
+        // Reset input file value
+        if (inputFileRef.current) {
+            inputFileRef.current.value = "";
+        }
     }
 
     const handleSave = async () => {
@@ -170,6 +187,11 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
             post.user = userInfo;
 
             savePostInLocal(post);
+
+            // Reset input file value
+            if (inputFileRef.current) {
+                inputFileRef.current.value = "";
+            }
         } catch (e) {
             console.log("Error while uploading cover photo: ", e);
         } finally {
@@ -177,6 +199,8 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
         }
     }
 
+    console.log(uploadingState);
+    console.log(image);
     return (
         <div>
             {/* ---- Cancel & Save Photo ---- */}
@@ -236,6 +260,7 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
                     ref={inputFileRef}
                     type="file"
                     accept="image/jpeg, image/png, image/svg, image/webp, image/gif"
+                    className="hidden"
                     onChange={handleImageChange}
                 />
 
