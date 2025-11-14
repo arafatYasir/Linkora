@@ -36,7 +36,7 @@ const UserProfilePage = () => {
     const { data: user, isLoading } = useGetUserQuery(username, { skip: isOwnProfile });
 
     // Post fetching api
-    const { data: posts, refetch: refetchPosts } = useGetUserPostsQuery(userInfo._id, { skip: userInfo.profilePicture !== userInfo.posts[0].user.profilePicture ? false : true });
+    const { data: posts, refetch: refetchPosts } = useGetUserPostsQuery(userInfo._id, { skip: userInfo.profilePicture !== userInfo?.posts[0]?.user?.profilePicture ? false : true });
 
     // Choosing the profile data to show
     const userProfile = isOwnProfile ? userInfo : user;
