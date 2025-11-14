@@ -158,6 +158,10 @@ const UserModel = new Schema({
             type: String,
             default: ""
         },
+        facebook: {
+            type: String,
+            default: ""
+        },
         x: {
             type: String,
             default: ""

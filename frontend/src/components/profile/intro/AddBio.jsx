@@ -1,4 +1,7 @@
-const AddBio = ({ bioText, setBioText, onCancel }) => {
+import { useState } from "react";
+
+const AddBio = ({ onCancel, onSave, loading }) => {
+    const [bioText, setBioText] = useState("");
     return (
         <div>
             <textarea
@@ -15,14 +18,17 @@ const AddBio = ({ bioText, setBioText, onCancel }) => {
             <div className="flex justify-end gap-x-1 mt-1">
                 <button
                     onClick={onCancel}
-                    className="py-2 px-4 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-text-primary/20 hover:bg-text-primary/40"
+                    disabled={loading}
+                    className="py-2 px-4 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-text-primary/20 hover:bg-text-primary/40 disabled:cursor-default disabled:bg-text-primary/50 disabled:hover:bg-text-primary/50"
                 >
                     Cancel
                 </button>
                 <button
-                    className="px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary hover:bg-primary-hover"
+                    onClick={() => onSave("bio", bioText)}
+                    disabled={loading}
+                    className="px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary hover:bg-primary-hover disabled:cursor-default disabled:bg-primary/50 disabled:hover:bg-primary/50"
                 >
-                    Save
+                    {loading ? "Saving..." : "Save"}
                 </button>
             </div>
         </div>

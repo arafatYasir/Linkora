@@ -198,9 +198,7 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
             setLoading(false);
         }
     }
-
-    console.log(uploadingState);
-    console.log(image);
+    
     return (
         <div>
             {/* ---- Cancel & Save Photo ---- */}

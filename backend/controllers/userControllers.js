@@ -432,4 +432,19 @@ const updateCoverPhoto = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto };
+const updateProfileIntro = async (req, res) => {
+    try {
+        const {intro} = req.body;
+        await User.findByIdAndUpdate(req.user.id, {details: intro});
+
+        res.send({
+            status: "OK"
+        });
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro };
