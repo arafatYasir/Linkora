@@ -7,6 +7,7 @@ import AddBio from "./AddBio";
 import EditBio from "./EditBio";
 import { useUpdateProfileIntroMutation } from "../../../../api/authApi";
 import { setIntro } from "../../../slices/authSlice";
+import EditDetailsModal from "./EditDetailsModal";
 
 const ProfileIntro = ({ user, details }) => {
     // States
@@ -29,6 +30,7 @@ const ProfileIntro = ({ user, details }) => {
         github: details.github
     });
     const [isIntroEmpty, setIsIntroEmpty] = useState(true);
+    const [showEditDetailsModal, setShowEditDetailsModal] = useState(false);
     const [addBio, setAddBio] = useState(false);
     const [editBio, setEditBio] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -82,10 +84,10 @@ const ProfileIntro = ({ user, details }) => {
             setLoading(true);
 
             // Saving in local state
-            saveIntroInLocal({...introInfos, [key]: value });
+            saveIntroInLocal({ ...introInfos, [key]: value });
 
             // Saving in database
-            const updateResponse = await updateProfileIntro({...introInfos, [key]: value }).unwrap();
+            const updateResponse = await updateProfileIntro({ ...introInfos, [key]: value }).unwrap();
 
             if (updateResponse?.status === "OK") {
                 // Reset states
@@ -133,7 +135,15 @@ const ProfileIntro = ({ user, details }) => {
                                         <IntroButton buttonText="Add bio" onClick={() => setAddBio(true)} />
                         }
 
-                        <IntroButton buttonText="Edit details" />
+                        <IntroButton buttonText="Edit details" onClick={() => setShowEditDetailsModal(true)} />
+
+                        {showEditDetailsModal && (
+                            <EditDetailsModal
+                                initialDetails={introInfos}
+                                onClose={() => setShowEditDetailsModal(false)}
+                                onSave={handleSaveIntro}
+                            />
+                        )}
                     </div>
                 )}
             </div>
