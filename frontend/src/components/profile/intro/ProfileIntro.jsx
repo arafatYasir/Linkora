@@ -10,6 +10,7 @@ import { setIntro } from "../../../slices/authSlice";
 import EditDetailsModal from "./EditDetailsModal";
 import Pronoun from "./Pronoun";
 import WorkPlace from "./WorkPlace";
+import Education from "./Education";
 
 const ProfileIntro = ({ user, details }) => {
     // States
@@ -143,6 +144,12 @@ const ProfileIntro = ({ user, details }) => {
                     {introInfos.pronoun && <Pronoun pronoun={introInfos.pronoun} />}
 
                     {(introInfos.job && introInfos.workPlace) ? <WorkPlace text={`${introInfos.job} at ${introInfos.workPlace}`} /> : (introInfos.job && !introInfos.workPlace) ? <WorkPlace text={`${introInfos.job}`} /> : <></>}
+
+                    {introInfos.school && <Education name={introInfos.school} />}
+
+                    {introInfos.college && <Education name={introInfos.college} />}
+
+                    {introInfos.university && <Education name={introInfos.university} />}
 
                     {introInfos.relationShip && <Relation relationType={introInfos.relationShip} />}
                 </div>

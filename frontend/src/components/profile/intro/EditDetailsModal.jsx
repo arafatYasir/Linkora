@@ -364,7 +364,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                     {/* Single-field sections using IntroSection component */}
                     <IntroSection title="School" fieldKey="school" value={local.school} onSave={saveField} placeholder="e.g., City High School" />
 
-                    <IntroSection title="College" fieldKey="college" value={local.college} onSave={saveField} placeholder="e.g., Community College" />
+                    <IntroSection title="College" fieldKey="college" value={local.college} onSave={saveField} placeholder="e.g., National College" />
 
                     <IntroSection title="University" fieldKey="university" value={local.university} onSave={saveField} placeholder="e.g., MIT" />
 
