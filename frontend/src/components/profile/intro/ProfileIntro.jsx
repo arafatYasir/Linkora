@@ -8,6 +8,7 @@ import EditBio from "./EditBio";
 import { useUpdateProfileIntroMutation } from "../../../../api/authApi";
 import { setIntro } from "../../../slices/authSlice";
 import EditDetailsModal from "./EditDetailsModal";
+import Pronoun from "./Pronoun";
 
 const ProfileIntro = ({ user, details }) => {
     // States
@@ -115,7 +116,12 @@ const ProfileIntro = ({ user, details }) => {
                 {/* ---- Introduction ---- */}
                 <div className="mt-4 space-y-3">
                     {(introInfos.bio && !addBio && !editBio) && <Bio text={introInfos.bio} />}
+
                     {introInfos.relationShip && <Relation relationType={introInfos.relationShip} />}
+
+                    {introInfos.pronouns.length > 0 && (
+                        introInfos.pronouns.map(pronoun => <Pronoun pronoun={pronoun} />)
+                    )}
                 </div>
 
                 {/* ---- Intro Editing Section ---- */}
@@ -137,6 +143,7 @@ const ProfileIntro = ({ user, details }) => {
 
                         <IntroButton buttonText="Edit details" onClick={() => setShowEditDetailsModal(true)} />
 
+                        {/* ---- Edit Details Modal ---- */}
                         {showEditDetailsModal && (
                             <EditDetailsModal
                                 initialDetails={introInfos}

@@ -35,8 +35,8 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
     }, [images]);
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-            <div ref={chooseModalRef} className={`w-full max-w-xl rounded-xl shadow-lg overflow-hidden bg-surface border border-border py-4`}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
+            <div ref={chooseModalRef} className={`w-full max-w-xl rounded-xl shadow-lg overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border)] py-4`}>
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 pb-4 border-b border-border">
                     <h2 className="text-xl font-semibold text-text-primary">
@@ -53,7 +53,7 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
                 </div>
 
                 {/* Body */}
-                <div className="px-6 mt-4 flex flex-col gap-y-2">
+                <div className="px-6 pt-4 max-h-[70vh] overflow-y-auto flex flex-col gap-y-2">
                     {
                         isImagesLoading ? <ChoosePhotosSkeleton /> : (
                             <>

@@ -1,24 +1,16 @@
-// EditDetailsModal.jsx
 import { useEffect, useRef, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import IntroSection from "./IntroSection";
+import CustomInput from "../../common/CustomInput";
 
-/**
- * Props:
- * - initialDetails: object with fields from your schema
- * - onClose: () => void
- * - onSave: async (key, value) => Promise - parent saves to DB & redux
- *
- * This modal keeps optimistic local state and calls onSave for each change.
- */
 const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
-    const uploadModalRef = useRef(null);
+    const introModalRef = useRef(null);
     const [local, setLocal] = useState({ ...initialDetails });
     const [loadingField, setLoadingField] = useState(null); // which key is currently saving
 
     useEffect(() => {
         const handleClose = (e) => {
-            if (uploadModalRef.current && !uploadModalRef.current.contains(e.target)) {
+            if (introModalRef.current && !introModalRef.current.contains(e.target)) {
                 onClose();
             }
         };
@@ -31,6 +23,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         setLoadingField(key);
         const previous = local[key];
         setLocal((p) => ({ ...p, [key]: value }));
+
         try {
             await onSave(key, value);
         } catch (e) {
@@ -71,7 +64,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                         pronouns.map((p, i) => (
                             <div key={i} className="px-3 py-1 rounded-full bg-border text-sm flex items-center gap-x-2">
                                 <span>{p}</span>
-                                <button aria-label="remove" onClick={() => removePronoun(i)} className="text-xs opacity-80 hover:opacity-100">×</button>
+                                <button aria-label="remove" onClick={() => removePronoun(i)} className="text-lg hover:text-primary opacity-80 hover:opacity-100 cursor-pointer">×</button>
                             </div>
                         ))
                     ) : (
@@ -83,22 +76,18 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                     <div className="mt-3">
                         <button
                             onClick={() => setOpen(true)}
-                            className="text-sm py-1 px-3 rounded-[var(--radius-button)] bg-border hover:bg-primary/10 transition-[var(--transition-default)]"
+                            className="text-sm py-1 px-3 rounded-[var(--radius-button)] bg-border hover:bg-primary/30 transition-[var(--transition-default)] cursor-pointer"
                         >
                             + Add pronouns
                         </button>
                     </div>
                 ) : (
                     <div className="mt-2">
-                        <input
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            placeholder="e.g., he/him, she/her, they/them"
-                            className="w-full border-2 border-[var(--color-border)] rounded-lg px-3 py-2 focus:outline-primary-hover"
-                        />
-                        <div className="flex justify-end gap-x-2 mt-2">
-                            <button onClick={() => setOpen(false)} className="py-2 px-4 rounded-lg bg-text-primary/20 hover:bg-text-primary/40">Cancel</button>
-                            <button onClick={addPronoun} className="py-2 px-4 rounded-lg bg-primary hover:bg-primary-hover">Save</button>
+                        <CustomInput value={input} setValue={setInput} placeholder="e.g., he/him, she/her, they/them" width="100%" borderWidth="2px" />
+
+                        <div className="flex justify-end gap-x-2 mt-2 text-sm">
+                            <button onClick={() => setOpen(false)} className="py-2 px-4 rounded-lg bg-text-primary/20 hover:bg-text-primary/40 cursor-pointer">Cancel</button>
+                            <button onClick={addPronoun} className="py-2 px-4 rounded-lg bg-primary hover:bg-primary-hover cursor-pointer">Save</button>
                         </div>
                     </div>
                 )}
@@ -282,8 +271,8 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
-            <div ref={uploadModalRef} className="w-full max-w-2xl rounded-xl shadow-lg overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border)] py-4">
-                {/* Header */}
+            <div ref={introModalRef} className="w-full max-w-2xl rounded-xl shadow-lg overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border)] py-4">
+                {/* ---- Header ---- */}
                 <div className="flex items-center justify-between px-6 pb-4 border-b border-[var(--color-border)]">
                     <h2 className="text-xl font-semibold text-[var(--color-text-primary)]">Edit details</h2>
                     <button
@@ -295,13 +284,12 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                     </button>
                 </div>
 
-                {/* Body */}
+                {/* ---- Body ---- */}
                 <div className="px-6 max-h-[70vh] overflow-y-auto">
-                    {/* Intro text area so user can see main bio (optional read-only here) */}
+                    {/* ---- Bio View ---- */}
                     <div className="py-3 border-b border-[var(--color-border)]">
                         <h4 className="text-sm font-semibold mb-2">Bio</h4>
                         <div className="text-sm text-[var(--color-text-secondary)]">{local.bio || <em>No bio set</em>}</div>
-                        {/* Note: bio editing is handled separately in your existing bio UI */}
                     </div>
 
                     {/* Pronouns */}
