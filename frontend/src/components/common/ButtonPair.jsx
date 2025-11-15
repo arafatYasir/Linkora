@@ -1,4 +1,4 @@
-const ButtonPair = ({ action, cancel, fontSize = "14px", paddingX = "16px", paddingY = "8px" }) => {
+const ButtonPair = ({ action, cancel, loading, fontSize = "14px", paddingX = "16px", paddingY = "8px" }) => {
     return (
         <div
             className="flex justify-end gap-x-2 mt-2"
@@ -12,6 +12,7 @@ const ButtonPair = ({ action, cancel, fontSize = "14px", paddingX = "16px", padd
                 style={{
                     padding: `${paddingY} ${paddingX}`
                 }}
+                disabled={loading}
             >
                 Cancel
             </button>
@@ -21,8 +22,9 @@ const ButtonPair = ({ action, cancel, fontSize = "14px", paddingX = "16px", padd
                 style={{
                     padding: `${paddingY} ${paddingX}`
                 }}
+                disabled={loading}
             >
-                Save
+                {loading ? "Saving..." : "Save"}
             </button>
         </div>
     )

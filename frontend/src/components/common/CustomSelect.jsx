@@ -76,7 +76,7 @@ const CustomSelect = ({ value, onChange, options, placeholder, paddingX, padding
                   w-full px-4 py-2.5 text-left transition-[var(--transition-default)]
                   text-[var(--color-text-primary)]
                   hover:bg-primary/30
-                  ${active ? "bg-primary/30" : "hover:bg-primary/20"}
+                  ${active ? "border border-primary rounded-lg" : "hover:bg-primary/20"}
                    cursor-pointer
                 `}
                             >

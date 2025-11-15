@@ -10,7 +10,7 @@ import IntroDetailsbutton from "../../common/IntroDetailsButton";
 const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
     const introModalRef = useRef(null);
     const [local, setLocal] = useState({ ...initialDetails });
-    const [loadingField, setLoadingField] = useState(null); // which key is currently saving
+    const [loadingField, setLoadingField] = useState(null);
 
     useEffect(() => {
         const handleClose = (e) => {
@@ -46,6 +46,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
     const PronounsEditor = () => {
         const [showSelect, setShowSelect] = useState(false);
         const [pronoun, setPronoun] = useState(local.pronoun || "");
+        const [loading, setLoading] = useState(false);
 
         const pronouns = [
             {
@@ -63,9 +64,16 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         ];
 
         const handleAddPronoun = async () => {
-            if (!pronoun) return;
-            await saveField("single", {}, "pronoun", pronoun);
-            setShowSelect(false);
+            try {
+                setLoading(true);
+                if (!pronoun) return;
+                await saveField("single", {}, "pronoun", pronoun);
+                setShowSelect(false);
+            } catch (e) {
+                console.log("Error while adding a pronoun: ", e);
+            } finally {
+                setLoading(false);
+            }
         };
 
         const handleCancel = () => {
@@ -115,6 +123,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                         <ButtonPair
                             action={handleAddPronoun}
                             cancel={handleCancel}
+                            loading={loading}
                         />
                     </div>
                 )}
@@ -140,8 +149,20 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         };
 
         const handleSave = async () => {
-            setLoading(true);
             try {
+                setLoading(true);
+                
+                if(jobValue.trim() !== "" && workValue.trim() === "") {
+                    alert("Please enter your workplace name");
+                    setLoading(false);
+                    return;
+                }
+                else if(jobValue.trim() === "" && workValue.trim() !== "") {
+                    alert("Please the job name");
+                    setLoading(false);
+                    return;
+                }
+
                 const object = { job: jobValue, workPlace: workValue };
                 await saveField("multiple", object, "", "");
                 setEditing(false);
@@ -191,6 +212,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                         <ButtonPair
                             action={handleSave}
                             cancel={handleCancel}
+                            loading={loading}
                         />
                     </div>
                 )}
