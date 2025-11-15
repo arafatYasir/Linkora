@@ -9,6 +9,7 @@ import { useUpdateProfileIntroMutation } from "../../../../api/authApi";
 import { setIntro } from "../../../slices/authSlice";
 import EditDetailsModal from "./EditDetailsModal";
 import Pronoun from "./Pronoun";
+import WorkPlace from "./WorkPlace";
 
 const ProfileIntro = ({ user, details }) => {
     // States
@@ -140,6 +141,8 @@ const ProfileIntro = ({ user, details }) => {
                     {(introInfos.bio && !addBio && !editBio) && <Bio text={introInfos.bio} />}
 
                     {introInfos.pronoun && <Pronoun pronoun={introInfos.pronoun} />}
+
+                    {(introInfos.job && introInfos.workPlace) ? <WorkPlace text={`${introInfos.job} at ${introInfos.workPlace}`} /> : (introInfos.job && !introInfos.workPlace) ? <WorkPlace text={`${introInfos.job}`} /> : <></>}
 
                     {introInfos.relationShip && <Relation relationType={introInfos.relationShip} />}
                 </div>

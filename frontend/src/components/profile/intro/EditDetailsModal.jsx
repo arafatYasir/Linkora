@@ -22,10 +22,13 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         return () => document.removeEventListener("mousedown", handleClose);
     }, [onClose]);
 
+    useEffect(() => {
+        setLocal({ ...initialDetails });
+    }, [initialDetails]);
+
     const saveField = async (type, object, key, value) => {
         setLoadingField(key);
         const previous = local[key];
-        setLocal((p) => ({ ...p, [key]: value }));
 
         try {
             await onSave(type, object, key, value);
@@ -139,7 +142,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         const handleSave = async () => {
             setLoading(true);
             try {
-                const object = {job: jobValue, workPlace: workValue};
+                const object = { job: jobValue, workPlace: workValue };
                 await saveField("multiple", object, "", "");
                 setEditing(false);
             } catch (e) {
