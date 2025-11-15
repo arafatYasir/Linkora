@@ -79,25 +79,35 @@ const ProfileIntro = ({ user, details }) => {
     }
 
     const saveIntroInLocal = (intro) => {
+        console.log("The value of intro sent from editor: ", intro)
+
         // Saving in local state
         setIntroInfos(intro);
 
         // Saving in Redux
         dispatch(setIntro(intro));
 
-        // Saing in localstorage
+        // Saving in localstorage
         const user = JSON.parse(localStorage.getItem("userInfo"));
         user.details = intro;
 
         localStorage.setItem("userInfo", JSON.stringify(user));
+
+        console.log("Redux state: ", userInfo);
+        console.log("Localstorage: ", JSON.parse(localStorage.getItem("userInfo")));
     }
 
-    const handleSaveIntro = async (key, value) => {
+    const handleSaveIntro = async (type, object, key, value) => {
         try {
             setLoading(true);
 
-            // Saving in local state
-            saveIntroInLocal({ ...introInfos, [key]: value });
+            // Saving in local state based on multiple or single
+            if(type === "single") {
+                saveIntroInLocal({ ...introInfos, [key]: value });
+            }
+            else {
+                saveIntroInLocal({...introInfos, ...object});
+            }
 
             // Saving in database
             const updateResponse = await updateProfileIntro({ ...introInfos, [key]: value }).unwrap();

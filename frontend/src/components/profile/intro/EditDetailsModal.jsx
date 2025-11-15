@@ -22,13 +22,13 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         return () => document.removeEventListener("mousedown", handleClose);
     }, [onClose]);
 
-    const saveField = async (key, value) => {
+    const saveField = async (type, object, key, value) => {
         setLoadingField(key);
         const previous = local[key];
         setLocal((p) => ({ ...p, [key]: value }));
 
         try {
-            await onSave(key, value);
+            await onSave(type, object, key, value);
         } catch (e) {
             // revert on error
             setLocal((p) => ({ ...p, [key]: previous }));
@@ -61,7 +61,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
 
         const handleAddPronoun = async () => {
             if (!pronoun) return;
-            await saveField("pronoun", pronoun);
+            await saveField("single", {}, "pronoun", pronoun);
             setShowSelect(false);
         };
 
@@ -71,7 +71,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         }
 
         const removePronoun = async () => {
-            await saveField("pronoun", "");
+            await saveField("single", {}, "pronoun", "");
         };
 
         return (
@@ -139,8 +139,8 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         const handleSave = async () => {
             setLoading(true);
             try {
-                if (jobValue !== local.job) await saveField("job", jobValue);
-                if (workValue !== local.workPlace) await saveField("workPlace", workValue);
+                const object = {job: jobValue, workPlace: workValue};
+                await saveField("multiple", object, "", "");
                 setEditing(false);
             } catch (e) {
                 console.error(e);
@@ -152,7 +152,6 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         return (
             <div className="py-3 border-b border-[var(--color-border)]">
                 <h4 className="text-sm font-semibold mb-2">Work & Job</h4>
-
                 {!editing ? (
                     <div className="flex items-center justify-between">
                         <div className="text-sm text-[var(--color-text-secondary)]">
