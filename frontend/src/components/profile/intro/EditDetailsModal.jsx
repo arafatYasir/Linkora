@@ -4,6 +4,8 @@ import IntroSection from "./IntroSection";
 import CustomInput from "../../common/CustomInput";
 import { HiPencil } from "react-icons/hi2";
 import CustomSelect from "../../common/CustomSelect"
+import ButtonPair from "../../common/ButtonPair";
+import IntroDetailsbutton from "../../common/IntroDetailsButton";
 
 const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
     const introModalRef = useRef(null);
@@ -57,7 +59,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
             }
         ];
 
-        const addPronoun = async () => {
+        const handleAddPronoun = async () => {
             if (!pronoun) return;
             await saveField("pronoun", pronoun);
             setShowSelect(false);
@@ -89,12 +91,14 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
 
                 {!showSelect ? (
                     <div className="mt-3">
-                        <button
+                        {/* <button
                             onClick={() => setShowSelect(true)}
                             className="text-sm py-1 px-3 rounded-[var(--radius-button)] bg-border hover:bg-primary/30 transition-[var(--transition-default)] cursor-pointer"
                         >
                             {!pronoun ? "+ Select pronoun" : <span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit pronoun</span>}
-                        </button>
+                        </button> */}
+
+                        <IntroDetailsbutton action={setShowSelect} condition={pronoun} option1={"+ Select pronoun"} option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit pronoun</span>} />
                     </div>
                 ) : (
                     <div className="mt-2">
@@ -107,20 +111,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                             paddingY="8px"
                         />
 
-                        <div className="flex justify-end gap-x-2 mt-2 text-sm">
-                            <button
-                                onClick={handleCancel}
-                                className="py-2 px-4 rounded-lg bg-text-primary/20 hover:bg-text-primary/40 cursor-pointer"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={addPronoun}
-                                className="py-2 px-4 rounded-lg bg-primary hover:bg-primary-hover cursor-pointer"
-                            >
-                                Save
-                            </button>
-                        </div>
+                        <ButtonPair action={handleAddPronoun} cancel={handleCancel} />
                     </div>
                 )}
 
@@ -148,7 +139,6 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         const save = async () => {
             setLoading(true);
             try {
-                // Save job then workplace (sequentially)
                 if (jobValue !== local.job) await saveField("job", jobValue);
                 if (workValue !== local.workPlace) await saveField("workPlace", workValue);
                 setEditing(false);
@@ -175,13 +165,28 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                             )}
                         </div>
                         <div>
-                            <button onClick={openEdit} className="text-sm py-1 px-3 rounded-[var(--radius-button)] bg-border hover:bg-primary/10">Edit</button>
+                            <button onClick={openEdit} className="text-sm py-1 px-3 rounded-[var(--radius-button)] bg-border hover:bg-primary/30 cursor-pointer">Edit</button>
                         </div>
                     </div>
                 ) : (
                     <div className="space-y-2">
-                        <input value={jobValue} onChange={(e) => setJobValue(e.target.value)} placeholder="Job title (e.g., Product Designer)" className="w-full border-2 border-[var(--color-border)] rounded-lg px-3 py-2 focus:outline-primary-hover" />
-                        <input value={workValue} onChange={(e) => setWorkValue(e.target.value)} placeholder="Workplace (e.g., Acme Inc.)" className="w-full border-2 border-[var(--color-border)] rounded-lg px-3 py-2 focus:outline-primary-hover" />
+                        <CustomInput
+                            value={jobValue}
+                            setValue={setJobValue}
+                            placeholder="Job title (e.g., Product Designer)"
+                            width="100%"
+                            borderWidth="2px"
+                        // fontSize="15px"
+                        />
+
+                        <CustomInput
+                            value={workValue}
+                            setValue={setWorkValue}
+                            placeholder="Workplace (e.g., Acme Inc.)"
+                            width="100%"
+                            borderWidth="2px"
+                        />
+
                         <div className="flex justify-end gap-x-2">
                             <button onClick={cancel} className="py-2 px-4 rounded-lg bg-text-primary/20 hover:bg-text-primary/40">Cancel</button>
                             <button onClick={save} disabled={loading} className="py-2 px-4 rounded-lg bg-primary hover:bg-primary-hover">{loading ? "Saving..." : "Save"}</button>
