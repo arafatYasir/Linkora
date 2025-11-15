@@ -86,6 +86,18 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
         setWidth(coverRef.current.clientWidth);
     }, [window.innerWidth]);
 
+    // useEffect to check if the modal is open and then disable body scrolling
+    useEffect(() => {
+        const body = document.querySelector("body");
+
+        if (showChooseModal) {
+            body.style.overflow = "hidden";
+        }
+        else {
+            body.style.overflowY = "scroll";
+        }
+    }, [showChooseModal]);
+
     // Functions
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
         setPixelCrop(croppedAreaPixels);
@@ -198,7 +210,7 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
             setLoading(false);
         }
     }
-    
+
     return (
         <div>
             {/* ---- Cancel & Save Photo ---- */}

@@ -22,7 +22,7 @@ const ProfileIntro = ({ user, details }) => {
         job: details.job,
         workPlace: details.workPlace,
         homeTown: details.homeTown,
-        pronouns: details.pronouns,
+        pronoun: details.pronoun,
         gmail: details.gmail,
         facebook: details.facebook,
         instagram: details.instagram,
@@ -56,6 +56,18 @@ const ProfileIntro = ({ user, details }) => {
             }
         });
     }, [details]);
+
+    // useEffect to check if intro edit modal is open and then disable body scrolling
+    useEffect(() => {
+        const body = document.querySelector("body");
+
+        if(showEditDetailsModal) {
+            body.style.overflow = "hidden";
+        }
+        else {
+            body.style.overflowY = "scroll";
+        }
+    }, [showEditDetailsModal]);
 
     // Functions
     const handleCancelBioAdding = () => {
@@ -117,11 +129,9 @@ const ProfileIntro = ({ user, details }) => {
                 <div className="mt-4 space-y-3">
                     {(introInfos.bio && !addBio && !editBio) && <Bio text={introInfos.bio} />}
 
-                    {introInfos.relationShip && <Relation relationType={introInfos.relationShip} />}
+                    {introInfos.pronoun && <Pronoun pronoun={introInfos.pronoun} />}
 
-                    {introInfos.pronouns.length > 0 && (
-                        introInfos.pronouns.map(pronoun => <Pronoun pronoun={pronoun} />)
-                    )}
+                    {introInfos.relationShip && <Relation relationType={introInfos.relationShip} />}
                 </div>
 
                 {/* ---- Intro Editing Section ---- */}

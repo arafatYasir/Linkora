@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { FaAngleDown } from "react-icons/fa6";
 
-const CustomSelect = ({ value, onChange, options, placeholder }) => {
+const CustomSelect = ({ value, onChange, options, placeholder, paddingX, paddingY }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -11,55 +11,82 @@ const CustomSelect = ({ value, onChange, options, placeholder }) => {
                 setIsOpen(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const selectedOption = options.find((opt) => opt.value === value);
-
     return (
         <div className="relative" ref={dropdownRef}>
+            {/* --- Trigger Button --- */}
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
                 className={`
-                w-full px-4 py-3 flex items-center justify-between text-left rounded-lg border transition-all duration-200
-                ${isOpen ? "border-primary shadow-[0_0_0_3px_rgba(52,178,123,0.2)] text-text-primary" : "border-border text-text-secondary"}bg-bg `}
+                w-full rounded-[var(--radius-button)] border 
+                outline-none text-left flex items-center justify-between 
+                transition-[var(--transition-default)]
+                bg-[var(--color-bg)]
+                text-[var(--color-text-secondary)] cursor-pointer
+                border-[var(--color-border)]
+                ${value ? "text-[var(--color-text-primary)]" : ""}
+                ${isOpen ? "border-[var(--color-primary)] shadow-[var(--color-glow-green)]" : ""}
+                `}
+                style={{
+                    padding: `${paddingY} ${paddingX}`
+                }}
             >
-                <span className={value ? "text-text-primary" : "text-text-secondary"}>
-                    {selectedOption ? selectedOption.label : placeholder}
-                </span>
+                <span>{value ? value : placeholder}</span>
+
                 <FaAngleDown
-                    className={`w-5 h-5 transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"
-                        } text-text-secondary`}
+                    className={`
+            w-5 h-5 transition-transform duration-200 
+            text-[var(--color-text-secondary)]
+            ${isOpen ? "rotate-180" : "rotate-0"}
+          `}
                 />
             </button>
 
+            {/* --- Dropdown Menu --- */}
             {isOpen && (
-                <div className="absolute z-50 w-full mt-2 rounded-lg border max-h-52 overflow-y-auto bg-surface border-border shadow-light">
-                    {options.map((option) => (
-                        <button
-                            key={option.value}
-                            type="button"
-                            onClick={() => {
-                                onChange(option.value);
-                                setIsOpen(false);
-                            }}
-                            className={`
-                w-full px-4 py-2.5 text-left transition-colors duration-150
-                ${value === option.value
-                                    ? "bg-green-100 text-text-primary"
-                                    : "bg-transparent text-text-primary hover:bg-green-50"
-                                }
-              `}
-                        >
-                            {option.label}
-                        </button>
-                    ))}
+                <div
+                    className={`
+            absolute z-50 w-full mt-2 rounded-[var(--radius-button)]
+            border border-[var(--color-border)]
+            bg-[var(--color-surface)]
+            shadow-[var(--shadow-light)]
+            max-h-[200px] overflow-y-auto
+          `}
+                >
+                    {options.map((option) => {
+                        const active = value === option.value;
+                        console.log("--------------");
+                        console.log("Is that a match: ", active);
+                        console.log("State: ", value);
+                        console.log("Map: ", option.value);
+
+                        return (
+                            <button
+                                key={option.value}
+                                type="button"
+                                onClick={() => {
+                                    onChange(option.value);
+                                    setIsOpen(false);
+                                }}
+                                className={`
+                  w-full px-4 py-2.5 text-left transition-[var(--transition-default)]
+                  text-[var(--color-text-primary)]
+                  hover:bg-primary/30
+                  ${active ? "bg-primary/30" : "hover:bg-primary/20"}
+                   cursor-pointer
+                `}
+                            >
+                                {option.label}
+                            </button>
+                        );
+                    })}
                 </div>
             )}
         </div>
     );
 }
-export defaul CustomSelect;
+export default CustomSelect;

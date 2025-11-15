@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import IntroSection from "./IntroSection";
 import CustomInput from "../../common/CustomInput";
+import { HiPencil } from "react-icons/hi2";
+import CustomSelect from "../../common/CustomSelect"
 
 const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
     const introModalRef = useRef(null);
@@ -18,7 +20,6 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         return () => document.removeEventListener("mousedown", handleClose);
     }, [onClose]);
 
-    // Generic helper to update local state optimistically and call parent save
     const saveField = async (key, value) => {
         setLoadingField(key);
         const previous = local[key];
@@ -38,59 +39,91 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
 
     // Pronouns editor
     const PronounsEditor = () => {
-        const [open, setOpen] = useState(false);
-        const [input, setInput] = useState("");
-        const pronouns = Array.isArray(local.pronouns) ? local.pronouns : [];
+        const [showSelect, setShowSelect] = useState(false);
+        const [pronoun, setPronoun] = useState(local.pronoun || "");
+
+        const pronouns = [
+            {
+                label: "he/him",
+                value: "he/him"
+            },
+            {
+                label: "she/her",
+                value: "she/her"
+            },
+            {
+                label: "they/them",
+                value: "they/them",
+            }
+        ];
 
         const addPronoun = async () => {
-            if (!input.trim()) return;
-            const newArr = [...pronouns, input.trim()];
-            await saveField("pronouns", newArr);
-            setInput("");
-            setOpen(false);
+            if (!pronoun) return;
+            await saveField("pronoun", pronoun);
+            setShowSelect(false);
         };
 
-        const removePronoun = async (idx) => {
-            const newArr = pronouns.filter((_, i) => i !== idx);
-            await saveField("pronouns", newArr);
+        const handleCancel = () => {
+            setPronoun(initialDetails.pronoun);
+            setShowSelect(false);
+        }
+
+        const removePronoun = async () => {
+            await saveField("pronoun", "");
         };
 
         return (
             <div className="py-3 border-b border-[var(--color-border)]">
-                <h4 className="text-sm font-semibold mb-2">Pronouns</h4>
+                <h4 className="text-sm font-semibold mb-2">Pronoun</h4>
 
                 <div className="flex items-center gap-2 flex-wrap">
-                    {pronouns.length > 0 ? (
-                        pronouns.map((p, i) => (
-                            <div key={i} className="px-3 py-1 rounded-full bg-border text-sm flex items-center gap-x-2">
-                                <span>{p}</span>
-                                <button aria-label="remove" onClick={() => removePronoun(i)} className="text-lg hover:text-primary opacity-80 hover:opacity-100 cursor-pointer">×</button>
-                            </div>
-                        ))
+                    {pronoun ? (
+                        <div className="px-3 py-1 rounded-full bg-border text-sm flex items-center gap-x-2">
+                            <span>{pronoun}</span>
+                            <button aria-label="remove" onClick={removePronoun} className="text-lg hover:text-primary opacity-80 hover:opacity-100 cursor-pointer">×</button>
+                        </div>
                     ) : (
-                        <div className="text-sm text-[var(--color-text-secondary)]">No pronouns set</div>
+                        <div className="text-sm text-[var(--color-text-secondary)]">No pronoun is set</div>
                     )}
                 </div>
 
-                {!open ? (
+                {!showSelect ? (
                     <div className="mt-3">
                         <button
-                            onClick={() => setOpen(true)}
+                            onClick={() => setShowSelect(true)}
                             className="text-sm py-1 px-3 rounded-[var(--radius-button)] bg-border hover:bg-primary/30 transition-[var(--transition-default)] cursor-pointer"
                         >
-                            + Add pronouns
+                            {!pronoun ? "+ Select pronoun" : <span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit pronoun</span>}
                         </button>
                     </div>
                 ) : (
                     <div className="mt-2">
-                        <CustomInput value={input} setValue={setInput} placeholder="e.g., he/him, she/her, they/them" width="100%" borderWidth="2px" />
+                        <CustomSelect
+                            placeholder="Select"
+                            value={pronoun}
+                            onChange={setPronoun}
+                            options={pronouns}
+                            paddingX="16px"
+                            paddingY="8px"
+                        />
 
                         <div className="flex justify-end gap-x-2 mt-2 text-sm">
-                            <button onClick={() => setOpen(false)} className="py-2 px-4 rounded-lg bg-text-primary/20 hover:bg-text-primary/40 cursor-pointer">Cancel</button>
-                            <button onClick={addPronoun} className="py-2 px-4 rounded-lg bg-primary hover:bg-primary-hover cursor-pointer">Save</button>
+                            <button
+                                onClick={handleCancel}
+                                className="py-2 px-4 rounded-lg bg-text-primary/20 hover:bg-text-primary/40 cursor-pointer"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={addPronoun}
+                                className="py-2 px-4 rounded-lg bg-primary hover:bg-primary-hover cursor-pointer"
+                            >
+                                Save
+                            </button>
                         </div>
                     </div>
                 )}
+
             </div>
         );
     };

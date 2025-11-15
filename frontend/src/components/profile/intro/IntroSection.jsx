@@ -1,4 +1,3 @@
-// IntroSection.jsx
 import { useState } from "react";
 
 /**

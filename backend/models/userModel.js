@@ -110,9 +110,9 @@ const UserModel = new Schema({
             type: String,
             default: ""
         },
-        pronouns: {
-            type: Array,
-            default: []
+        pronoun: {
+            type: String,
+            default: ""
         },
         job: {
             type: String,
