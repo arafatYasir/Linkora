@@ -89,44 +89,46 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
             <div className="py-3 border-b border-[var(--color-border)]">
                 <h4 className="text-sm font-semibold mb-2">Pronoun</h4>
 
-                <div className="flex items-center gap-2 flex-wrap">
-                    {pronoun ? (
-                        <div className="px-3 py-1 rounded-full bg-border text-sm flex items-center gap-x-2">
-                            <span>{pronoun}</span>
-                            <button aria-label="remove" onClick={removePronoun} className="text-lg hover:text-primary opacity-80 hover:opacity-100 cursor-pointer">×</button>
+                <div className={`flex items-center justify-between ${showSelect ? "flex-col items-stretch" : "flex-row"}`}>
+                    <div className="flex items-center gap-2 flex-wrap">
+                        {pronoun ? (
+                            <div className="px-3 py-1 rounded-full bg-border text-sm flex items-center gap-x-2">
+                                <span>{pronoun}</span>
+                                <button aria-label="remove" onClick={removePronoun} className="text-lg hover:text-primary opacity-80 hover:opacity-100 cursor-pointer">×</button>
+                            </div>
+                        ) : (
+                            <div className="text-sm text-[var(--color-text-secondary)]">No pronoun is set</div>
+                        )}
+                    </div>
+
+                    {!showSelect ? (
+                        <div>
+                            <IntroDetailsbutton
+                                action={setShowSelect}
+                                condition={pronoun}
+                                option1={"+ Select pronoun"}
+                                option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit pronoun</span>}
+                            />
                         </div>
                     ) : (
-                        <div className="text-sm text-[var(--color-text-secondary)]">No pronoun is set</div>
+                        <div className="mt-2">
+                            <CustomSelect
+                                placeholder="Select"
+                                value={pronoun}
+                                onChange={setPronoun}
+                                options={pronouns}
+                                paddingX="16px"
+                                paddingY="8px"
+                            />
+
+                            <ButtonPair
+                                action={handleAddPronoun}
+                                cancel={handleCancel}
+                                loading={loading}
+                            />
+                        </div>
                     )}
                 </div>
-
-                {!showSelect ? (
-                    <div className="mt-3">
-                        <IntroDetailsbutton
-                            action={setShowSelect}
-                            condition={pronoun}
-                            option1={"+ Select pronoun"}
-                            option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit pronoun</span>}
-                        />
-                    </div>
-                ) : (
-                    <div className="mt-2">
-                        <CustomSelect
-                            placeholder="Select"
-                            value={pronoun}
-                            onChange={setPronoun}
-                            options={pronouns}
-                            paddingX="16px"
-                            paddingY="8px"
-                        />
-
-                        <ButtonPair
-                            action={handleAddPronoun}
-                            cancel={handleCancel}
-                            loading={loading}
-                        />
-                    </div>
-                )}
             </div>
         );
     };
@@ -151,13 +153,13 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         const handleSave = async () => {
             try {
                 setLoading(true);
-                
-                if(jobValue.trim() !== "" && workValue.trim() === "") {
+
+                if (jobValue.trim() !== "" && workValue.trim() === "") {
                     alert("Please enter your workplace name");
                     setLoading(false);
                     return;
                 }
-                else if(jobValue.trim() === "" && workValue.trim() !== "") {
+                else if (jobValue.trim() === "" && workValue.trim() !== "") {
                     alert("Please the job name");
                     setLoading(false);
                     return;
@@ -361,7 +363,9 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
 
                     {/* Single-field sections using IntroSection component */}
                     <IntroSection title="School" fieldKey="school" value={local.school} onSave={saveField} placeholder="e.g., City High School" />
+
                     <IntroSection title="College" fieldKey="college" value={local.college} onSave={saveField} placeholder="e.g., Community College" />
+
                     <IntroSection title="University" fieldKey="university" value={local.university} onSave={saveField} placeholder="e.g., MIT" />
 
                     {/* City fields */}

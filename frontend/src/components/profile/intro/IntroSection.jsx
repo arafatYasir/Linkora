@@ -1,13 +1,9 @@
 import { useState } from "react";
+import IntroDetailsButton from "../../common/IntroDetailsButton";
+import CustomInput from "../../common/CustomInput";
+import ButtonPair from "../../common/ButtonPair";
+import { HiPencil } from "react-icons/hi2";
 
-/**
- * Props:
- * - title: display title (e.g., "Job")
- * - fieldKey: key to send back to parent (e.g., "job")
- * - value: current value
- * - placeholder: input placeholder
- * - onSave: async function (fieldKey, value) => Promise
- */
 const IntroSection = ({ title, fieldKey, value, placeholder = "", onSave }) => {
     const [editing, setEditing] = useState(false);
     const [input, setInput] = useState(value || "");
@@ -24,16 +20,12 @@ const IntroSection = ({ title, fieldKey, value, placeholder = "", onSave }) => {
     };
 
     const handleSave = async () => {
-        if (input === (value || "")) {
-            setEditing(false);
-            return;
-        }
-        setLoading(true);
         try {
-            await onSave(fieldKey, input);
+            setLoading(true);
+            await onSave("single", {}, fieldKey, input);
             setEditing(false);
         } catch (e) {
-            console.error("Error saving intro section", e);
+            console.error("Error saving intro section: ", e);
         } finally {
             setLoading(false);
         }
@@ -50,37 +42,22 @@ const IntroSection = ({ title, fieldKey, value, placeholder = "", onSave }) => {
                     </div>
 
                     <div>
-                        <button
-                            onClick={openEdit}
-                            className="text-sm py-1 px-3 rounded-[var(--radius-button)] bg-border hover:bg-primary/10 transition-[var(--transition-default)]"
-                        >
-                            {value ? "Edit" : `+ Add ${title.toLowerCase()}`}
-                        </button>
+                        <IntroDetailsButton action={openEdit} condition={value} option1={`+ Add ${title.toLowerCase()}`} option2={(
+                            <span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit {title.toLowerCase()}</span>
+                        )} />
                     </div>
                 </div>
             ) : (
                 <div className="mt-2">
-                    <input
+                    <CustomInput
                         value={input}
-                        onChange={(e) => setInput(e.target.value)}
+                        setValue={setInput}
                         placeholder={placeholder || `Enter ${title.toLowerCase()}`}
-                        className="w-full border-2 border-[var(--color-border)] rounded-lg px-3 py-2 focus:outline-primary-hover"
+                        width="100%"
+                        borderWidth="2px"
                     />
-                    <div className="flex justify-end gap-x-2 mt-2">
-                        <button
-                            onClick={handleCancel}
-                            className="py-2 px-4 rounded-lg text-sm font-medium bg-text-primary/20 hover:bg-text-primary/40 transition-[var(--transition-default)]"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            onClick={handleSave}
-                            disabled={loading}
-                            className="py-2 px-4 rounded-lg text-sm font-medium bg-primary hover:bg-primary-hover transition-[var(--transition-default)]"
-                        >
-                            {loading ? "Saving..." : "Save"}
-                        </button>
-                    </div>
+
+                    <ButtonPair action={handleSave} cancel={handleCancel} loading={loading} paddingX="16px" paddingY="8px" />
                 </div>
             )}
         </div>
