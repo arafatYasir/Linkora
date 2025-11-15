@@ -91,14 +91,12 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
 
                 {!showSelect ? (
                     <div className="mt-3">
-                        {/* <button
-                            onClick={() => setShowSelect(true)}
-                            className="text-sm py-1 px-3 rounded-[var(--radius-button)] bg-border hover:bg-primary/30 transition-[var(--transition-default)] cursor-pointer"
-                        >
-                            {!pronoun ? "+ Select pronoun" : <span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit pronoun</span>}
-                        </button> */}
-
-                        <IntroDetailsbutton action={setShowSelect} condition={pronoun} option1={"+ Select pronoun"} option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit pronoun</span>} />
+                        <IntroDetailsbutton
+                            action={setShowSelect}
+                            condition={pronoun}
+                            option1={"+ Select pronoun"}
+                            option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit pronoun</span>}
+                        />
                     </div>
                 ) : (
                     <div className="mt-2">
@@ -111,10 +109,12 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                             paddingY="8px"
                         />
 
-                        <ButtonPair action={handleAddPronoun} cancel={handleCancel} />
+                        <ButtonPair
+                            action={handleAddPronoun}
+                            cancel={handleCancel}
+                        />
                     </div>
                 )}
-
             </div>
         );
     };
@@ -132,11 +132,11 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
             setEditing(true);
         };
 
-        const cancel = () => {
+        const handleCancel = () => {
             setEditing(false);
         };
 
-        const save = async () => {
+        const handleSave = async () => {
             setLoading(true);
             try {
                 if (jobValue !== local.job) await saveField("job", jobValue);
@@ -165,7 +165,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                             )}
                         </div>
                         <div>
-                            <button onClick={openEdit} className="text-sm py-1 px-3 rounded-[var(--radius-button)] bg-border hover:bg-primary/30 cursor-pointer">Edit</button>
+                            <IntroDetailsbutton action={openEdit} condition={(jobValue && workValue)} option1={"+ Add workplace"} option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit workplace</span>} />
                         </div>
                     </div>
                 ) : (
@@ -176,7 +176,6 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                             placeholder="Job title (e.g., Product Designer)"
                             width="100%"
                             borderWidth="2px"
-                        // fontSize="15px"
                         />
 
                         <CustomInput
@@ -187,10 +186,10 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                             borderWidth="2px"
                         />
 
-                        <div className="flex justify-end gap-x-2">
-                            <button onClick={cancel} className="py-2 px-4 rounded-lg bg-text-primary/20 hover:bg-text-primary/40">Cancel</button>
-                            <button onClick={save} disabled={loading} className="py-2 px-4 rounded-lg bg-primary hover:bg-primary-hover">{loading ? "Saving..." : "Save"}</button>
-                        </div>
+                        <ButtonPair
+                            action={handleSave}
+                            cancel={handleCancel}
+                        />
                     </div>
                 )}
             </div>
