@@ -179,11 +179,11 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                             )}
                         </div>
                         <div>
-                            <IntroDetailsButton 
-                                action={openEdit} 
-                                condition={(jobValue && workValue)} 
-                                option1={"+ Add workplace"} 
-                                option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit workplace</span>} 
+                            <IntroDetailsButton
+                                action={openEdit}
+                                condition={(jobValue && workValue)}
+                                option1={"+ Add workplace"}
+                                option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit workplace</span>}
                             />
                         </div>
                     </div>
@@ -295,10 +295,18 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         const options = ["Single", "In a Relationship", "It's Complicated", "Engaged", "Married", "Divorced"];
         const [editing, setEditing] = useState(false);
         const [value, setValue] = useState(local.relationShip || options[0]);
+        const [loading, setLoading] = useState(false);
 
         const save = async () => {
-            await saveField("single", {}, "relationShip", value);
-            setEditing(false);
+            try {
+                setLoading(true);
+                await saveField("single", {}, "relationShip", value);
+                setEditing(false);
+            } catch (e) {
+                console.log("Error while saving relationship: ", e);
+            } finally {
+                setLoading(false);
+            }
         };
 
         return (
@@ -308,26 +316,23 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                     <div className="flex items-center justify-between">
                         <div className="text-sm text-[var(--color-text-secondary)]">{local.relationShip || "Not specified"}</div>
                         <div>
-                            <IntroDetailsButton 
-                                action={() => setEditing(true)} 
-                                condition={value} 
-                                option1={"+ Add relationship"} 
-                                option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit relationship</span>} 
+                            <IntroDetailsButton
+                                action={() => setEditing(true)}
+                                condition={value}
+                                option1={"+ Add relationship"}
+                                option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit relationship</span>}
                             />
                         </div>
                     </div>
                 ) : (
                     <div>
-                        {/* <select className="w-full border-2 border-[var(--color-border)] rounded-lg px-3 py-2" value={value} onChange={(e) => setValue(e.target.value)}>
-                            {options.map((o) => <option key={o} value={o}>{o}</option>)}
-                        </select> */}
+                        <CustomSelect options={options} value={value} onChange={setValue} paddingX="12px" paddingY="8px" placeholder={value} />
 
-                        <CustomSelect options={options} value={value} onChange={setValue} />
-
-                        <div className="flex justify-end gap-x-2 mt-2">
-                            <button onClick={() => setEditing(false)} className="py-2 px-4 rounded-lg bg-text-primary/20 hover:bg-text-primary/40">Cancel</button>
-                            <button onClick={save} className="py-2 px-4 rounded-lg bg-primary hover:bg-primary-hover">Save</button>
-                        </div>
+                        <ButtonPair 
+                            action={save} 
+                            cancel={() => setEditing(false)} 
+                            loading={loading}
+                        />
                     </div>
                 )}
             </div>
