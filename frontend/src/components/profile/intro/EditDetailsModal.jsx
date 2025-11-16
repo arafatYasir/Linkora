@@ -218,37 +218,44 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
 
     // Social links editor
     const SocialLinksEditor = () => {
-        // supported platforms
+        // Supported Platforms
         const platforms = [
-            { key: "github", label: "GitHub", placeholder: "github.com/username" },
-            { key: "facebook", label: "Facebook", placeholder: "facebook.com/username" },
-            { key: "instagram", label: "Instagram", placeholder: "instagram.com/username" },
-            { key: "youtube", label: "YouTube", placeholder: "youtube.com/channel/..." },
-            { key: "gmail", label: "Gmail", placeholder: "your@email.com" },
-            { key: "x", label: "X (Twitter)", placeholder: "x.com/username" },
+            "GitHub", "Facebook", "Instagram", "YouTube", "Gmail", "X (Twitter)"
         ];
+        const platformKeys = [
+            "github", "facebook", "instagram", "youtube", "gmail", "x"
+        ]
 
-        const [openAdd, setOpenAdd] = useState(false);
+        const [openAdd, setOpenAdd] = useState(null);
         const [selected, setSelected] = useState(platforms[0].key);
         const [value, setValue] = useState("");
-        const links = {
-            github: local.github,
-            facebook: local.facebook,
-            instagram: local.instagram,
-            youtube: local.youtube,
-            gmail: local.gmail,
-            x: local.x,
-        };
+        const [loading, setLoading] = useState(false);
+
+        const handleEditOrAdd = (p, i) => {
+            setSelected(p);
+            setValue(local[platformKeys[i]] || "");
+            setOpenAdd(p);
+        }
 
         const addOrUpdate = async () => {
-            if (!value.trim()) return;
-            await saveField(selected, value.trim());
-            setValue("");
-            setOpenAdd(false);
+            try {
+                setLoading(true);
+
+                if (!value.trim()) return;
+                console.log(selected, value);
+                await saveField("single", {}, selected, value.trim());
+
+                setValue("");
+                setOpenAdd(false);
+            } catch (e) {
+                console.log("Error while saving social link: ", e);
+            } finally {
+                setLoading(false);
+            }
         };
 
         const remove = async (key) => {
-            await saveField(key, "");
+            await saveField("single", {}, key, "");
         };
 
         return (
@@ -256,36 +263,53 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                 <h4 className="text-sm font-semibold mb-2">Social links</h4>
 
                 <div className="space-y-2">
-                    {platforms.map((p) => (
-                        <div key={p.key} className="flex items-center justify-between">
-                            <div className="text-sm">
-                                <strong className="mr-2">{p.label}:</strong>
-                                <span className="text-[var(--color-text-secondary)]">{local[p.key] || <em className="text-[var(--color-text-secondary)]">Not added</em>}</span>
+                    {platformKeys.map((p, i) => (
+                        <>
+                            <div key={i} className="flex items-center justify-between">
+                                <div className="text-sm">
+                                    <strong className="mr-2">{platforms[i]}:</strong>
+                                    <span className="text-[var(--color-text-secondary)]">{local[platformKeys[i]] || <em className="text-[var(--color-text-secondary)]">Not added</em>}</span>
+                                </div>
+
+                                <div className="flex gap-x-2">
+                                    {local[platformKeys[i]] && (
+                                        <button
+                                            onClick={() => remove(p)}
+                                            className="text-sm py-1 px-3 rounded-[var(--radius-button)] bg-border hover:bg-error/30 transition-[var(--transition-default)] cursor-pointer"
+                                        >
+                                            Remove
+                                        </button>
+                                    )}
+
+                                    <IntroDetailsButton
+                                        action={() => handleEditOrAdd(p, i)}
+                                        condition={local[platformKeys[i]]}
+                                        option1={"+ Add"}
+                                        option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit</span>}
+                                    />
+                                </div>
                             </div>
-                            <div className="flex gap-x-2">
-                                {local[p.key] && (
-                                    <button onClick={() => remove(p.key)} className="py-1 px-3 rounded-[var(--radius-button)] bg-text-primary/10 hover:bg-text-primary/20">Remove</button>
-                                )}
-                                <button onClick={() => { setSelected(p.key); setValue(local[p.key] || ""); setOpenAdd(true); }} className="py-1 px-3 rounded-[var(--radius-button)] bg-border hover:bg-primary/10">
-                                    {local[p.key] ? "Edit" : "+ Add"}
-                                </button>
-                            </div>
-                        </div>
+                            {openAdd === p && (
+                                <>
+                                    <CustomInput
+                                        value={value}
+                                        setValue={setValue}
+                                        placeholder="Username"
+                                        width="100%"
+                                        paddingX="12px"
+                                        paddingY="8px"
+                                    />
+
+                                    <ButtonPair
+                                        action={addOrUpdate}
+                                        cancel={() => setOpenAdd(false)}
+                                        loading={loading}
+                                    />
+                                </>
+                            )}
+                        </>
                     ))}
                 </div>
-
-                {openAdd && (
-                    <div className="mt-3">
-                        <select value={selected} onChange={(e) => setSelected(e.target.value)} className="border-2 border-[var(--color-border)] rounded-lg px-3 py-2 mb-2">
-                            {platforms.map((p) => <option key={p.key} value={p.key}>{p.label}</option>)}
-                        </select>
-                        <input value={value} onChange={(e) => setValue(e.target.value)} placeholder={platforms.find(p => p.key === selected)?.placeholder || "Enter link"} className="w-full border-2 border-[var(--color-border)] rounded-lg px-3 py-2 focus:outline-primary-hover" />
-                        <div className="flex justify-end gap-x-2 mt-2">
-                            <button onClick={() => setOpenAdd(false)} className="py-2 px-4 rounded-lg bg-text-primary/20 hover:bg-text-primary/40">Cancel</button>
-                            <button onClick={addOrUpdate} className="py-2 px-4 rounded-lg bg-primary hover:bg-primary-hover">Save</button>
-                        </div>
-                    </div>
-                )}
             </div>
         );
     };
@@ -328,9 +352,9 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                     <div>
                         <CustomSelect options={options} value={value} onChange={setValue} paddingX="12px" paddingY="8px" placeholder={value} />
 
-                        <ButtonPair 
-                            action={save} 
-                            cancel={() => setEditing(false)} 
+                        <ButtonPair
+                            action={save}
+                            cancel={() => setEditing(false)}
                             loading={loading}
                         />
                     </div>
@@ -385,12 +409,12 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                     {/* Social Links */}
                     <SocialLinksEditor />
 
-                    <div className="py-6" />
+                    <div className="py-4" />
                 </div>
 
                 {/* Footer (optional short help) */}
                 <div className="px-6 pt-2 pb-4 border-t border-[var(--color-border)] text-sm text-[var(--color-text-secondary)]">
-                    <div>Changes are saved per-section. Close the modal when you're done.</div>
+                    <div>Changes are saved per-section.</div>
                 </div>
             </div>
         </div>
