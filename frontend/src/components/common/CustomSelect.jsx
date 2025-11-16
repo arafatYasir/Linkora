@@ -57,19 +57,15 @@ const CustomSelect = ({ value, onChange, options, placeholder, paddingX, padding
             max-h-[200px] overflow-y-auto
           `}
                 >
-                    {options.map((option) => {
-                        const active = value === option.value;
-                        console.log("--------------");
-                        console.log("Is that a match: ", active);
-                        console.log("State: ", value);
-                        console.log("Map: ", option.value);
+                    {options.map((option, index) => {
+                        const active = value === option;
 
                         return (
                             <button
-                                key={option.value}
+                                key={index}
                                 type="button"
                                 onClick={() => {
-                                    onChange(option.value);
+                                    onChange(option);
                                     setIsOpen(false);
                                 }}
                                 className={`
@@ -80,7 +76,7 @@ const CustomSelect = ({ value, onChange, options, placeholder, paddingX, padding
                    cursor-pointer
                 `}
                             >
-                                {option.label}
+                                {option}
                             </button>
                         );
                     })}

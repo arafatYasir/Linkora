@@ -5,7 +5,7 @@ import CustomInput from "../../common/CustomInput";
 import { HiPencil } from "react-icons/hi2";
 import CustomSelect from "../../common/CustomSelect"
 import ButtonPair from "../../common/ButtonPair";
-import IntroDetailsbutton from "../../common/IntroDetailsButton";
+import IntroDetailsButton from "../../common/IntroDetailsButton";
 
 const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
     const introModalRef = useRef(null);
@@ -49,18 +49,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         const [loading, setLoading] = useState(false);
 
         const pronouns = [
-            {
-                label: "he/him",
-                value: "he/him"
-            },
-            {
-                label: "she/her",
-                value: "she/her"
-            },
-            {
-                label: "they/them",
-                value: "they/them",
-            }
+            "he/him", "she/her", "they/them"
         ];
 
         const handleAddPronoun = async () => {
@@ -103,7 +92,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
 
                     {!showSelect ? (
                         <div>
-                            <IntroDetailsbutton
+                            <IntroDetailsButton
                                 action={setShowSelect}
                                 condition={pronoun}
                                 option1={"+ Select pronoun"}
@@ -190,7 +179,12 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                             )}
                         </div>
                         <div>
-                            <IntroDetailsbutton action={openEdit} condition={(jobValue && workValue)} option1={"+ Add workplace"} option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit workplace</span>} />
+                            <IntroDetailsButton 
+                                action={openEdit} 
+                                condition={(jobValue && workValue)} 
+                                option1={"+ Add workplace"} 
+                                option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit workplace</span>} 
+                            />
                         </div>
                     </div>
                 ) : (
@@ -296,14 +290,14 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         );
     };
 
-    // Relationship editor (dropdown)
+    // Relationship Editor
     const RelationshipEditor = () => {
         const options = ["Single", "In a Relationship", "It's Complicated", "Engaged", "Married", "Divorced"];
         const [editing, setEditing] = useState(false);
         const [value, setValue] = useState(local.relationShip || options[0]);
 
         const save = async () => {
-            await saveField("relationShip", value);
+            await saveField("single", {}, "relationShip", value);
             setEditing(false);
         };
 
@@ -314,14 +308,22 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                     <div className="flex items-center justify-between">
                         <div className="text-sm text-[var(--color-text-secondary)]">{local.relationShip || "Not specified"}</div>
                         <div>
-                            <button onClick={() => setEditing(true)} className="py-1 px-3 rounded-[var(--radius-button)] bg-border hover:bg-primary/10">Edit</button>
+                            <IntroDetailsButton 
+                                action={() => setEditing(true)} 
+                                condition={value} 
+                                option1={"+ Add relationship"} 
+                                option2={<span className="flex items-center gap-x-1"><HiPencil size={12} className="opacity-80" /> Edit relationship</span>} 
+                            />
                         </div>
                     </div>
                 ) : (
                     <div>
-                        <select className="w-full border-2 border-[var(--color-border)] rounded-lg px-3 py-2" value={value} onChange={(e) => setValue(e.target.value)}>
+                        {/* <select className="w-full border-2 border-[var(--color-border)] rounded-lg px-3 py-2" value={value} onChange={(e) => setValue(e.target.value)}>
                             {options.map((o) => <option key={o} value={o}>{o}</option>)}
-                        </select>
+                        </select> */}
+
+                        <CustomSelect options={options} value={value} onChange={setValue} />
+
                         <div className="flex justify-end gap-x-2 mt-2">
                             <button onClick={() => setEditing(false)} className="py-2 px-4 rounded-lg bg-text-primary/20 hover:bg-text-primary/40">Cancel</button>
                             <button onClick={save} className="py-2 px-4 rounded-lg bg-primary hover:bg-primary-hover">Save</button>
@@ -349,7 +351,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
 
                 {/* ---- Body ---- */}
                 <div className="px-6 max-h-[70vh] overflow-y-auto">
-                    {/* ---- Bio View ---- */}
+                    {/* ---- Bio View Only ---- */}
                     <div className="py-3 border-b border-[var(--color-border)]">
                         <h4 className="text-sm font-semibold mb-2">Bio</h4>
                         <div className="text-sm text-[var(--color-text-secondary)]">{local.bio || <em>No bio set</em>}</div>

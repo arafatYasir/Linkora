@@ -11,6 +11,7 @@ import EditDetailsModal from "./EditDetailsModal";
 import Pronoun from "./Pronoun";
 import WorkPlace from "./WorkPlace";
 import Education from "./Education";
+import Location from "./Location";
 
 const ProfileIntro = ({ user, details }) => {
     // States
@@ -100,6 +101,10 @@ const ProfileIntro = ({ user, details }) => {
     }
 
     const handleSaveIntro = async (type, object, key, value) => {
+        console.log("type: ", type);
+        console.log("object:", object);
+        console.log("key:", key);
+        console.log("value:", value);
         try {
             setLoading(true);
 
@@ -152,6 +157,10 @@ const ProfileIntro = ({ user, details }) => {
                     {introInfos.university && <Education name={introInfos.university} />}
 
                     {introInfos.relationShip && <Relation relationType={introInfos.relationShip} />}
+
+                    {introInfos.currentCity && <Location type="currentCity" location={introInfos.currentCity} />}
+
+                    {introInfos.homeTown && <Location type="homeTown" location={introInfos.homeTown} />}
                 </div>
 
                 {/* ---- Intro Editing Section ---- */}
