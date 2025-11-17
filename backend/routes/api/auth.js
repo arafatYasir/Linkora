@@ -1,5 +1,5 @@
 const express = require("express");
-const { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, cancelRequest, follow, unFollow, acceptRequest, unFriend } = require("../../controllers/userControllers");
+const { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, cancelRequest, follow, unFollow, acceptRequest, unFriend, deleteRequest } = require("../../controllers/userControllers");
 const authMiddleware = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
@@ -27,5 +27,6 @@ router.delete("/cancel-request/:id", authMiddleware, cancelRequest);
 router.post("/follow/:id", authMiddleware, follow);
 router.delete("/unfollow/:id", authMiddleware, unFollow);
 router.delete("/unfriend/:id", authMiddleware, unFriend);
+router.delete("/delete-request/:id", authMiddleware, deleteRequest);
 
 module.exports = router;

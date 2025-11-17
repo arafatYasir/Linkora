@@ -481,7 +481,7 @@ const addFriend = async (req, res) => {
             }
         }
         else {
-            return res.send({ error: "You can't send friend request to your account." });
+            return res.send({ error: "You can't perform this to your account." });
         }
     } catch (e) {
         res.status(404).json({
@@ -524,7 +524,7 @@ const cancelRequest = async (req, res) => {
             }
         }
         else {
-            return res.send({ message: "You can't perform cancel request to your account" });
+            return res.send({ message: "You can't perform this to your account." });
         }
     } catch (e) {
         res.status(400).json({
@@ -563,7 +563,7 @@ const follow = async (req, res) => {
             }
         }
         else {
-            return res.send({ message: "You can't follow your account." });
+            return res.send({ message: "You can't perform this to your account." });
         }
     } catch (e) {
         res.status(400).json({
@@ -602,7 +602,7 @@ const unFollow = async (req, res) => {
             }
         }
         else {
-            return res.send({ message: "You can't unfollow your account." });
+            return res.send({ message: "You can't perform this to your account." });
         }
     } catch (e) {
         res.status(400).json({
@@ -639,7 +639,7 @@ const acceptRequest = async (req, res) => {
             }
         }
         else {
-            return res.send({ message: "You can't accept request to your account." });
+            return res.send({ message: "You can't perform this to your account." });
         }
     } catch (e) {
         res.status(400).json({
@@ -672,7 +672,7 @@ const unFriend = async (req, res) => {
             }
         }
         else {
-            return res.send({ message: "You can't unfriend to your account." });
+            return res.send({ message: "You can't perform this to your account." });
         }
     } catch (e) {
         res.status(400).json({
@@ -681,4 +681,37 @@ const unFriend = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unFollow, unFriend };
+const deleteRequest = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (req.user.id !== id) {
+            const sender = await User.findById(id);
+            const receiver = await User.findById(req.user.id);
+
+            if (receiver.friendRequests.includes(sender._id)) {
+                await receiver.updateOne({
+                    $pull: { friendRequests: sender._id, followers: sender._id }
+                });
+
+                await sender.updateOne({
+                    $pull: { following: receiver._id }
+                });
+
+                res.send({ message: "Request deleted!" });
+            }
+            else {
+                return res.send({ error: "No such friend request found!" });
+            }
+        }
+        else {
+            return res.send({ message: "You can't perform this to your account." });
+        }
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unFollow, unFriend, deleteRequest };
