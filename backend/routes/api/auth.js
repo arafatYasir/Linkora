@@ -1,5 +1,5 @@
 const express = require("express");
-const { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro } = require("../../controllers/userControllers");
+const { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, cancelRequest } = require("../../controllers/userControllers");
 const authMiddleware = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
@@ -17,5 +17,6 @@ router.put("/update-profile-picture", authMiddleware, updateProfilePicture);
 router.put("/update-cover-photo", authMiddleware, updateCoverPhoto);
 router.put("/update-profile-intro", authMiddleware, updateProfileIntro);
 router.post("/add-friend/:id", authMiddleware, addFriend);
+router.delete("/cancel-request/:id", authMiddleware, cancelRequest);
 
 module.exports = router;

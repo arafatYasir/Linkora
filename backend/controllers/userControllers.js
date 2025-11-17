@@ -460,28 +460,28 @@ const addFriend = async (req, res) => {
                     error: "Friend request reciever account not found!"
                 });
             }
-            
-            if(!requestReciever.friends.includes(requestSender._id) && requestReciever.friendRequests.includes(requestSender._id)) {
+
+            if (!requestReciever.friends.includes(requestSender._id) && !requestReciever.friendRequests.includes(requestSender._id)) {
                 await requestReciever.updateOne({
-                    $push: {friendRequests: requestSender._id}
+                    $push: { friendRequests: requestSender._id }
                 });
 
                 await requestReciever.updateOne({
-                    $push: {followers: requestSender._id}
+                    $push: { followers: requestSender._id }
                 });
 
                 await requestSender.updateOne({
-                    $push: {following: requestReciever._id}
+                    $push: { following: requestReciever._id }
                 });
 
-                res.send({message: "Friend request has been sent!"});
+                res.send({ message: "Friend request has been sent!" });
             }
             else {
-                return res.send({error: "You are already friends."});
+                return res.send({ error: "You are already friends." });
             }
         }
         else {
-            return res.send({error: "You can't send friend request to your account."});
+            return res.send({ error: "You can't send friend request to your account." });
         }
     } catch (e) {
         res.status(404).json({
@@ -490,4 +490,47 @@ const addFriend = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend };
+const cancelRequest = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (req.user.id !== id) {
+            const requestSender = await User.findById(req.user.id);
+            const requestReciever = await User.findById(id);
+
+            if (!requestReciever) {
+                res.status(404).json({
+                    error: "Cancel reciever account not found!"
+                });
+            }
+
+            if (!requestReciever.friends.includes(requestSender._id) && requestReciever.friendRequests.includes(requestSender._id)) {
+                await requestReciever.updateOne({
+                    $pull: { friendRequests: requestSender._id }
+                });
+
+                await requestReciever.updateOne({
+                    $pull: { followers: requestSender._id }
+                });
+
+                await requestSender.updateOne({
+                    $pull: { following: requestReciever._id }
+                });
+
+                res.send({ message: "Friend request canceled!" });
+            }
+            else {
+                return res.send({ error: "Invalid cancel request" });
+            }
+        }
+        else {
+            return res.send({message: "You can't perform cancel request to your account"});
+        }
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, cancelRequest };
