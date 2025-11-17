@@ -572,7 +572,7 @@ const follow = async (req, res) => {
     }
 }
 
-const unfollow = async (req, res) => {
+const unFollow = async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -621,15 +621,15 @@ const acceptRequest = async (req, res) => {
 
             if (receiver.friendRequests.includes(sender._id)) {
                 await receiver.updateOne({
-                    $push: {friends: sender._id, following: sender._id}
+                    $push: { friends: sender._id, following: sender._id }
                 });
 
                 await receiver.updateOne({
-                    $pull: {friendRequests: sender._id}
+                    $pull: { friendRequests: sender._id }
                 });
 
                 await sender.updateOne({
-                    $push: {friends: receiver._id, followers: receiver._id}
+                    $push: { friends: receiver._id, followers: receiver._id }
                 });
 
                 res.send({ message: "Friend request accepted!" });
@@ -648,4 +648,37 @@ const acceptRequest = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unfollow };
+const unFriend = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (req.user.id !== id) {
+            const sender = await User.findById(req.user.id);
+            const receiver = await User.findById(id);
+
+            if (receiver.friends.includes(sender._id) && sender.friends.includes(receiver._id)) {
+                await receiver.updateOne({
+                    $pull: { friends: sender._id, following: sender._id, followers: sender._id }
+                });
+
+                await sender.updateOne({
+                    $pull: { friends: receiver._id, following: receiver._id, followers: receiver._id }
+                });
+
+                res.send({ message: "Successfully unfriend!" });
+            }
+            else {
+                return res.send({ error: "No such friend found!" });
+            }
+        }
+        else {
+            return res.send({ message: "You can't unfriend to your account." });
+        }
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unFollow, unFriend };
