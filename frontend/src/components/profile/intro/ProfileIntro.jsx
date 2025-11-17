@@ -12,6 +12,9 @@ import Pronoun from "./Pronoun";
 import WorkPlace from "./WorkPlace";
 import Education from "./Education";
 import Location from "./Location";
+import SocialLink from "./SocialLink";
+import { IoMdMail } from "react-icons/io";
+import { FaFacebook, FaGithub, FaInstagram, FaXTwitter, FaYoutube } from "react-icons/fa6";
 
 const ProfileIntro = ({ user, details }) => {
     // States
@@ -161,6 +164,18 @@ const ProfileIntro = ({ user, details }) => {
                     {introInfos.currentCity && <Location type="currentCity" location={introInfos.currentCity} />}
 
                     {introInfos.homeTown && <Location type="homeTown" location={introInfos.homeTown} />}
+
+                    {introInfos.gmail && <SocialLink icon={<IoMdMail size={18} className="shrink-0" />} username={introInfos.gmail} baseURL={false} />}
+
+                    {introInfos.facebook && <SocialLink icon={<FaFacebook size={18} className="shrink-0" />} username={introInfos.facebook} baseURL="https://www.facebook.com" />}
+
+                    {introInfos.instagram && <SocialLink icon={<FaInstagram size={18} className="shrink-0" />} username={introInfos.instagram} baseURL="https://www.instagram.com" />}
+
+                    {introInfos.x && <SocialLink icon={<FaXTwitter size={18} className="shrink-0" />} username={introInfos.x} baseURL="https://x.com" />}
+
+                    {introInfos.youtube && <SocialLink icon={<FaYoutube size={18} className="shrink-0" />} username={introInfos.youtube} baseURL="https://www.youtube.com" />}
+
+                    {introInfos.github && <SocialLink icon={<FaGithub size={18} className="shrink-0" />} username={introInfos.github} baseURL="https://github.com" />}
                 </div>
 
                 {/* ---- Intro Editing Section ---- */}
