@@ -524,7 +524,7 @@ const cancelRequest = async (req, res) => {
             }
         }
         else {
-            return res.send({message: "You can't perform cancel request to your account"});
+            return res.send({ message: "You can't perform cancel request to your account" });
         }
     } catch (e) {
         res.status(400).json({
@@ -533,4 +533,43 @@ const cancelRequest = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, cancelRequest };
+const follow = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (req.user.id !== id) {
+            const sender = await User.findById(req.user.id);
+            const receiver = await User.findById(id);
+
+            if (!receiver) {
+                res.status(404).json({
+                    error: "Cancel reciever account not found!"
+                });
+            }
+
+            if (!receiver.followers.includes(sender._id) && !sender.following.includes(receiver._id)) {
+                await receiver.updateOne({
+                    $push: { followers: sender._id }
+                });
+
+                await sender.updateOne({
+                    $push: { following: receiver._id }
+                });
+
+                res.send({ message: "Following successful!" });
+            }
+            else {
+                return res.send({ error: "Already following." });
+            }
+        }
+        else {
+            return res.send({ message: "You can't follow your account." });
+        }
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, cancelRequest, follow };
