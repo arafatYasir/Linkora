@@ -16,5 +16,6 @@ router.get("/get-user/:username", authMiddleware, getUser);
 router.put("/update-profile-picture", authMiddleware, updateProfilePicture);
 router.put("/update-cover-photo", authMiddleware, updateCoverPhoto);
 router.put("/update-profile-intro", authMiddleware, updateProfileIntro);
+router.post("/add-friend/:id", authMiddleware, addFriend);
 
 module.exports = router;

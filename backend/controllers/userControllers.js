@@ -434,8 +434,8 @@ const updateCoverPhoto = async (req, res) => {
 
 const updateProfileIntro = async (req, res) => {
     try {
-        const {intro} = req.body;
-        await User.findByIdAndUpdate(req.user.id, {details: intro});
+        const { intro } = req.body;
+        await User.findByIdAndUpdate(req.user.id, { details: intro });
 
         res.send({
             status: "OK"
@@ -447,4 +447,47 @@ const updateProfileIntro = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro };
+const addFriend = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (req.user.id !== id) {
+            const requestSender = await User.findById(req.user.id);
+            const requestReciever = await User.findById(id);
+
+            if (!requestReciever) {
+                res.status(404).json({
+                    error: "Friend request reciever account not found!"
+                });
+            }
+            
+            if(!requestReciever.friends.includes(requestSender._id) && requestReciever.friendRequests.includes(requestSender._id)) {
+                await requestReciever.updateOne({
+                    $push: {friendRequests: requestSender._id}
+                });
+
+                await requestReciever.updateOne({
+                    $push: {followers: requestSender._id}
+                });
+
+                await requestSender.updateOne({
+                    $push: {following: requestReciever._id}
+                });
+
+                res.send({message: "Friend request has been sent!"});
+            }
+            else {
+                return res.send({error: "You are already friends."});
+            }
+        }
+        else {
+            return res.send({error: "You can't send friend request to your account."});
+        }
+    } catch (e) {
+        res.status(404).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend };
