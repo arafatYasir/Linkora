@@ -611,4 +611,41 @@ const unfollow = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, cancelRequest, follow, unfollow };
+const acceptRequest = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (req.user.id !== id) {
+            const sender = await User.findById(id);
+            const receiver = await User.findById(req.user.id);
+
+            if (receiver.friendRequests.includes(sender._id)) {
+                await receiver.updateOne({
+                    $push: {friends: sender._id, following: sender._id}
+                });
+
+                await receiver.updateOne({
+                    $pull: {friendRequests: sender._id}
+                });
+
+                await sender.updateOne({
+                    $push: {friends: receiver._id, followers: receiver._id}
+                });
+
+                res.send({ message: "Friend request accepted!" });
+            }
+            else {
+                return res.send({ error: "No such friend request found!" });
+            }
+        }
+        else {
+            return res.send({ message: "You can't accept request to your account." });
+        }
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unfollow };
