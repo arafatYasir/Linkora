@@ -1,4 +1,4 @@
-const IntroButton = ({buttonText, onClick}) => {
+const IntroButton = ({ buttonText, onClick }) => {
     return (
         <button
             onClick={onClick}
