@@ -6,7 +6,7 @@ import RelationshipButton from "./RelationshipButton";
 import { MdPeopleAlt, MdPersonAddAlt1 } from "react-icons/md";
 import { FiUserCheck, FiUserX } from "react-icons/fi";
 import { FaSquarePlus } from "react-icons/fa6";
-import { useAcceptRequestMutation, useAddFriendMutation, useCancelRequestMutation, useDeleteRequestMutation } from "../../../api/authApi";
+import { useAcceptRequestMutation, useAddFriendMutation, useCancelRequestMutation, useDeleteRequestMutation, useUnfollowMutation, useUnfriendMutation } from "../../../api/authApi";
 
 const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading, images }) => {
     // States
@@ -26,7 +26,13 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
     const [acceptRequest, { isLoading: isAcceptingRequest }] = useAcceptRequestMutation();
 
     // Delete friend request api
-    const [deleteRequest, {isLoading: isDeletingRequest}] = useDeleteRequestMutation();
+    const [deleteRequest, { isLoading: isDeletingRequest }] = useDeleteRequestMutation();
+
+    // Unfriend api
+    const [unfriend, { isLoading: isUnfriending }] = useUnfriendMutation();
+
+    // Unfollow api
+    const [unfollow, { isLoading: isUnfollowing }] = useUnfollowMutation();
 
     // Functions to control the relationship actions
     const sendFriendRequest = async () => {
@@ -50,7 +56,7 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
     const acceptFriendRequest = async () => {
         try {
             const res = await acceptRequest(user._id).unwrap();
-            setRelationship({...relationship, friends: true, following: true, receivedRequest: false});
+            setRelationship({ ...relationship, friends: true, following: true, receivedRequest: false });
         } catch (e) {
             console.log("Error while accepting request: ", e);
         }
@@ -59,9 +65,27 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
     const deleteFriendRequest = async () => {
         try {
             const res = await deleteRequest(user._id).unwrap();
-            setRelationship({...relationship, receivedRequest: false});
+            setRelationship({ ...relationship, receivedRequest: false });
         } catch (e) {
             console.log("Error while deleting request: ", e);
+        }
+    }
+
+    const unFriend = async () => {
+        try {
+            const res = await unfriend(user._id).unwrap();
+            setRelationship({ ...relationship, friends: false, following: false, });
+        } catch (e) {
+            console.log("Error while unfriending: ", e);
+        }
+    }
+
+    const unFollow = async () => {
+        try {
+            const res = await unfollow(user._id).unwrap();
+            setRelationship({ ...relationship, following: false, });
+        } catch (e) {
+            console.log("Error while unfollowing: ", e);
         }
     }
 
@@ -130,13 +154,17 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
                                 text="Friends"
                                 icon={<MdPeopleAlt size={20} />}
                                 backgroundColor="var(--color-border)"
+                                loading={isUnfriending}
+                                loadingUI={`${isUnfriending ? "Unfriending..." : "Unfollowing..."}`}
+                                extraAction1={unFollow}
+                                extraAction2={unFriend}
                             />
                         ) : relationship?.receivedRequest ? (
                             <RelationshipButton
                                 text="Respond"
                                 icon={<FiUserCheck size={20} />}
-                                loading={isAcceptingRequest}
-                                loadingUI="Accepting..."
+                                loading={isAcceptingRequest || isDeletingRequest}
+                                loadingUI={`${isAcceptingRequest ? "Accepting..." : "Deleting..."}`}
                                 extraAction1={acceptFriendRequest}
                                 extraAction2={deleteFriendRequest}
                             />
@@ -167,7 +195,7 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
                         />
                     )}
 
-                    {(userInfo._id !== user._id && !relationship?.friends && !relationship?.following && !relationship?.receivedRequest && !relationship?.sentRequest) && (
+                    {(userInfo._id !== user._id && !relationship?.following && !relationship?.receivedRequest && !relationship?.sentRequest) && (
                         <RelationshipButton
                             text="Follow"
                             icon={<FaSquarePlus size={20} />}
