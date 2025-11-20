@@ -6,7 +6,7 @@ import RelationshipButton from "./RelationshipButton";
 import { MdPeopleAlt, MdPersonAddAlt1 } from "react-icons/md";
 import { FiUserCheck, FiUserX } from "react-icons/fi";
 import { FaSquarePlus } from "react-icons/fa6";
-import { useAcceptRequestMutation, useAddFriendMutation, useCancelRequestMutation, useDeleteRequestMutation, useUnfollowMutation, useUnfriendMutation } from "../../../api/authApi";
+import { useAcceptRequestMutation, useAddFriendMutation, useCancelRequestMutation, useDeleteRequestMutation, useUnfollowMutation, useUnfriendMutation, useFollowMutation } from "../../../api/authApi";
 
 const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading, images }) => {
     // States
@@ -33,6 +33,9 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
 
     // Unfollow api
     const [unfollow, { isLoading: isUnfollowing }] = useUnfollowMutation();
+
+    // Follow api
+    const [follow, { isLoading: isFollowing }] = useFollowMutation();
 
     // Functions to control the relationship actions
     const sendFriendRequest = async () => {
@@ -89,6 +92,14 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
         }
     }
 
+    const followUser = async () => {
+        try {
+            const res = await follow(user._id).unwrap();
+            setRelationship({ ...relationship, following: true, });
+        } catch (e) {
+            console.log("Error while unfollowing: ", e);
+        }
+    }
     // Locking the scroll when modal is open
     useEffect(() => {
         const body = document.querySelector("body");
@@ -199,6 +210,9 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
                         <RelationshipButton
                             text="Follow"
                             icon={<FaSquarePlus size={20} />}
+                            onClick={followUser}
+                            loading={isFollowing}
+                            loadingUI="Following..."
                         />
                     )}
                 </div>
