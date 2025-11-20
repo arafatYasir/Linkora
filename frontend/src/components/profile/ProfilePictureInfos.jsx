@@ -6,7 +6,7 @@ import RelationshipButton from "./RelationshipButton";
 import { MdPeopleAlt, MdPersonAddAlt1 } from "react-icons/md";
 import { FiUserCheck, FiUserX } from "react-icons/fi";
 import { FaSquarePlus } from "react-icons/fa6";
-import { useAddFriendMutation } from "../../../api/authApi";
+import { useAddFriendMutation, useCancelRequestMutation } from "../../../api/authApi";
 
 const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading, images }) => {
     // States
@@ -16,15 +16,27 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
 
-    // Add friend api
+    // Add friend request api
     const [addFriend, { isLoading: isRequesting }] = useAddFriendMutation();
+
+    // Cancel friend request api
+    const [cancelRequest, { isLoading: isCancelingRequest }] = useCancelRequestMutation();
 
     const sendFriendRequest = async () => {
         try {
             const res = await addFriend(user._id).unwrap();
-            setRelationship({...relationship, following: true, sentRequest: true});
+            setRelationship({ ...relationship, following: true, sentRequest: true });
         } catch (e) {
             console.log("Error while sending request: ", e);
+        }
+    }
+
+    const cancelFriendRequest = async () => {
+        try {
+            const res = await cancelRequest(user._id).unwrap();
+            setRelationship({ ...relationship, following: false, sentRequest: false });
+        } catch (e) {
+            console.log("Error while canceling request: ", e);
         }
     }
 
@@ -103,6 +115,9 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
                             <RelationshipButton
                                 text="Cancel request"
                                 icon={<FiUserX size={20} />}
+                                onClick={cancelFriendRequest}
+                                loading={isCancelingRequest}
+                                loadingUI="Canceling..."
                             />
                         ) : (relationship?.following && !relationship.sentRequest) ? (
                             <RelationshipButton

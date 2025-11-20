@@ -29,10 +29,9 @@ const RelationshipButton = ({ icon, text, onClick, loading = false, loadingUI, p
         <div ref={optionsRef} className="relative font-semibold text-text">
             <button
                 onClick={
-                    text === "Add friend" ? onClick :
                     text === "Friends" ? () => toggleOptions("Friends") : 
                     text === "Respond" ? () => toggleOptions("Respond") :
-                    text === "Following" ? () => toggleOptions("Following") : () => {}
+                    text === "Following" ? () => toggleOptions("Following") : onClick
                 }
                 className="flex items-center gap-x-1.5 rounded-[var(--radius-button)] cursor-pointer hover:opacity-80 transition-[var(--transition-default)] active:scale-98"
                 style={{
