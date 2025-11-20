@@ -5,6 +5,7 @@ import ChangeProfilePicture from "./ChangeProfilePicture";
 import RelationshipButton from "./RelationshipButton";
 import { MdPeopleAlt, MdPersonAddAlt1 } from "react-icons/md";
 import { FiUserCheck, FiUserX } from "react-icons/fi";
+import { FaSquarePlus } from "react-icons/fa6";
 
 const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading, images }) => {
     const [showUploadModal, setShowUploadModal] = useState(false);
@@ -15,6 +16,15 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
         receivedRequest: false
     })
     const { userInfo } = useSelector(state => state.auth);
+
+    // const sendFriendRequest = async () => {
+    //     try {
+    //         console.log("ab");
+            
+    //     } catch (e) {
+    //         console.log("Error while sending request: ", e);
+    //     }
+    // }
 
     // Locking the scroll when modal is open
     useEffect(() => {
@@ -115,6 +125,13 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
                         <RelationshipButton
                             text="Add friend"
                             icon={<MdPersonAddAlt1 size={20} />}
+                        />
+                    )}
+
+                    {userInfo._id !== user._id && !relationship.following && (
+                        <RelationshipButton
+                            text="Follow"
+                            icon={<FaSquarePlus size={20} />}
                         />
                     )}
                 </div>

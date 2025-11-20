@@ -104,7 +104,49 @@ export const authApi = createApi({
                 method: "PUT",
                 body: { intro }
             })
-        })
+        }),
+        addFriend: build.mutation({
+            query: (id) => ({
+                url: `/api/v1/add-friend/${id}`,
+                method: "POST",
+            })
+        }),
+        acceptRequest: build.mutation({
+            query: (id) => ({
+                url: `/api/v1/accept-request/${id}`,
+                method: "POST",
+            })
+        }),
+        cancelRequest: build.mutation({
+            query: (id) => ({
+                url: `/api/v1/cancel-request/${id}`,
+                method: "DELETE",
+            })
+        }),
+        follow: build.mutation({
+            query: (id) => ({
+                url: `/api/v1/follow/${id}`,
+                method: "POST",
+            })
+        }),
+        unfollow: build.mutation({
+            query: (id) => ({
+                url: `/api/v1/unfollow/${id}`,
+                method: "DELETE",
+            })
+        }),
+        unfriend: build.mutation({
+            query: (id) => ({
+                url: `/api/v1/unfriend/${id}`,
+                method: "DELETE",
+            })
+        }),
+        deleteRequest: build.mutation({
+            query: (id) => ({
+                url: `/api/v1/delete-request/${id}`,
+                method: "DELETE",
+            })
+        }),
     }),
 })
 
