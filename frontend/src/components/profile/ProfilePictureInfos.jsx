@@ -104,7 +104,7 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
                                 text="Cancel request"
                                 icon={<FiUserX size={20} />}
                             />
-                        ) : relationship?.following ? (
+                        ) : (relationship?.following && !relationship.sentRequest) ? (
                             <RelationshipButton
                                 text="Following"
                                 icon={<FiUserCheck size={20} />}

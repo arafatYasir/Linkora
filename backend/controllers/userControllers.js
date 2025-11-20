@@ -400,13 +400,13 @@ const getUser = async (req, res) => {
         if(mySelf.friends.includes(user._id) && user.friends.includes(mySelf._id)) {
             relationship.friends = true;
         }
-        else if(mySelf.following.includes(user._id) && user.followers.includes(mySelf._id)) {
+        if(mySelf.following.includes(user._id) && user.followers.includes(mySelf._id)) {
             relationship.following = true;
         }
-        else if(user.friendRequests.includes(mySelf._id)) {
+        if(user.friendRequests.includes(mySelf._id)) {
             relationship.sentRequest = true;
         }
-        else if(mySelf.friendRequests.includes(user._id)) {
+        if(mySelf.friendRequests.includes(user._id)) {
             relationship.receivedRequest = true;
         }
 
