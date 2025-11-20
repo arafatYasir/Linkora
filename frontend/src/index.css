@@ -3,8 +3,9 @@
 @theme {
   /* Light Theme Colors */
   --color-primary: #34B27B;
+  --color-text: #000000;
   --color-primary-hover: #00a85f;
-  --color-bg: #f9fafb;
+  --color-bg: #F5F6F7;
   --color-surface: #ffffff;
   --color-text-primary: #111827;
   --color-text-secondary: #6b7280;
@@ -14,6 +15,7 @@
 
   /* Dark Theme Colors */
   --dark-color-primary: #32bf81;
+  --dark-color-text: #ffffff;
   --dark-color-primary-hover: #00c46a;
   --dark-color-bg: #0d1117;
   --dark-color-surface: #161b22;
@@ -50,6 +52,7 @@
 /* Dark Theme Overrides */
 .dark {
   --color-primary: var(--dark-color-primary);
+  --color-text: var(--dark-color-text);
   --color-primary-hover: var(--dark-color-primary-hover);
   --color-bg: var(--dark-color-bg);
   --color-surface: var(--dark-color-surface);
@@ -65,7 +68,7 @@
 /* 🌐 Global Styles */
 body {
   background: var(--color-bg);
-  color: var(--color-text-primary);
+  color: var(--color-text);
   font-family: "Inter", sans-serif;
   font-smooth: always;
   min-height: 100vh;

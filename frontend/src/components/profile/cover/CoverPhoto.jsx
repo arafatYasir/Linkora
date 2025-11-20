@@ -277,7 +277,7 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
                 {/* ---- If it is the same user then let him edit ---- */}
                 {
                     (userInfo._id === user._id && !image) && (
-                        <div ref={coverOptionsRef}>
+                        <div ref={coverOptionsRef} className="relative">
                             {/* ---- Edit Cover ---- */}
                             <button
                                 className="flex items-center gap-x-2 absolute bottom-10 right-10 z-10 bg-border px-3 py-1.5 rounded-lg cursor-pointer active:scale-98"
@@ -289,11 +289,11 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
 
                             {/* ---- Edit Cover Options ---- */}
                             {showCoverOptions && (
-                                <ul className="flex flex-col absolute bottom-20 right-10 bg-border px-3 py-2 rounded-lg transition-all">
+                                <div className="flex flex-col absolute bottom-20 right-10 bg-border px-3 py-2 rounded-lg transition-all">
                                     {editOptions.map(option => (
                                         <CoverOption key={option.id} option={option} inputFileRef={inputFileRef} setShowCoverOptions={setShowCoverOptions} setShowChooseModal={setShowChooseModal} />
                                     ))}
-                                </ul>
+                                </div>
                             )}
                         </div>
                     )

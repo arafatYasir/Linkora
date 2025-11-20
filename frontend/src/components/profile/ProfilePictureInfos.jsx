@@ -86,7 +86,7 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
             {
                 <div className="ml-[100px] mt-[60px]">
                     {userInfo._id !== user._id && (
-                        relationship.friends ? (
+                        !relationship.friends ? (
                             <RelationshipButton
                                 text="Friends"
                                 icon={<MdPeopleAlt size={20} />}
