@@ -6,25 +6,27 @@ import RelationshipButton from "./RelationshipButton";
 import { MdPeopleAlt, MdPersonAddAlt1 } from "react-icons/md";
 import { FiUserCheck, FiUserX } from "react-icons/fi";
 import { FaSquarePlus } from "react-icons/fa6";
+import { useAddFriendMutation } from "../../../api/authApi";
 
 const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading, images }) => {
+    // States
     const [showUploadModal, setShowUploadModal] = useState(false);
-    const [relationship, setRelationship] = useState({
-        friends: false,
-        following: false,
-        sentRequest: false,
-        receivedRequest: false
-    })
+    const [relationship, setRelationship] = useState(null);
+
+    // Redux states
     const { userInfo } = useSelector(state => state.auth);
 
-    // const sendFriendRequest = async () => {
-    //     try {
-    //         console.log("ab");
-            
-    //     } catch (e) {
-    //         console.log("Error while sending request: ", e);
-    //     }
-    // }
+    // Add friend api
+    const [addFriend, { isLoading: isRequesting }] = useAddFriendMutation();
+
+    const sendFriendRequest = async () => {
+        try {
+            const res = await addFriend(user._id).unwrap();
+            setRelationship({...relationship, following: true, sentRequest: true});
+        } catch (e) {
+            console.log("Error while sending request: ", e);
+        }
+    }
 
     // Locking the scroll when modal is open
     useEffect(() => {
@@ -37,22 +39,12 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
         }
     }, [showUploadModal]);
 
+    // Storing the relationship status whenever it changes
     useEffect(() => {
-        if (userInfo._id !== user._id) {
-            if (userInfo.friends.includes(user._id) && user.friends.includes(userInfo._id)) {
-                setRelationship(prev => ({ ...prev, friends: true }));
-            }
-            else if (userInfo.following.includes(user._id) && user.followers.includes(userInfo._id)) {
-                setRelationship(prev => ({ ...prev, following: true }));
-            }
-            else if (user.friendRequests.includes(userInfo._id)) {
-                setRelationship(prev => ({ ...prev, sentRequest: true }));
-            }
-            else if (userInfo.friendRequests.includes(user._id)) {
-                setRelationship(prev => ({ ...prev, receivedRequest: true }));
-            }
-        }
-    }, [user, userInfo]);
+        setRelationship(user.relationship);
+    }, [user.relationship])
+
+    console.log(relationship);
 
     return (
         <div className="flex items-center justify-between gap-x-4 absolute -bottom-28 left-10">
@@ -96,39 +88,42 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
             {
                 <div className="ml-[100px] mt-[60px] flex gap-x-2">
                     {userInfo._id !== user._id && (
-                        relationship.friends ? (
+                        relationship?.friends ? (
                             <RelationshipButton
                                 text="Friends"
                                 icon={<MdPeopleAlt size={20} />}
                                 backgroundColor="var(--color-border)"
                             />
-                        ) : relationship.following ? (
+                        ) : relationship?.receivedRequest ? (
+                            <RelationshipButton
+                                text="Respond"
+                                icon={<FiUserCheck size={20} />}
+                            />
+                        ) : relationship?.sentRequest ? (
+                            <RelationshipButton
+                                text="Cancel request"
+                                icon={<FiUserX size={20} />}
+                            />
+                        ) : relationship?.following ? (
                             <RelationshipButton
                                 text="Following"
                                 icon={<FiUserCheck size={20} />}
                                 backgroundColor="var(--color-border)"
                             />
-                        ) : relationship.sentRequest ? (
-                            <RelationshipButton
-                                text="Cancel request"
-                                icon={<FiUserX size={20} />}
-                            />
-                        ) : relationship.receivedRequest ? (
-                            <RelationshipButton
-                                text="Respond"
-                                icon={<FiUserCheck size={20} />}
-                            />
                         ) : <></>
                     )}
 
-                    {userInfo._id !== user._id && !relationship.friends && (
+                    {(userInfo._id !== user._id && !relationship?.friends && !relationship?.sentRequest && !relationship?.receivedRequest) && (
                         <RelationshipButton
                             text="Add friend"
+                            loading={isRequesting}
+                            loadingUI="Sending request..."
                             icon={<MdPersonAddAlt1 size={20} />}
+                            onClick={sendFriendRequest}
                         />
                     )}
 
-                    {userInfo._id !== user._id && !relationship.following && (
+                    {(userInfo._id !== user._id && !relationship?.friends && !relationship?.following && !relationship?.receivedRequest && !relationship?.sentRequest) && (
                         <RelationshipButton
                             text="Follow"
                             icon={<FaSquarePlus size={20} />}

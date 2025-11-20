@@ -29,6 +29,7 @@ const RelationshipButton = ({ icon, text, onClick, loading = false, loadingUI, p
         <div ref={optionsRef} className="relative font-semibold text-text">
             <button
                 onClick={
+                    text === "Add friend" ? onClick :
                     text === "Friends" ? () => toggleOptions("Friends") : 
                     text === "Respond" ? () => toggleOptions("Respond") :
                     text === "Following" ? () => toggleOptions("Following") : () => {}
@@ -38,6 +39,7 @@ const RelationshipButton = ({ icon, text, onClick, loading = false, loadingUI, p
                     padding: `${paddingY} ${paddingX}`,
                     background: backgroundColor
                 }}
+                disabled={loading}
             >
                 {icon}
                 <span>{loading ? loadingUI : text}</span>
