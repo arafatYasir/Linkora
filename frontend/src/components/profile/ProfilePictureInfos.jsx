@@ -6,7 +6,7 @@ import RelationshipButton from "./RelationshipButton";
 import { MdPeopleAlt, MdPersonAddAlt1 } from "react-icons/md";
 import { FiUserCheck, FiUserX } from "react-icons/fi";
 import { FaSquarePlus } from "react-icons/fa6";
-import { useAddFriendMutation, useCancelRequestMutation } from "../../../api/authApi";
+import { useAcceptRequestMutation, useAddFriendMutation, useCancelRequestMutation, useDeleteRequestMutation } from "../../../api/authApi";
 
 const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading, images }) => {
     // States
@@ -22,6 +22,13 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
     // Cancel friend request api
     const [cancelRequest, { isLoading: isCancelingRequest }] = useCancelRequestMutation();
 
+    // Accept frined request api
+    const [acceptRequest, { isLoading: isAcceptingRequest }] = useAcceptRequestMutation();
+
+    // Delete friend request api
+    const [deleteRequest, {isLoading: isDeletingRequest}] = useDeleteRequestMutation();
+
+    // Functions to control the relationship actions
     const sendFriendRequest = async () => {
         try {
             const res = await addFriend(user._id).unwrap();
@@ -37,6 +44,24 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
             setRelationship({ ...relationship, following: false, sentRequest: false });
         } catch (e) {
             console.log("Error while canceling request: ", e);
+        }
+    }
+
+    const acceptFriendRequest = async () => {
+        try {
+            const res = await acceptRequest(user._id).unwrap();
+            setRelationship({...relationship, friends: true, following: true, receivedRequest: false});
+        } catch (e) {
+            console.log("Error while accepting request: ", e);
+        }
+    }
+
+    const deleteFriendRequest = async () => {
+        try {
+            const res = await deleteRequest(user._id).unwrap();
+            setRelationship({...relationship, receivedRequest: false});
+        } catch (e) {
+            console.log("Error while deleting request: ", e);
         }
     }
 
@@ -110,6 +135,10 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
                             <RelationshipButton
                                 text="Respond"
                                 icon={<FiUserCheck size={20} />}
+                                loading={isAcceptingRequest}
+                                loadingUI="Accepting..."
+                                extraAction1={acceptFriendRequest}
+                                extraAction2={deleteFriendRequest}
                             />
                         ) : relationship?.sentRequest ? (
                             <RelationshipButton

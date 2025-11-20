@@ -3,7 +3,7 @@ import { FiUserMinus, FiUserX } from "react-icons/fi"
 import { RiCloseLargeLine } from "react-icons/ri";
 import { IoMdCheckmark } from "react-icons/io";
 
-const RelationshipButton = ({ icon, text, onClick, loading = false, loadingUI, paddingX = "16px", paddingY = "8px", backgroundColor = "var(--color-primary-hover)" }) => {
+const RelationshipButton = ({ icon, text, onClick, extraAction1, extraAction2, loading = false, loadingUI, paddingX = "16px", paddingY = "8px", backgroundColor = "var(--color-primary-hover)" }) => {
     const [showOptions, setShowOptions] = useState(null);
     const optionsRef = useRef(null);
 
@@ -70,14 +70,20 @@ const RelationshipButton = ({ icon, text, onClick, loading = false, loadingUI, p
             {showOptions === "Respond" && (
                 <ul className="flex flex-col absolute bottom-11 left-0 bg-border px-3 py-2 rounded-lg transition-all w-[200px]">
                     <button
-                        onClick={() => { }}
+                        onClick={() => {
+                            extraAction1();
+                            setShowOptions(null);
+                        }}
                         className="font-semibold flex items-center gap-x-3 hover:bg-primary/50 cursor-pointer p-1.5 rounded-md transition-all duration-250"
                     >
                         <IoMdCheckmark size={20} />
                         <span>Confirm request</span>
                     </button>
                     <button
-                        onClick={() => { }}
+                        onClick={() => {
+                            extraAction2();
+                            setShowOptions(null);
+                        }}
                         className="font-semibold flex items-center gap-x-3 hover:bg-primary/50 cursor-pointer p-1.5 rounded-md transition-all duration-250"
                     >
                         <RiCloseLargeLine size={18} />
