@@ -84,9 +84,9 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
 
             {/* ---- Action Buttons ---- */}
             {
-                <div className="ml-[100px] mt-[60px]">
+                <div className="ml-[100px] mt-[60px] flex gap-x-2">
                     {userInfo._id !== user._id && (
-                        !relationship.friends ? (
+                        relationship.friends ? (
                             <RelationshipButton
                                 text="Friends"
                                 icon={<MdPeopleAlt size={20} />}
@@ -96,6 +96,7 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
                             <RelationshipButton
                                 text="Following"
                                 icon={<FiUserCheck size={20} />}
+                                backgroundColor="var(--color-border)"
                             />
                         ) : relationship.sentRequest ? (
                             <RelationshipButton
@@ -107,7 +108,11 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
                                 text="Respond"
                                 icon={<FiUserCheck size={20} />}
                             />
-                        ) : <RelationshipButton
+                        ) : <></>
+                    )}
+
+                    {userInfo._id !== user._id && !relationship.friends && (
+                        <RelationshipButton
                             text="Add friend"
                             icon={<MdPersonAddAlt1 size={20} />}
                         />
