@@ -412,6 +412,11 @@ const getUser = async (req, res) => {
 
         const posts = await Post.find({ user: user._id }).populate("user").sort({ createdAt: -1 });
 
+        await user.populate({
+            path: "friends",
+            select: "-accessToken -refreshToken -details -friends -followers -following -password -verificationTokenExpiry -verified -updatedAt -createdAt"
+        });
+
         res.json({ ...user.toObject(), posts, relationship });
     } catch (e) {
         res.status(400).json({

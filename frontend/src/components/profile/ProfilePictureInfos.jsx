@@ -114,9 +114,7 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
     // Storing the relationship status whenever it changes
     useEffect(() => {
         setRelationship(user.relationship);
-    }, [user.relationship])
-
-    console.log(relationship);
+    }, [user.relationship]);
 
     return (
         <div className="flex items-center justify-between gap-x-4 absolute -bottom-28 left-10">

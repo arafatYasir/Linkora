@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
-import ProfilePhotosSkeleton from "./ProfilePhotosSkeleton";
 
-const ProfilePhotos = ({ isImagesLoading, images }) => {
+const FriendsList = ({friends}) => {
+    // console.log(friends);
     return (
-        <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)] mb-5">
+        <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
             {/* ---- Header ---- */}
             <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold leading-6">Photos ({images?.resources?.length || 0})</h3>
-                <Link to="photos" className="text-primary p-2 rounded-lg hover:text-text-primary hover:bg-primary/50 transition-all duration-250">See all photos</Link>
+                <h3 className="text-xl font-bold leading-6">Friends ({friends?.length || 0})</h3>
+                <Link to="friends" className="text-primary p-2 rounded-lg hover:text-text-primary hover:bg-primary/50 transition-all duration-250">See all friends</Link>
             </div>
 
             {/* ---- Images ---- */}
-            {
+            {/* {
                 (!images || isImagesLoading) ? <ProfilePhotosSkeleton /> : (
                     <div className="grid grid-cols-[120px_120px_120px] justify-between gap-y-2.5 mt-4">
                         {
@@ -30,9 +30,9 @@ const ProfilePhotos = ({ isImagesLoading, images }) => {
                         }
                     </div>
                 )
-            }
+            } */}
         </div>
     )
 }
 
-export default ProfilePhotos
+export default FriendsList
