@@ -46,7 +46,7 @@ const UserProfilePage = () => {
     const sorting = "desc";
     const maxLimit = 30;
 
-    const { data: images, isImagesLoading } = useListImagesQuery({ path, sorting, maxLimit }, {skip: !userProfile});
+    const { data: images, isImagesLoading } = useListImagesQuery({ path, sorting, maxLimit }, {skip: !userProfile?.username});
 
     // useEffect to handle re-fetched data
     useEffect(() => {
