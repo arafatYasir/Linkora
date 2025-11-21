@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
-const FriendsList = ({friends}) => {
-    // console.log(friends);
+const FriendsList = ({ friends }) => {
     return (
         <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
             {/* ---- Header ---- */}
@@ -11,26 +10,33 @@ const FriendsList = ({friends}) => {
             </div>
 
             {/* ---- Images ---- */}
-            {/* {
-                (!images || isImagesLoading) ? <ProfilePhotosSkeleton /> : (
+            {
+                (!friends) ? <ProfilePhotosSkeleton /> : (
                     <div className="grid grid-cols-[120px_120px_120px] justify-between gap-y-2.5 mt-4">
                         {
-                            images.resources.map(image => (
-                                <div
-                                    key={image.asset_id}
-                                    className="w-[120px] h-[120px] overflow-hidden cursor-pointer hover:opacity-70 transition-all duration-250"
+                            friends.map(friend => (
+                                <Link 
+                                    key={friend._id}
+                                    to={`/profile/${friend.username}`}
+                                    className="block"
                                 >
-                                    <img
-                                        src={image.secure_url}
-                                        alt="Yasir Arafat Image"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
+                                    <div
+                                        className="w-[120px] h-[120px] overflow-hidden cursor-pointer hover:opacity-70 transition-all duration-250 rounded-xl"
+                                    >
+                                        <img
+                                            src={friend.profilePicture}
+                                            alt="Yasir Arafat Image"
+                                            className="w-full h-full object-cover"
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                    <p className="text-sm mt-1">{friend.firstname + " " + friend.lastname}</p>
+                                </Link>
                             ))
                         }
                     </div>
                 )
-            } */}
+            }
         </div>
     )
 }

@@ -33,7 +33,7 @@ const UserProfilePage = () => {
     }
 
     // Fetching user data if that is another user's profile
-    const { data: user, isLoading } = useGetUserQuery(username);
+    const { data: user, isLoading } = useGetUserQuery(isOwnProfile ? userInfo.username : username);
 
     // Post fetching api
     const { data: posts, refetch: refetchPosts } = useGetUserPostsQuery(userInfo._id, { skip: userInfo.profilePicture !== userInfo?.posts[0]?.user?.profilePicture ? false : true });

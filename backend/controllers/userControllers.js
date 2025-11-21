@@ -414,7 +414,7 @@ const getUser = async (req, res) => {
 
         await user.populate({
             path: "friends",
-            select: "-accessToken -refreshToken -details -friends -followers -following -password -verificationTokenExpiry -verified -updatedAt -createdAt"
+            select: "-accessToken -refreshToken -details -friends -followers -following -password -verificationTokenExpiry -verified -updatedAt -createdAt -friendRequests -savedPosts -search"
         });
 
         res.json({ ...user.toObject(), posts, relationship });
