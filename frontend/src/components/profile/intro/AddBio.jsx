@@ -2,6 +2,7 @@ import { useState } from "react";
 
 const AddBio = ({ onCancel, onSave, loading }) => {
     const [bioText, setBioText] = useState("");
+    console.log(bioText);
     return (
         <div>
             <textarea

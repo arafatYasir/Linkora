@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import defaultPhoto from "../../../public/default images/avatar.png"
 
 const FriendsList = ({ friends }) => {
     return (
@@ -24,7 +25,7 @@ const FriendsList = ({ friends }) => {
                                         className="w-[120px] h-[120px] overflow-hidden cursor-pointer hover:opacity-70 transition-all duration-250 rounded-xl"
                                     >
                                         <img
-                                            src={friend.profilePicture}
+                                            src={friend.profilePicture || defaultPhoto}
                                             alt="Yasir Arafat Image"
                                             className="w-full h-full object-cover"
                                             loading="lazy"

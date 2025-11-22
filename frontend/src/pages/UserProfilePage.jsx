@@ -75,8 +75,6 @@ const UserProfilePage = () => {
 
     if (isLoading) return <div className="text-3xl text-center">Loading...</div>
 
-    console.log(user);
-
     return (
         <div className="max-w-[1100px] mx-auto">
             {/* Light/Dark Theme Toggle Button */}
@@ -87,7 +85,7 @@ const UserProfilePage = () => {
                 {theme === "dark" ? <MdOutlineLightMode size={20} /> : <MdOutlineNightlight size={20} />}
             </button>
 
-            {user.status === "Not Found" ? <NotFound /> : (
+            {userProfile?.status === "Not Found" ? <NotFound /> : (
                 <div>
                     <div className="relative">
                         {/* ---- Cover Photo ---- */}

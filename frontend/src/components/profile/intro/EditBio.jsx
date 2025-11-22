@@ -2,6 +2,7 @@ import { useState } from "react"
 
 const EditBio = ({ bio, onCancel, onSave, loading }) => {
     const [editedText, setEditedText] = useState(bio);
+    console.log(editedText);
     return (
         <div>
             <textarea
@@ -24,7 +25,7 @@ const EditBio = ({ bio, onCancel, onSave, loading }) => {
                     Cancel
                 </button>
                 <button
-                    onClick={() => onSave("bio", editedText)}
+                    onClick={() => onSave("single", {}, "bio", editedText)}
                     disabled={loading}
                     className="px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary hover:bg-primary-hover"
                 >
