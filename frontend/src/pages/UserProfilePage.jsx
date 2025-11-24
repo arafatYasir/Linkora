@@ -30,7 +30,7 @@ const UserProfilePage = () => {
     let isOwnProfile = !username || username.trim() === "" || username.trim() === userInfo.username;
 
     // Fetching user data
-    const { data: user, isLoading } = useGetUserQuery(isOwnProfile ? userInfo.username : username);
+    const { data: user, isLoading, error: userError } = useGetUserQuery(isOwnProfile ? userInfo.username : username);
 
     // Post fetching api
     const { data: posts, refetch: refetchPosts } = useGetUserPostsQuery(userInfo._id, { skip: userInfo.profilePicture !== userInfo?.posts[0]?.user?.profilePicture ? false : true });
@@ -44,6 +44,11 @@ const UserProfilePage = () => {
     const maxLimit = 30;
 
     const { data: images, isImagesLoading } = useListImagesQuery({ path, sorting, maxLimit }, { skip: !user?.username });
+
+    // useEffect to scroll the user profile to top
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [username]);
 
     // useEffect to save user data to redux and localstorage
     useEffect(() => {
@@ -86,11 +91,6 @@ const UserProfilePage = () => {
 
     if (isLoading && !isOwnProfile) return <div className="text-3xl text-center">Loading...</div>
 
-    console.log(userProfile);
-    console.log(user);
-    console.log(images);
-    console.log("Rendering");
-
     return (
         <div className="max-w-[1100px] mx-auto">
             {/* Light/Dark Theme Toggle Button */}
@@ -103,7 +103,7 @@ const UserProfilePage = () => {
                 {theme === "dark" ? <MdOutlineLightMode size={20} /> : <MdOutlineNightlight size={20} />}
             </button>
 
-            {userProfile?.status === "Not Found" ? <NotFound /> : (
+            {userError?.status === 404 ? <NotFound /> : (
                 <div>
                     <div className="relative">
                         {/* ---- Cover Photo ---- */}
