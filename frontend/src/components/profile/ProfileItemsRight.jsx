@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import CreatePost from "../post/CreatePost";
 import PostModal from "../post/PostModal";
-import Post from "../post/Post"
 import AllPosts from "../post/AllPosts";
 import PostViewControl from "../post/PostViewControl";
 import GridPosts from "../post/GridPosts";
@@ -39,7 +38,7 @@ const ProfileItemsRight = ({ user }) => {
         <div className="col-span-3">
             {/* ---- Post Creation feature only if the same user profile ---- */}
             {
-                userInfo._id === user._id && (
+                userInfo._id === user?._id && (
                     <div className="w-full mb-5">
                         <CreatePost onOpenModal={openPostModal} user={user} />
 
@@ -54,13 +53,12 @@ const ProfileItemsRight = ({ user }) => {
             }
 
             {/* ---- User Posts ---- */}
-
             {
-                ((user.posts && user.posts.length > 0) && viewMethod === "list") ? (
-                    <AllPosts posts={user.posts} />
+                ((user?.posts && user?.posts?.length > 0) && viewMethod === "list") ? (
+                    <AllPosts posts={user?.posts} />
                 )
-                : ((user.posts && user.posts.length > 0) && viewMethod === "grid") ? (
-                    <GridPosts posts={user.posts} />
+                : ((user?.posts && user?.posts?.length > 0) && viewMethod === "grid") ? (
+                    <GridPosts posts={user?.posts} />
                 ) : <h2 className="text-xl text-center">No posts available for this user</h2>
             }
         </div>

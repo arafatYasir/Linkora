@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom"
 import { useGetAllPostsQuery, useGetUserPostsQuery, useGetUserQuery, useListImagesQuery } from "../../api/authApi";
+import { logOutUser, setUser } from "../slices/authSlice";
 import NotFound from "../components/NotFound";
 import defaultCover from "../../public/default images/defaultcover.jpg"
 import defaultPhoto from "../../public/default images/avatar.png"
@@ -14,7 +15,7 @@ import { MdOutlineNightlight } from "react-icons/md";
 
 const UserProfilePage = () => {
     // States
-    const [theme, setTheme] = useState(JSON.parse(localStorage.getItem("theme")) || "dark");
+    const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
@@ -26,29 +27,39 @@ const UserProfilePage = () => {
     const { username } = useParams();
 
     // Checking if the username is the same logged user's username
-    let isOwnProfile = true;
+    let isOwnProfile = !username || username.trim() === "" || username.trim() === userInfo.username;
 
-    if (username && username.trim() !== "" && username !== userInfo.username) {
-        isOwnProfile = false;
-    }
-
-    // Fetching user data if that is another user's profile
+    // Fetching user data
     const { data: user, isLoading } = useGetUserQuery(isOwnProfile ? userInfo.username : username);
 
     // Post fetching api
     const { data: posts, refetch: refetchPosts } = useGetUserPostsQuery(userInfo._id, { skip: userInfo.profilePicture !== userInfo?.posts[0]?.user?.profilePicture ? false : true });
 
-    // Choosing the profile data to show
-    const userProfile = user;
+    // User Profile
+    const userProfile = isOwnProfile ? userInfo : user;
 
     // Image fetching api
-    const path = userProfile?.username;
+    const path = user?.username;
     const sorting = "desc";
     const maxLimit = 30;
 
-    const { data: images, isImagesLoading } = useListImagesQuery({ path, sorting, maxLimit }, {skip: !userProfile?.username});
+    const { data: images, isImagesLoading } = useListImagesQuery({ path, sorting, maxLimit }, { skip: !user?.username });
 
-    // useEffect to handle re-fetched data
+    // useEffect to save user data to redux and localstorage
+    useEffect(() => {
+        if (user) {
+            // If the logged in user reloads then set the fetched data to 
+            if (userInfo._id === user?._id) {
+                // Set the user in redux
+                dispatch(setUser(user));
+
+                // Set the user in localstorage
+                localStorage.setItem("userInfo", JSON.stringify(user));
+            }
+        }
+    }, [user]);
+
+    // useEffect to handle re-fetched post data
     useEffect(() => {
         if (posts && posts.length > 0) {
             dispatch(updatePosts(posts));
@@ -63,25 +74,32 @@ const UserProfilePage = () => {
     useEffect(() => {
         const body = document.querySelector("body");
 
-        if(theme === "light") {
+        if (theme === "light") {
             body.classList.remove("dark");
-            localStorage.setItem("theme", JSON.stringify("light"));
+            localStorage.setItem("theme", "light");
         }
         else {
             body.classList.add("dark");
-            localStorage.setItem("theme", JSON.stringify("dark"));
+            localStorage.setItem("theme", "dark");
         }
     }, [theme]);
 
-    if (isLoading) return <div className="text-3xl text-center">Loading...</div>
+    if (isLoading && !isOwnProfile) return <div className="text-3xl text-center">Loading...</div>
+
+    console.log(userProfile);
+    console.log(user);
+    console.log(images);
+    console.log("Rendering");
 
     return (
         <div className="max-w-[1100px] mx-auto">
             {/* Light/Dark Theme Toggle Button */}
-            <button onClick={() => {
-                if(theme === "dark") setTheme("light");
-                else setTheme("dark");
-            }} className="absolute top-10 right-10 w-10 h-10 flex items-center justify-center hover:bg-primary/50 rounded-full cursor-pointer transition-all duration-250">
+            <button
+                onClick={() => {
+                    setTheme(prev => prev === "light" ? "dark" : "light");
+                }}
+                className="absolute top-10 right-10 w-10 h-10 flex items-center justify-center hover:bg-primary/50 rounded-full cursor-pointer transition-all duration-250"
+            >
                 {theme === "dark" ? <MdOutlineLightMode size={20} /> : <MdOutlineNightlight size={20} />}
             </button>
 

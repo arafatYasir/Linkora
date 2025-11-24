@@ -158,7 +158,7 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
         try {
             setLoading(true);
 
-            const path = `${user.username}/cover_photo`;
+            const path = `${user?.username}/cover_photo`;
             const formData = new FormData();
 
             formData.append("path", path);
@@ -260,7 +260,7 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
                         ) : (image && uploadingState === "saved") ? (
                             <img src={imageUrl} alt="Cover Photo" className="w-full h-full object-cover" />
                         ) : (!image && !uploadingState) ? (
-                            <img src={user.coverPhoto || defaultCover} alt="Cover Photo" className="w-full h-full object-cover" />
+                            <img src={user?.coverPhoto || defaultCover} alt="Cover Photo" className="w-full h-full object-cover" />
                         ) : <></>
                     }
                 </div>
@@ -276,7 +276,7 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
 
                 {/* ---- If it is the same user then let him edit ---- */}
                 {
-                    (userInfo._id === user._id && !image) && (
+                    (userInfo._id === user?._id && !image) && (
                         <div ref={coverOptionsRef} className="relative">
                             {/* ---- Edit Cover ---- */}
                             <button

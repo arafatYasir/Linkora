@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import defaultPhoto from "../../../public/default images/avatar.png"
+import ProfilePhotosSkeleton from "./ProfilePhotosSkeleton";
 
 const FriendsList = ({ friends }) => {
     return (

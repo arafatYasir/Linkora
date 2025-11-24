@@ -22,6 +22,7 @@ export const authSlice = createSlice({
         },
         setCoverPhoto: (state, action) => {
             state.userInfo.coverPhoto = action.payload;
+            console.log(action.payload);
         },
         setIntro: (state, action) => {
             state.userInfo.details = action.payload;

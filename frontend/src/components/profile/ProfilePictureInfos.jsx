@@ -113,23 +113,23 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
 
     // Storing the relationship status whenever it changes
     useEffect(() => {
-        setRelationship(user.relationship);
-    }, [user.relationship]);
+        setRelationship(user?.relationship);
+    }, [user?.relationship]);
 
     return (
         <div className="flex items-center justify-between gap-x-4 absolute -bottom-28 left-10">
             <div className="relative">
                 <div className="w-44 h-44 rounded-full border-4 border-bg overflow-hidden">
                     <img
-                        src={user.profilePicture || defaultPhoto}
-                        alt={`${user.firstname} ${user.lastname}'s Profile Picture | ${user.username}`}
+                        src={user?.profilePicture || defaultPhoto}
+                        alt={`${user?.firstname} ${user?.lastname}'s Profile Picture | ${user?.username}`}
                         className="w-full h-full object-cover"
                     />
                 </div>
 
                 {/* ---- Change Profile Picture ---- */}
                 {
-                    userInfo._id === user._id && (
+                    userInfo._id === user?._id && (
                         <button
                             className="absolute bottom-5 right-2 bg-border p-1 rounded-full hover:bg-primary transition-all duration-250 cursor-pointer"
                             onClick={() => setShowUploadModal(true)}
@@ -144,20 +144,20 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
             </div>
 
             <div className="flex flex-col gap-y-4 mt-[60px]">
-                <p className="text-[32px] font-bold leading-[16px]">{user.firstname} {user.lastname}</p>
+                <p className="text-[32px] font-bold leading-[16px]">{user?.firstname} {user?.lastname}</p>
                 <p className="space-x-1">
-                    <span className="text-[15px] font-semibold leading-[16px]">{user.friends.length} Friends</span>
+                    <span className="text-[15px] font-semibold leading-[16px]">{user?.friends?.length} Friends</span>
                     <span>•</span>
-                    <span className="text-[15px] font-semibold leading-[16px]">{user.followers.length} Followers</span>
+                    <span className="text-[15px] font-semibold leading-[16px]">{user?.followers?.length} Followers</span>
                     <span>•</span>
-                    <span className="text-[15px] font-semibold leading-[16px]">{user.following.length} Following</span>
+                    <span className="text-[15px] font-semibold leading-[16px]">{user?.following?.length} Following</span>
                 </p>
             </div>
 
             {/* ---- Action Buttons ---- */}
             {
                 <div className="ml-[100px] mt-[60px] flex gap-x-2">
-                    {userInfo._id !== user._id && (
+                    {userInfo._id !== user?._id && (
                         relationship?.friends ? (
                             <RelationshipButton
                                 text="Friends"
@@ -194,7 +194,7 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
                         ) : <></>
                     )}
 
-                    {(userInfo._id !== user._id && !relationship?.friends && !relationship?.sentRequest && !relationship?.receivedRequest) && (
+                    {(userInfo._id !== user?._id && !relationship?.friends && !relationship?.sentRequest && !relationship?.receivedRequest) && (
                         <RelationshipButton
                             text="Add friend"
                             loading={isRequesting}
@@ -204,7 +204,7 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
                         />
                     )}
 
-                    {(userInfo._id !== user._id && !relationship?.following && !relationship?.receivedRequest && !relationship?.sentRequest) && (
+                    {(userInfo._id !== user?._id && !relationship?.following && !relationship?.receivedRequest && !relationship?.sentRequest) && (
                         <RelationshipButton
                             text="Follow"
                             icon={<FaSquarePlus size={20} />}

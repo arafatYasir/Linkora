@@ -1,6 +1,6 @@
 import Post from "./Post";
 
-const AllPosts = ({posts}) => {
+const AllPosts = ({ posts }) => {
     const sortedPosts = [...posts].sort((a, b) => {
         return new Date(b.createdAt) - new Date(a.createdAt);
     });

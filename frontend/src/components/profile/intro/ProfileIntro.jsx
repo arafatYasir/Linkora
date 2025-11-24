@@ -18,24 +18,7 @@ import { FaFacebook, FaGithub, FaInstagram, FaXTwitter, FaYoutube } from "react-
 
 const ProfileIntro = ({ user, details }) => {
     // States
-    const [introInfos, setIntroInfos] = useState({
-        bio: details.bio,
-        college: details.college,
-        university: details.university,
-        school: details.school,
-        relationShip: details.relationShip,
-        currentCity: details.currentCity,
-        job: details.job,
-        workPlace: details.workPlace,
-        homeTown: details.homeTown,
-        pronoun: details.pronoun,
-        gmail: details.gmail,
-        facebook: details.facebook,
-        instagram: details.instagram,
-        x: details.x,
-        youtube: details.youtube,
-        github: details.github
-    });
+    const [introInfos, setIntroInfos] = useState(null);
     const [isIntroEmpty, setIsIntroEmpty] = useState(true);
     const [showEditDetailsModal, setShowEditDetailsModal] = useState(false);
     const [addBio, setAddBio] = useState(false);
@@ -53,21 +36,41 @@ const ProfileIntro = ({ user, details }) => {
 
     // useEffect to check if intro is empty
     useEffect(() => {
-        const values = Object.values(details);
+        if (details) {
+            setIntroInfos({
+                bio: details.bio,
+                college: details.college,
+                university: details.university,
+                school: details.school,
+                relationShip: details.relationShip,
+                currentCity: details.currentCity,
+                job: details.job,
+                workPlace: details.workPlace,
+                homeTown: details.homeTown,
+                pronoun: details.pronoun,
+                gmail: details.gmail,
+                facebook: details.facebook,
+                instagram: details.instagram,
+                x: details.x,
+                youtube: details.youtube,
+                github: details.github
+            });
+            const values = Object.values(details);
 
-        values.forEach(value => {
-            if (value?.length > 0 || value !== "") {
-                setIsIntroEmpty(false);
-                return;
-            }
-        });
+            values.forEach(value => {
+                if (value?.length > 0 || value !== "") {
+                    setIsIntroEmpty(false);
+                    return;
+                }
+            });
+        }
     }, [details]);
 
     // useEffect to check if intro edit modal is open and then disable body scrolling
     useEffect(() => {
         const body = document.querySelector("body");
 
-        if(showEditDetailsModal) {
+        if (showEditDetailsModal) {
             body.style.overflow = "hidden";
         }
         else {
@@ -112,11 +115,11 @@ const ProfileIntro = ({ user, details }) => {
             setLoading(true);
 
             // Saving in local state based on multiple or single
-            if(type === "single") {
+            if (type === "single") {
                 saveIntroInLocal({ ...introInfos, [key]: value });
             }
             else {
-                saveIntroInLocal({...introInfos, ...object});
+                saveIntroInLocal({ ...introInfos, ...object });
             }
 
             // Saving in database
@@ -134,7 +137,7 @@ const ProfileIntro = ({ user, details }) => {
         }
     }
 
-    if (isIntroEmpty) return;
+    if (!introInfos || isIntroEmpty) return;
 
     return (
         <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)] mb-5">
@@ -179,7 +182,7 @@ const ProfileIntro = ({ user, details }) => {
                 </div>
 
                 {/* ---- Intro Editing Section ---- */}
-                {user._id === userInfo._id && (
+                {user?._id === userInfo._id && (
                     <div className="space-y-4 mt-4">
                         {
                             (introInfos.bio && !addBio && !editBio) ? (
