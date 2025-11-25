@@ -1,5 +1,6 @@
 const Post = require("../models/postModel");
 const User = require("../models/userModel");
+const mongoose = require("mongoose");
 
 const createPost = async (req, res) => {
     try {
@@ -19,7 +20,7 @@ const createPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
     try {
-        const posts = await Post.find({}).populate("user", "firstname lastname username profilePicture cover").sort({ createdAt: -1 });
+        const posts = await Post.find({}).populate("user", "firstname lastname username profilePicture coverPhoto").sort({ createdAt: -1 });
 
         res.send(posts);
     }
@@ -33,7 +34,7 @@ const getAllPosts = async (req, res) => {
 const getUserPosts = async (req, res) => {
     try {
         const { id } = req.params;
-        const posts = await Post.find({user: id}).populate("user", "firstname lastname username profilePicture cover").sort({ createdAt: -1 });
+        const posts = await Post.find({ user: id }).populate("user", "firstname lastname username profilePicture coverPhoto").sort({ createdAt: -1 });
 
         res.send(posts);
     } catch (e) {
@@ -43,4 +44,61 @@ const getUserPosts = async (req, res) => {
     }
 }
 
-module.exports = { createPost, getAllPosts, getUserPosts };
+const reactPost = async (req, res) => {
+    try {
+        const { react, postId } = req.body;
+        const post = await Post.findById(postId);
+
+        // If post not found
+        if (!post) {
+            return res.status(404).json({
+                error: "Post not found!"
+            });
+        }
+
+        const hasAlreadyReacted = post.reacts.find(react => react.reactedBy.toString() === req.user.id);
+        console.log(hasAlreadyReacted);
+
+        // If user has not reacted before then create a new react
+        if (!hasAlreadyReacted) {
+            post.reacts.push({
+                react,
+                reactedBy: req.user.id
+            })
+
+            await post.save();
+
+            console.log("Adding react");
+        }
+        else {
+            // If previous react and new react is same then delete react from post
+            if(hasAlreadyReacted.react === react) {
+                post.reacts.pull({
+                    reactedBy: req.user.id
+                });
+
+                await post.save();
+
+                console.log("Deleting react");
+            }
+            else {
+                // If previous react and new react is not same then update react
+                post.reacts.find(react => react.reactedBy.toString() === req.user.id).react = react;
+                await post.save();
+                console.log("Updating react");
+            }
+        }
+
+        res.json({
+            message: "Reacted successfully",
+            status: "OK",
+            post
+        });
+    } catch (e) {
+        res.status(404).json({
+            error: e.message
+        })
+    }
+}
+
+module.exports = { createPost, getAllPosts, getUserPosts, reactPost };
