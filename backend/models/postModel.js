@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const {ObjectId} = mongoose.Schema;
+const { ObjectId } = mongoose.Schema;
 
 const postSchema = new mongoose.Schema({
     type: {
@@ -37,7 +37,20 @@ const postSchema = new mongoose.Schema({
                 require: true
             }
         }
+    ],
+    reacts: [
+        {
+            react: {
+                type: String,
+                enum: ["like", "love", "haha", "wow", "angry", "sad"],
+                required: true
+            },
+            reactedBy: {
+                type: ObjectId,
+                ref: "User"
+            }
+        }
     ]
-}, {timestamps: true});
+}, { timestamps: true });
 
 module.exports = mongoose.model("post", postSchema);
