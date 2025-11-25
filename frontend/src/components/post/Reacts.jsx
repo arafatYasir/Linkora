@@ -1,8 +1,8 @@
 import { reactions } from "../../constants/reactions"
 
-const Reacts = ({ setShowReacts, timerRef }) => {
+const Reacts = ({ showReacts, setShowReacts, timerRef }) => {
     return (
-        <div className="flex items-center justify-between w-[280px] bg-[var(--color-bg)] shadow-md rounded-full p-1 border border-[var(--color-border)] absolute top-[-50px] left-0"
+        <div className={`grid grid-cols-12 w-[280px] bg-[var(--color-bg)] shadow-md rounded-full p-1 border border-[var(--color-border)] transition-[var(--transition-default)] absolute left-0 top-[-50px]`}
             onMouseOver={() => {
                 clearTimeout(timerRef.current);
                 timerRef.current = setTimeout(() => setShowReacts(true), 200)
@@ -16,7 +16,7 @@ const Reacts = ({ setShowReacts, timerRef }) => {
                     key={index}
                     src={react.image}
                     alt={react.name}
-                    className="w-10 h-10 cursor-pointer hover:scale-120 transition-all duration-150"
+                    className="col-span-2 cursor-pointer hover:scale-150 transition-[var(--transition-default)]"
                 />
             ))}
         </div>

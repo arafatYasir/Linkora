@@ -132,25 +132,25 @@ const Post = ({ post }) => {
             {/* ---- Post Footer ---- */}
             <div className="flex items-center justify-between border-t pt-2 px-4 pb-1 mt-4 border-t-[var(--color-border)]">
                 <div
-                    className="flex items-center justify-center gap-2 relative w-1/3 text-center cursor-pointer hover:bg-primary/30 p-2 rounded-lg transition-all duration-250"
+                    className="flex items-center justify-center gap-2 relative w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1 rounded-lg transition-all duration-250"
                     onMouseOver={() => {
                         clearTimeout(timerRef.current);
                         timerRef.current = setTimeout(() => setShowReacts(true), 200)
                     }}
                     onMouseLeave={() => {
-                        timerRef.current = setTimeout(() => setShowReacts(false), 500)
+                        timerRef.current = setTimeout(() => setShowReacts(false), 1000)
                     }}
                 >
 
                     {/* ---- Reactions on hover ---- */}
-                    {showReacts && <Reacts setShowReacts={setShowReacts} timerRef={timerRef} />}
+                    {showReacts && <Reacts showReacts={showReacts} setShowReacts={setShowReacts} timerRef={timerRef} />}
 
                     <FaRegThumbsUp />
                     <span>Like</span>
                 </div>
 
                 <div
-                    className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/30 p-2 rounded-lg transition-all duration-250"
+                    className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1 rounded-lg transition-all duration-250"
                     onClick={() => {
                         setShowComments(prev => !prev);
                     }}
@@ -159,7 +159,7 @@ const Post = ({ post }) => {
                     <span>Comments</span>
                 </div>
 
-                <div className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/30 p-2 rounded-lg transition-all">
+                <div className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1 rounded-lg transition-all">
                     <IoMdShareAlt size={20} />
                     <span>Shares</span>
                 </div>
