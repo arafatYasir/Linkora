@@ -10,10 +10,22 @@ import { useEffect, useState } from "react";
 import { useRef } from "react";
 import CreateComment from "./CreateComment";
 import PostOptions from "./PostOptions";
+import { useReactPostMutation } from "../../../api/authApi";
+import { useSelector } from "react-redux";
+
+const reactionColors = {
+    Like: "#2078F4",
+    Love: "#F33E58",
+    Haha: "#F7B125",
+    Wow: "#F7B125",
+    Sad: "#F7B125",
+    Angry: "#E9710F"
+};
 
 const Post = ({ post }) => {
     // States
     const [showReacts, setShowReacts] = useState(false);
+    const [react, setReact] = useState(null);
     const [showComments, setShowComments] = useState(false);
     const [showOptions, setShowOptions] = useState(false);
     const [comment, setComment] = useState("");
@@ -25,11 +37,21 @@ const Post = ({ post }) => {
     const optionsRef = useRef(null);
 
     // Extracting data from post
-    const { text, type, user, background, comments, images } = post;
+    const { _id, text, type, user, background, comments, images, usersReaction } = post;
+
+    // Reaction api
+    const [reactPost] = useReactPostMutation();
 
     useEffect(() => {
         if (showComments) commentRef.current.focus();
     }, [showComments]);
+
+    // useEffect to sync and set the usersReaction to state
+    useEffect(() => {
+        if(usersReaction?.react) {
+            setReact(usersReaction?.react);
+        }
+    }, [usersReaction?.react]);
 
     useEffect(() => {
         const handleCloseOptions = (e) => {
@@ -43,12 +65,26 @@ const Post = ({ post }) => {
         return () => {
             document.removeEventListener("mousedown", handleCloseOptions);
         }
-    }, [])
+    }, []);
+
+    // Functions
+    const handleReact = async (reactType) => {
+        try {
+            const data = await reactPost({ react: reactType, postId: _id }).unwrap();
+            setShowReacts(false);
+
+            if (data.status === "OK") {
+                setReact(prev => prev === reactType ? null : reactType);
+            }
+        } catch (e) {
+            console.error("Error while reacting post", e);
+        }
+    }
 
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
 
     return (
-        <li className="w-full max-w-[640px] bg-[var(--color-surface)]  rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
+        <li className="w-full max-w-[640px] bg-[var(--color-surface)]  rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] transition-[var(--transition-default)]">
             {/* ---- Post Heading ---- */}
             <div className="flex items-center justify-between border-b pb-2 px-4 pt-4 border-b-[var(--color-border)]">
                 <div className="flex items-center gap-x-3">
@@ -130,9 +166,13 @@ const Post = ({ post }) => {
             </div>
 
             {/* ---- Post Footer ---- */}
-            <div className="flex items-center justify-between border-t pt-2 px-4 pb-1 mt-4 border-t-[var(--color-border)]">
-                <div
-                    className="flex items-center justify-center gap-2 relative w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1 rounded-lg transition-all duration-250"
+            <div className="relative flex items-center justify-between border-t pt-2 px-4 pb-1 mt-4 border-t-[var(--color-border)]">
+                {/* ---- Show reactions on hover ---- */}
+                {showReacts && <Reacts setShowReacts={setShowReacts} timerRef={timerRef} handleReact={handleReact} />}
+
+                {/* ---- Buttons ---- */}
+                <button
+                    className="flex items-center justify-center gap-2 relative w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1.5 rounded-lg transition-all duration-250"
                     onMouseOver={() => {
                         clearTimeout(timerRef.current);
                         timerRef.current = setTimeout(() => setShowReacts(true), 200)
@@ -140,29 +180,40 @@ const Post = ({ post }) => {
                     onMouseLeave={() => {
                         timerRef.current = setTimeout(() => setShowReacts(false), 1000)
                     }}
+                    onClick={() => handleReact(react || "Like")}
                 >
+                    {
+                        react ? (
+                            <img
+                                src={`/reacts/${react.toLowerCase()}.svg`}
+                                className="w-5 h-5"
+                            />
+                        ) : (
+                            <FaRegThumbsUp />
+                        )
+                    }
+                    <span 
+                        className={react ? "font-medium" : ""}
+                        style={{
+                            color: reactionColors[react] || ""
+                        }}
+                    >{react || "Like"}</span>
+                </button>
 
-                    {/* ---- Reactions on hover ---- */}
-                    {showReacts && <Reacts showReacts={showReacts} setShowReacts={setShowReacts} timerRef={timerRef} />}
-
-                    <FaRegThumbsUp />
-                    <span>Like</span>
-                </div>
-
-                <div
-                    className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1 rounded-lg transition-all duration-250"
+                <button
+                    className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1.5 rounded-lg transition-all duration-250"
                     onClick={() => {
                         setShowComments(prev => !prev);
                     }}
                 >
                     <FaRegComment />
                     <span>Comments</span>
-                </div>
+                </button>
 
-                <div className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1 rounded-lg transition-all">
+                <button className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1.5 rounded-lg transition-all">
                     <IoMdShareAlt size={20} />
                     <span>Shares</span>
-                </div>
+                </button>
             </div>
 
             {/* ---- Comments ---- */}

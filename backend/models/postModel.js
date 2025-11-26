@@ -42,7 +42,7 @@ const postSchema = new mongoose.Schema({
         {
             react: {
                 type: String,
-                enum: ["like", "love", "haha", "wow", "angry", "sad"],
+                enum: ["Like", "Love", "Haha", "Wow", "Angry", "Sad"],
                 required: true
             },
             reactedBy: {

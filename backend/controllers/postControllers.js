@@ -1,6 +1,4 @@
 const Post = require("../models/postModel");
-const User = require("../models/userModel");
-const mongoose = require("mongoose");
 
 const createPost = async (req, res) => {
     try {
@@ -20,9 +18,14 @@ const createPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
     try {
-        const posts = await Post.find({}).populate("user", "firstname lastname username profilePicture coverPhoto").sort({ createdAt: -1 });
+        const posts = await Post.find({}).populate("user", "firstname lastname username profilePicture coverPhoto gender").sort({ createdAt: -1 });
 
-        res.send(posts);
+        const postsWithReaction = posts.map(post => ({
+            ...post.toObject(),
+            usersReaction: post.reacts.find(react => react.reactedBy.toString() === req.user.id)
+        }))
+
+        res.json(postsWithReaction);
     }
     catch (e) {
         res.status(404).json({
@@ -57,7 +60,6 @@ const reactPost = async (req, res) => {
         }
 
         const hasAlreadyReacted = post.reacts.find(react => react.reactedBy.toString() === req.user.id);
-        console.log(hasAlreadyReacted);
 
         // If user has not reacted before then create a new react
         if (!hasAlreadyReacted) {
@@ -72,14 +74,11 @@ const reactPost = async (req, res) => {
         }
         else {
             // If previous react and new react is same then delete react from post
-            if(hasAlreadyReacted.react === react) {
-                post.reacts.pull({
-                    reactedBy: req.user.id
-                });
+            if (hasAlreadyReacted.react === react) {
+                post.reacts.pull(hasAlreadyReacted._id);
 
                 await post.save();
-
-                console.log("Deleting react");
+                console.log("Removing react");
             }
             else {
                 // If previous react and new react is not same then update react
@@ -88,7 +87,7 @@ const reactPost = async (req, res) => {
                 console.log("Updating react");
             }
         }
-
+        console.log(post);
         res.json({
             message: "Reacted successfully",
             status: "OK",

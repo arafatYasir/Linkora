@@ -1,26 +1,26 @@
 export const reactions = [
     {
-        name: "like",
+        name: "Like",
         image: "/reacts/like.gif"
     },
     {
-        name: "love",
+        name: "Love",
         image: "/reacts/love.gif"
     },
     {
-        name: "haha",
+        name: "Haha",
         image: "/reacts/haha.gif"
     },
     {
-        name: "angry",
+        name: "Angry",
         image: "/reacts/angry.gif"
     },
     {
-        name: "wow",
+        name: "Wow",
         image: "/reacts/wow.gif"
     },
     {
-        name: "sad",
+        name: "Sad",
         image: "/reacts/sad.gif"
     },
 ]
