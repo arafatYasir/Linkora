@@ -88,7 +88,8 @@ const UserProfilePage = () => {
             localStorage.setItem("theme", "dark");
         }
     }, [theme]);
-
+    
+    console.log("Render");
     if (isLoading && !isOwnProfile) return <div className="text-3xl text-center">Loading...</div>
 
     return (
