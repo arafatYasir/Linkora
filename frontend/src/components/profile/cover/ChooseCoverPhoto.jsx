@@ -46,9 +46,10 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
                         onClick={() => {
                             setShowChooseModal(false);
                         }}
-                        className="p-2 rounded-full transition-all duration-250 cursor-pointer text-text-secondary bg-border hover:bg-primary/50"
+                        className="p-2 rounded-full transition-all duration-250 cursor-pointer text-[var(--color-text-secondary)] bg-border hover:bg-primary/50"
+                        aria-label="Close"
                     >
-                        <IoMdClose size={24} />
+                        <IoMdClose size={20} />
                     </button>
                 </div>
 
