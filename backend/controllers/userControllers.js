@@ -411,13 +411,17 @@ const getUser = async (req, res) => {
         }
 
         const posts = await Post.find({ user: user._id }).populate("user").sort({ createdAt: -1 });
+        const postsWithReaction = posts.map(post => ({
+            ...post.toObject(),
+            usersReaction: post.reacts.find(react => react.reactedBy.toString() === req.user.id)
+        }));
 
         await user.populate({
             path: "friends",
             select: "-accessToken -refreshToken -details -friends -followers -following -password -verificationTokenExpiry -verified -updatedAt -createdAt -friendRequests -savedPosts -search"
         });
 
-        res.json({ ...user.toObject(), posts, relationship });
+        res.json({ ...user.toObject(), posts: postsWithReaction, relationship });
     } catch (e) {
         res.status(400).json({
             error: e.message

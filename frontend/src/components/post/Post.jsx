@@ -11,7 +11,6 @@ import { useRef } from "react";
 import CreateComment from "./CreateComment";
 import PostOptions from "./PostOptions";
 import { useReactPostMutation } from "../../../api/authApi";
-import { useSelector } from "react-redux";
 
 const reactionColors = {
     Like: "#2078F4",
@@ -82,6 +81,8 @@ const Post = ({ post }) => {
     }
 
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
+
+    console.log(usersReaction);
 
     return (
         <li className="w-full max-w-[640px] bg-[var(--color-surface)]  rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] transition-[var(--transition-default)]">

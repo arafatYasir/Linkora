@@ -36,7 +36,7 @@ const UserProfilePage = () => {
     const { data: posts, refetch: refetchPosts } = useGetUserPostsQuery(userInfo._id, { skip: userInfo.profilePicture !== userInfo?.posts[0]?.user?.profilePicture ? false : true });
 
     // User Profile
-    const userProfile = isOwnProfile ? userInfo : user;
+    const userProfile = user;
 
     // Image fetching api
     const path = user?.username;

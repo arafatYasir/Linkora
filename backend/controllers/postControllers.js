@@ -37,9 +37,14 @@ const getAllPosts = async (req, res) => {
 const getUserPosts = async (req, res) => {
     try {
         const { id } = req.params;
-        const posts = await Post.find({ user: id }).populate("user", "firstname lastname username profilePicture coverPhoto").sort({ createdAt: -1 });
+        const posts = await Post.find({ user: id }).populate("user", "firstname lastname username profilePicture coverPhoto gender").sort({ createdAt: -1 });
 
-        res.send(posts);
+        const postsWithReaction = posts.map(post => ({
+            ...post.toObject(),
+            usersReaction: post.reacts.find(react => react.reactedBy.toString() === req.user.id)
+        }));
+
+        res.json(postsWithReaction);
     } catch (e) {
         res.status(404).json({
             error: e.message
