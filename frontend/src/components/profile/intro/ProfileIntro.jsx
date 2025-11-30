@@ -88,8 +88,6 @@ const ProfileIntro = ({ user, details }) => {
     }
 
     const saveIntroInLocal = (intro) => {
-        console.log("The value of intro sent from editor: ", intro)
-
         // Saving in local state
         setIntroInfos(intro);
 
@@ -101,16 +99,9 @@ const ProfileIntro = ({ user, details }) => {
         user.details = intro;
 
         localStorage.setItem("userInfo", JSON.stringify(user));
-
-        console.log("Redux state: ", userInfo);
-        console.log("Localstorage: ", JSON.parse(localStorage.getItem("userInfo")));
     }
 
     const handleSaveIntro = async (type, object, key, value) => {
-        console.log("type: ", type);
-        console.log("object:", object);
-        console.log("key:", key);
-        console.log("value:", value);
         try {
             setLoading(true);
 
@@ -140,7 +131,7 @@ const ProfileIntro = ({ user, details }) => {
     if (!introInfos || isIntroEmpty) return;
 
     return (
-        <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)] mb-5">
+        <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] border border-[var(--color-border)] transition-[var(--transition-default)] mb-5">
             {/* ---- Header ---- */}
             <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold leading-6">Intro</h3>

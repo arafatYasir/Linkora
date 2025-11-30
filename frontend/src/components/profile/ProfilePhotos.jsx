@@ -3,7 +3,7 @@ import ProfilePhotosSkeleton from "./ProfilePhotosSkeleton";
 
 const ProfilePhotos = ({ isImagesLoading, images }) => {
     return (
-        <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)] mb-5">
+        <div className="w-full max-w-[640px] bg-[var(--color-surface)] p-4 rounded-[var(--radius-card)] border border-[var(--color-border)] transition-[var(--transition-default)] mb-5">
             {/* ---- Header ---- */}
             <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold leading-6">Photos ({images?.resources?.length || 0})</h3>

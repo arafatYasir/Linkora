@@ -5,7 +5,7 @@ import { BiSolidGridAlt } from "react-icons/bi";
 
 const PostViewControl = ({viewMethod, setViewMethod}) => {
     return (
-        <div className="w-full bg-[var(--color-surface)] px-4 pt-4 rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.6)] transition-[var(--transition-default)]">
+        <div className="w-full bg-[var(--color-surface)] px-4 pt-4 rounded-[var(--radius-card)] border border-[var(--color-border)] transition-[var(--transition-default)]">
             <div className="flex items-center justify-between border-b border-b-[var(--color-border)] pb-2">
                 <span className="text-xl font-bold leading-6">Posts</span>
 
