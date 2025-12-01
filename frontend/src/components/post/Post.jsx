@@ -36,7 +36,7 @@ const Post = ({ post }) => {
     const optionsRef = useRef(null);
 
     // Extracting data from post
-    const { _id, text, type, user, background, comments, images, usersReaction } = post;
+    const { _id, text, type, user, background, comments, images, usersReaction, reactionsCount, totalReactions } = post;
 
     // Reaction api
     const [reactPost] = useReactPostMutation();
@@ -47,7 +47,7 @@ const Post = ({ post }) => {
 
     // useEffect to sync and set the usersReaction to state
     useEffect(() => {
-        if(usersReaction?.react) {
+        if (usersReaction?.react) {
             setReact(usersReaction?.react);
         }
     }, [usersReaction?.react]);
@@ -70,7 +70,7 @@ const Post = ({ post }) => {
     const handleReact = async (reactType) => {
         const prevReact = react;
         setReact(prev => prev === reactType ? null : reactType);
-        
+
         try {
             await reactPost({ react: reactType, postId: _id }).unwrap();
             setShowReacts(false);
@@ -130,42 +130,61 @@ const Post = ({ post }) => {
 
             {/* ---- Post Body ---- */}
             <div className="mt-4">
-                {
-                    background ? (
-                        <div
-                            style={{
-                                background: `url("${background}")`,
-                                backgroundRepeat: "no-repeat",
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                            }}
-                            className="h-[400px] w-full text-center flex items-center justify-center text-3xl font-bold"
-                        >
-                            {text}
-                        </div>
-                    ) : (
-                        <div className="text-lg leading-[1]">
-                            <p className="px-4">{text}</p>
+                <div className="mb-2">
+                    {
+                        background ? (
+                            <div
+                                style={{
+                                    background: `url("${background}")`,
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                }}
+                                className="h-[400px] w-full text-center flex items-center justify-center text-3xl font-bold"
+                            >
+                                {text}
+                            </div>
+                        ) : (
+                            <div className="text-lg leading-[1]">
+                                <p className="px-4">{text}</p>
 
-                            {images && images.length > 0 && (
-                                <div className="flex flex-wrap mt-4">
-                                    {images.map((image, index) => (
-                                        <img
-                                            key={index}
-                                            src={image}
-                                            alt={`${user.firstname} ${user.lastname} post image ${index + 1}`}
-                                            className={`${type === "profile-picture" ? "w-[400px] h-[400px] mx-auto rounded-full" : "w-full max-h-[600px]"} object-cover`}
-                                        />
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    )
-                }
+                                {images && images.length > 0 && (
+                                    <div className="flex flex-wrap mt-4">
+                                        {images.map((image, index) => (
+                                            <img
+                                                key={index}
+                                                src={image}
+                                                alt={`${user.firstname} ${user.lastname} post image ${index + 1}`}
+                                                className={`${type === "profile-picture" ? "w-[400px] h-[400px] mx-auto rounded-full" : "w-full max-h-[600px]"} object-cover`}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )
+                    }
+                </div>
+                {/* ---- Other's Reactions & Count ---- */}
+                <div className="px-4 mb-2 flex items-center gap-x-1.5 cursor-pointer">
+                    {/* ---- Reactions ---- */}
+                    <div className="flex items-center space-x-[-2px]">
+                        {Object.keys(reactionsCount).map((react, index) => (
+                            <img
+                                key={index}
+                                src={`/reacts/${react.toLowerCase()}.svg`}
+                                alt={react}
+                                className="w-5 h-5"
+                            />
+                        ))}
+                    </div>
+
+                    {/* ---- Count ---- */}
+                    <span>{totalReactions ? totalReactions : ""}</span>
+                </div>
             </div>
 
             {/* ---- Post Footer ---- */}
-            <div className="relative flex items-center justify-between border-t pt-2 px-4 pb-1 mt-4 border-t-[var(--color-border)]">
+            <div className="relative flex items-center justify-between border-t pt-2 px-4 pb-1 border-t-[var(--color-border)]">
                 {/* ---- Show reactions on hover ---- */}
                 {showReacts && <Reacts setShowReacts={setShowReacts} timerRef={timerRef} handleReact={handleReact} />}
 
@@ -191,7 +210,7 @@ const Post = ({ post }) => {
                             <FaRegThumbsUp />
                         )
                     }
-                    <span 
+                    <span
                         className={react ? "font-medium" : ""}
                         style={{
                             color: reactionColors[react] || ""
