@@ -25,6 +25,9 @@ const Post = ({ post }) => {
     // States
     const [showReacts, setShowReacts] = useState(false);
     const [react, setReact] = useState(null);
+    const [totalReacts, setTotalReacts] = useState(null);
+    const [allReactionCounts, setAllReactionCounts] = useState(null);
+    const [isReacting, setIsReacting] = useState(false);
     const [showComments, setShowComments] = useState(false);
     const [showOptions, setShowOptions] = useState(false);
     const [comment, setComment] = useState("");
@@ -40,6 +43,11 @@ const Post = ({ post }) => {
 
     // Reaction api
     const [reactPost] = useReactPostMutation();
+
+    useEffect(() => {
+        setTotalReacts(totalReactions);
+        setAllReactionCounts(reactionsCount);
+    }, [reactionsCount, totalReactions]);
 
     useEffect(() => {
         if (showComments) commentRef.current.focus();
@@ -68,15 +76,46 @@ const Post = ({ post }) => {
 
     // Functions
     const handleReact = async (reactType) => {
+        if(isReacting) return;
+
+        setIsReacting(true);
+
         const prevReact = react;
+        const prevAllReactionCounts = allReactionCounts;
+        const prevTotalReacts = totalReacts;
+
+        // Setting local state values for optimistic ui updates
         setReact(prev => prev === reactType ? null : reactType);
+        if (prevReact === reactType) {
+            setAllReactionCounts(prev => ({
+                ...prev,
+                [reactType]: prev[reactType] - 1
+            }));
+            setTotalReacts(prev => prev - 1);
+        }
+        else {
+            // Handling both add and update reaction. If user is adding a completely new reaction then prevReact will be null and it will be ignored. So in that case it will add 1 to the new reaction. But if the user had some other reaction at first and now he is changing the reaction to something else then the prevReact will hold the key of the previous react and previous react count will be decreased by 1. And as always the new react count will be increase by 1.
+            setAllReactionCounts(prev => ({
+                ...prev,
+                ...(prevReact && { [prevReact]: prev[prevReact] - 1 }),
+                [reactType]: (prev[reactType] || 0) + 1
+            }));
+
+            // If the user had some previous react and now updating it then the react count doesnt change at all
+            if (prevReact === null) setTotalReacts(prev => prev + 1);
+        }
 
         try {
             await reactPost({ react: reactType, postId: _id }).unwrap();
             setShowReacts(false);
         } catch (e) {
             console.error("Error while reacting post", e);
+            // Reverting back to previous state
             setReact(prevReact);
+            setAllReactionCounts(prevAllReactionCounts);
+            setTotalReacts(prevTotalReacts);
+        } finally {
+            setIsReacting(false);
         }
     }
 
@@ -168,18 +207,22 @@ const Post = ({ post }) => {
                 <div className="px-4 mb-2 flex items-center gap-x-1.5 cursor-pointer">
                     {/* ---- Reactions ---- */}
                     <div className="flex items-center space-x-[-2px]">
-                        {Object.keys(reactionsCount).map((react, index) => (
-                            <img
-                                key={index}
-                                src={`/reacts/${react.toLowerCase()}.svg`}
-                                alt={react}
-                                className="w-5 h-5"
-                            />
-                        ))}
+                        {allReactionCounts && Object.keys(allReactionCounts).map((react, index) => {
+                            if (allReactionCounts[react] > 0) {
+                                return (
+                                    <img
+                                        key={index}
+                                        src={`/reacts/${react.toLowerCase()}.svg`}
+                                        alt={react}
+                                        className="w-5 h-5"
+                                    />
+                                )
+                            }
+                        })}
                     </div>
 
                     {/* ---- Count ---- */}
-                    <span>{totalReactions ? totalReactions : ""}</span>
+                    <span>{totalReacts ? totalReacts : ""}</span>
                 </div>
             </div>
 
