@@ -20,10 +20,21 @@ const getAllPosts = async (req, res) => {
     try {
         const posts = await Post.find({}).populate("user", "firstname lastname username profilePicture coverPhoto gender").sort({ createdAt: -1 });
 
-        const postsWithReaction = posts.map(post => ({
-            ...post.toObject(),
-            usersReaction: post.reacts.find(react => react.reactedBy.toString() === req.user.id)
-        }))
+        const postsWithReaction = posts.map(post => {
+            const reactionsCount = {};
+
+            post.reacts.forEach(react => {
+                const key = react.react;
+                reactionsCount[key] = (reactionsCount[key] || 0) + 1;
+            });
+
+            return {
+                ...post.toObject(),
+                usersReaction: post.reacts.find(react => react.reactedBy.toString() === req.user.id),
+                reactionsCount,
+                totalReactions: post.reacts.length
+            };
+        })
 
         res.json(postsWithReaction);
     }
@@ -39,10 +50,21 @@ const getUserPosts = async (req, res) => {
         const { id } = req.params;
         const posts = await Post.find({ user: id }).populate("user", "firstname lastname username profilePicture coverPhoto gender").sort({ createdAt: -1 });
 
-        const postsWithReaction = posts.map(post => ({
-            ...post.toObject(),
-            usersReaction: post.reacts.find(react => react.reactedBy.toString() === req.user.id)
-        }));
+        const postsWithReaction = posts.map(post => {
+            const reactionsCount = {};
+
+            post.reacts.forEach(react => {
+                const key = react.react;
+                reactionsCount[key] = (reactionsCount[key] || 0) + 1;
+            });
+
+            return {
+                ...post.toObject(),
+                usersReaction: post.reacts.find(react => react.reactedBy.toString() === req.user.id),
+                reactionsCount,
+                totalReactions: post.reacts.length
+            }
+        });
 
         res.json(postsWithReaction);
     } catch (e) {

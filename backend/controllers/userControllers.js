@@ -397,24 +397,36 @@ const getUser = async (req, res) => {
             });
         }
 
-        if(mySelf.friends.includes(user._id) && user.friends.includes(mySelf._id)) {
+        if (mySelf.friends.includes(user._id) && user.friends.includes(mySelf._id)) {
             relationship.friends = true;
         }
-        if(mySelf.following.includes(user._id) && user.followers.includes(mySelf._id)) {
+        if (mySelf.following.includes(user._id) && user.followers.includes(mySelf._id)) {
             relationship.following = true;
         }
-        if(user.friendRequests.includes(mySelf._id)) {
+        if (user.friendRequests.includes(mySelf._id)) {
             relationship.sentRequest = true;
         }
-        if(mySelf.friendRequests.includes(user._id)) {
+        if (mySelf.friendRequests.includes(user._id)) {
             relationship.receivedRequest = true;
         }
 
         const posts = await Post.find({ user: user._id }).populate("user").sort({ createdAt: -1 });
-        const postsWithReaction = posts.map(post => ({
-            ...post.toObject(),
-            usersReaction: post.reacts.find(react => react.reactedBy.toString() === req.user.id)
-        }));
+
+        const postsWithReaction = posts.map(post => {
+            const reactionsCount = {};
+
+            post.reacts.forEach(react => {
+                const key = react.react;
+                reactionsCount[key] = (reactionsCount[key] || 0) + 1;
+            });
+
+            return {
+                ...post.toObject(),
+                usersReaction: post.reacts.find(react => react.reactedBy.toString() === req.user.id),
+                reactionsCount,
+                totalReactions: post.reacts.length
+            }
+        });
 
         await user.populate({
             path: "friends",
