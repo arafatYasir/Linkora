@@ -68,22 +68,22 @@ const Post = ({ post }) => {
 
     // Functions
     const handleReact = async (reactType) => {
+        const prevReact = react;
+        setReact(prev => prev === reactType ? null : reactType);
+        
         try {
-            const data = await reactPost({ react: reactType, postId: _id }).unwrap();
+            await reactPost({ react: reactType, postId: _id }).unwrap();
             setShowReacts(false);
-
-            if (data.status === "OK") {
-                setReact(prev => prev === reactType ? null : reactType);
-            }
         } catch (e) {
             console.error("Error while reacting post", e);
+            setReact(prevReact);
         }
     }
 
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
 
     return (
-        <li className="w-full max-w-[640px] bg-[var(--color-surface)]  rounded-[var(--radius-card)] shadow-[var(--shadow-dark)] border border-[var(--color-border)] transition-[var(--transition-default)]">
+        <li className="w-full max-w-[640px] bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] transition-[var(--transition-default)]">
             {/* ---- Post Heading ---- */}
             <div className="flex items-center justify-between border-b pb-2 px-4 pt-4 border-b-[var(--color-border)]">
                 <div className="flex items-center gap-x-3">
