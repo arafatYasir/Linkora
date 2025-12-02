@@ -10,6 +10,7 @@ import { useGetAllPostsQuery, useGetUserQuery } from "../../api/authApi";
 const HomePage = () => {
     // States
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+    const [posts, setPosts] = useState([]);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
@@ -21,7 +22,7 @@ const HomePage = () => {
     const { data: user } = useGetUserQuery(userInfo.username);
 
     // Fetching posts
-    const { data: posts } = useGetAllPostsQuery();
+    const { data: allPosts } = useGetAllPostsQuery();
 
     const openPostModal = () => {
         setIsPostModalOpen(true);
@@ -48,6 +49,12 @@ const HomePage = () => {
             body.style.overflowY = "scroll";
         }
     }, [isPostModalOpen]);
+
+    useEffect(() => {
+        if (allPosts) {
+            setPosts(allPosts);
+        }
+    }, [allPosts]);
 
     useEffect(() => {
         if (user) {
@@ -78,12 +85,12 @@ const HomePage = () => {
             <div className="w-1/2 mb-5">
                 <CreatePost onOpenModal={openPostModal} user={userInfo} />
 
-                {isPostModalOpen && <PostModal onClose={closePostModal} />}
+                {isPostModalOpen && <PostModal onClose={closePostModal} setPosts={setPosts} />}
             </div>
 
             {/* ---- All Posts ---- */}
             {
-                posts?.length > 0 && <AllPosts posts={posts} />
+                posts.length > 0 && <AllPosts posts={posts} />
             }
         </div>
     )
