@@ -127,4 +127,30 @@ const reactPost = async (req, res) => {
     }
 }
 
-module.exports = { createPost, getAllPosts, getUserPosts, reactPost };
+const commentPost = async (req, res) => {
+    try {
+        const {comment, image, postId} = req.body;
+        const post = await Post.findByIdAndUpdate(postId, {
+            $push: {
+                comments: {
+                    comment,
+                    image,
+                    commentedBy: req.user.id,
+                    commentedAt: new Date()
+                }
+            }
+        }).populate("comments.commentedBy", "firstname lastname profilePicture username");
+
+        res.json({
+            message: "Commented successfully",
+            status: "OK",
+            comments: post.comments
+        });
+    } catch (e) {
+        res.status(404).json({
+            error: e.message
+        })
+    }
+}
+
+module.exports = { createPost, getAllPosts, getUserPosts, reactPost, commentPost };
