@@ -49,8 +49,12 @@ const Post = ({ post }) => {
     const [reactPost] = useReactPostMutation();
 
     useEffect(() => {
-        setTotalReacts(totalReactions);
-        setAllReactionCounts(reactionsCount);
+        if (totalReactions) {
+            setTotalReacts(totalReactions);
+        }
+        if (reactionsCount) {
+            setAllReactionCounts(reactionsCount);
+        }
     }, [reactionsCount, totalReactions]);
 
     useEffect(() => {
@@ -92,6 +96,8 @@ const Post = ({ post }) => {
         const prevAllReactionCounts = allReactionCounts;
         const prevTotalReacts = totalReacts;
 
+        console.log(prevReact, reactType)
+
         // Setting local state values for optimistic ui updates
         setReact(prev => prev === reactType ? null : reactType);
         if (prevReact === reactType) {
@@ -105,8 +111,8 @@ const Post = ({ post }) => {
             // Handling both add and update reaction. If user is adding a completely new reaction then prevReact will be null and it will be ignored. So in that case it will add 1 to the new reaction. But if the user had some other reaction at first and now he is changing the reaction to something else then the prevReact will hold the key of the previous react and previous react count will be decreased by 1. And as always the new react count will be increase by 1.
             setAllReactionCounts(prev => ({
                 ...prev,
-                ...(prevReact && { [prevReact]: prev[prevReact] - 1 }),
-                [reactType]: (prev[reactType] || 0) + 1
+                ...(prevReact && { [prevReact]: (prev[prevReact] || 1) - 1 }),
+                ...(reactType && { [reactType]: (prev[reactType] || 0) + 1 })
             }));
 
             // If the user had some previous react and now updating it then the react count doesnt change at all

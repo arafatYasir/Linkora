@@ -102,11 +102,24 @@ const PostModal = ({ onClose, setPosts }) => {
             }
 
             // Extracting post and pushing the userinfo on the post
-            const post = {...res.post};
+            const post = { ...res.post };
             post.user = userInfo;
 
             // Saving that post in local state to immediately show the post
-            setPosts(prev => [...prev, post]);
+            setPosts(prev => [...prev, {
+                ...post,
+                reactionsCount: {
+                    Like: 0,
+                    Love: 0,
+                    Haha: 0,
+                    Wow: 0,
+                    Sad: 0,
+                    Angry: 0
+                },
+                totalReactions: 0,
+                usersReaction: null,
+                comments: []
+            }]);
         } catch (e) {
             console.log("ERROR on submission to post: ", e.message);
         } finally {
