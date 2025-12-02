@@ -283,12 +283,12 @@ const Post = ({ post }) => {
                     }}
                 >
                     <FaRegComment />
-                    <span>Comments</span>
+                    <span>Comment</span>
                 </button>
 
                 <button className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1.5 rounded-lg transition-all">
                     <IoMdShareAlt size={20} />
-                    <span>Shares</span>
+                    <span>Share</span>
                 </button>
             </div>
 
