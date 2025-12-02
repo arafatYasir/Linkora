@@ -112,31 +112,6 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
         setPicture(e.target.files[0]);
     }
 
-    const saveProfilePictureInLocal = (url) => {
-        // Set in redux
-        dispatch(setProfilePicture(url));
-
-        // Set in localstorage
-        const userData = JSON.parse(localStorage.getItem("userInfo"));
-        userData.profilePicture = url;
-
-        localStorage.setItem("userInfo", JSON.stringify(userData));
-
-        // Re-fetch user to apply the changes on the profile page
-        refetchUser();
-    }
-
-    const savePostInLocal = (post) => {
-        // Set in redux
-        dispatch(addPost(post));
-
-        // Set in localstorage
-        const userData = JSON.parse(localStorage.getItem("userInfo"));
-        userData.posts = [...userData.posts, post];
-
-        localStorage.setItem("userInfo", JSON.stringify(userData));
-    }
-
     const handleAddOrUpload = async () => {
         if (!picture && !imageSaved) {
             fileInputRef.current.click();
@@ -189,15 +164,12 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
                     setZoom(1);
                 }
 
-                // Saving that profile picture url in local
-                const profilePictureUrl = updateResponse.url;
-                saveProfilePictureInLocal(profilePictureUrl);
-
                 // Saving that profile picture changing post in local
                 const post = { ...postResponse.post };
                 post.user = userInfo;
 
-                savePostInLocal(post);
+                // Re-fetching user's full data to reflect the changes everywhere
+                refetchUser();
 
                 // Reset input file value
                 if (fileInputRef.current) {
