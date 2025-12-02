@@ -57,7 +57,7 @@ const Post = ({ post }) => {
     }, [showComments]);
 
     useEffect(() => {
-        if(comments.length > 0) setAllComments(comments);
+        if (comments.length > 0) setAllComments(comments);
     }, [comments]);
 
     // useEffect to sync and set the usersReaction to state
@@ -83,7 +83,7 @@ const Post = ({ post }) => {
 
     // Functions
     const handleReact = async (reactType) => {
-        if(isReacting) return;
+        if (isReacting) return;
 
         setIsReacting(true);
 
@@ -212,26 +212,33 @@ const Post = ({ post }) => {
                         )
                     }
                 </div>
-                {/* ---- Other's Reactions & Count ---- */}
-                <div className="px-4 mb-2 flex items-center gap-x-1.5 cursor-pointer">
-                    {/* ---- Reactions ---- */}
-                    <div className="flex items-center space-x-[-2px]">
-                        {allReactionCounts && Object.keys(allReactionCounts).map((react, index) => {
-                            if (allReactionCounts[react] > 0) {
-                                return (
-                                    <img
-                                        key={index}
-                                        src={`/reacts/${react.toLowerCase()}.svg`}
-                                        alt={react}
-                                        className="w-5 h-5"
-                                    />
-                                )
-                            }
-                        })}
+
+                {/* ---- Reactions & Comments ---- */}
+                <div className="flex items-center justify-between mb-2 px-4">
+                    {/* ---- Reactions & Count ---- */}
+                    <div className="flex items-center gap-x-1.5 cursor-pointer">
+                        {/* ---- Reactions ---- */}
+                        <div className="flex items-center space-x-[-2px]">
+                            {allReactionCounts && Object.keys(allReactionCounts).map((react, index) => {
+                                if (allReactionCounts[react] > 0) {
+                                    return (
+                                        <img
+                                            key={index}
+                                            src={`/reacts/${react.toLowerCase()}.svg`}
+                                            alt={react}
+                                            className="w-5 h-5"
+                                        />
+                                    )
+                                }
+                            })}
+                        </div>
+
+                        {/* ---- Count ---- */}
+                        <span>{totalReacts ? totalReacts : ""}</span>
                     </div>
 
-                    {/* ---- Count ---- */}
-                    <span>{totalReacts ? totalReacts : ""}</span>
+                    {/* ---- Comments & Count ---- */}
+                    <p className="cursor-pointer hover:underline">{allComments.length > 0 ? `${allComments.length} comments` : ""}</p>
                 </div>
             </div>
 
