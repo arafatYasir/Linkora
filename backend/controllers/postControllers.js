@@ -114,7 +114,7 @@ const reactPost = async (req, res) => {
                 console.log("Updating react");
             }
         }
-        console.log(post);
+        
         res.json({
             message: "Reacted successfully",
             status: "OK",

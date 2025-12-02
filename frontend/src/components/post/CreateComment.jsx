@@ -4,6 +4,7 @@ import { MdEmojiEmotions } from 'react-icons/md';
 import { LuFiles } from 'react-icons/lu';
 import { useRef } from "react";
 import { FaTimes } from "react-icons/fa";
+import { PiPaperPlaneRightFill } from "react-icons/pi";
 
 const CreateComment = ({ comment, setComment, commentFile, setCommentFile, commentRef }) => {
     // States
@@ -24,21 +25,20 @@ const CreateComment = ({ comment, setComment, commentFile, setCommentFile, comme
             return;
         }
 
-        console.log(file.type.startsWith("image"));
         setCommentFile(file);
     }
 
     return (
         <div className="mt-1 border-t pt-2 px-4 pb-2 border-[var(--color-border)]">
-            <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-full overflow-hidden">
+            <div className="flex items-start justify-between gap-x-2">
+                <div className="w-8 h-8 rounded-full overflow-hidden shrink-0">
                     <img
                         src={userInfo.profilePicture || defaultAvatar}
                         alt={userInfo.firstname + " " + userInfo.lastname + "Profile Picture"}
                         className="w-full h-full object-cover"
                     />
                 </div>
-                <div className="w-[90%] relative">
+                <div className="w-full relative">
                     {/* File Input */}
                     <input
                         type="file"
@@ -48,27 +48,36 @@ const CreateComment = ({ comment, setComment, commentFile, setCommentFile, comme
                         onChange={handleFileUpload}
                     />
                     {/* Text Input */}
-                    <input
+                    <textarea
                         type="text"
                         placeholder={`${userInfo.firstname} write a public comment...`}
-                        className="w-full border border-[var(--color-border)] py-[7px] px-4 rounded-full focus:outline-none"
+                        className="w-full border border-[var(--color-border)] pt-[6px] pb-[30px] px-4 rounded-2xl focus:outline-none resize-none"
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                         ref={commentRef}
                     />
 
-                    <div className="flex items-center gap-x-4 absolute top-1/2 right-4 -translate-y-1/2">
-                        <MdEmojiEmotions
-                            size={22}
-                            className="cursor-pointer"
-                            // onClick={() => setShowEmojiPicker(prev => !prev)}
-                        />
+                    <div className="flex justify-between w-[95%] absolute bottom-7 left-3 translate-y-1/2">
+                        <div className="flex items-center">
+                            <button className="p-2 hover:bg-border rounded-full flex items-center justify-center cursor-pointer">
+                                <MdEmojiEmotions size={18} />
+                            </button>
+                            <button
+                                onClick={() => fileInputRef.current.click()}
+                                className="p-2 hover:bg-border rounded-full flex items-center justify-cente cursor-pointer"
+                            >
+                                <LuFiles size={18} />
+                            </button>
+                        </div>
 
-                        <LuFiles
-                            size={22}
-                            className="cursor-pointer"
-                            onClick={() => fileInputRef.current.click()}
-                        />
+                        <button
+                            onClick={() => {
+                                
+                            }}
+                            className="p-2 hover:bg-border rounded-full flex items-center justify-center cursor-pointer"
+                        >
+                            <PiPaperPlaneRightFill size={18} />
+                        </button>
                     </div>
                 </div>
             </div>
@@ -85,13 +94,13 @@ const CreateComment = ({ comment, setComment, commentFile, setCommentFile, comme
                             ) : <></>
                         }
 
-                        
+
                         {/* Close Icon */}
                         <FaTimes size={18} className="text-bg bg-text-primary rounded-full absolute top-1 right-1 cursor-pointer p-0.5" onClick={() => setCommentFile(null)} />
                     </div>
                 )
             }
-        </div>
+        </div >
     )
 }
 
