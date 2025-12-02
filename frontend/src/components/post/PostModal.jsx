@@ -4,9 +4,8 @@ import { backgrounds } from "../../constants/postBackgrounds";
 import { useCreatePostMutation, useUploadImageMutation } from "../../../api/authApi";
 import { useDispatch, useSelector } from "react-redux";
 import dataURIToBlob from "../../helpers/dataURIToBlob";
-import { addPost } from "../../slices/authSlice";
 
-const PostModal = ({ onClose }) => {
+const PostModal = ({ onClose, setPosts }) => {
     // States
     const [text, setText] = useState("");
     const [files, setFiles] = useState([]);
@@ -34,17 +33,6 @@ const PostModal = ({ onClose }) => {
         setFiles((prev) => prev.filter((_, i) => i !== index));
     };
 
-    const savePostInLocal = (post) => {
-        // Set in redux
-        dispatch(addPost(post));
-
-        // Set in localstorage
-        const userData = JSON.parse(localStorage.getItem("userInfo"));
-        userData.posts = [...userData.posts, post];
-
-        localStorage.setItem("userInfo", JSON.stringify(userData));
-    }
-
     const handleSubmit = async () => {
         try {
             setLoading(true);
@@ -63,7 +51,6 @@ const PostModal = ({ onClose }) => {
                 if (res.status === "OK") {
                     alert(res.message);
                     setText("");
-                    setFiles([]);
                     setBackground("");
                     setShowBackgrounds(false);
                     onClose();
@@ -85,7 +72,6 @@ const PostModal = ({ onClose }) => {
                     postImages.forEach(image => (
                         formData.append("files", image)
                     ));
-
                     formData.append("path", path);
 
                     // upload images first to cloudinary
@@ -119,8 +105,8 @@ const PostModal = ({ onClose }) => {
             const post = {...res.post};
             post.user = userInfo;
 
-            // Saving that post
-            savePostInLocal(post);
+            // Saving that post in local state to immediately show the post
+            setPosts(prev => [...prev, post]);
         } catch (e) {
             console.log("ERROR on submission to post: ", e.message);
         } finally {

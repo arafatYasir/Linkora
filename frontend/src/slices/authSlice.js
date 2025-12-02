@@ -12,6 +12,7 @@ export const authSlice = createSlice({
             state.userInfo = action.payload;
         },
         addPost: (state, action) => {
+            console.log("I am here on redux addPost!");
             state.userInfo.posts = [...state.userInfo.posts, action.payload];
         },
         updatePosts: (state, action) => {

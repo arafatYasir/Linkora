@@ -258,9 +258,9 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
                                 objectFit="horizontal-cover"
                             />
                         ) : (image && uploadingState === "saved") ? (
-                            <img src={imageUrl} alt="Cover Photo" className="w-full h-full object-cover" />
+                            <img src={imageUrl} alt="Cover Photo" className="w-full h-full object-cover" fetchPriority="high" />
                         ) : (!image && !uploadingState) ? (
-                            <img src={user?.coverPhoto || defaultCover} alt="Cover Photo" className="w-full h-full object-cover" />
+                            <img src={user?.coverPhoto || defaultCover} alt="Cover Photo" className="w-full h-full object-cover" fetchPriority="high" />
                         ) : <></>
                     }
                 </div>

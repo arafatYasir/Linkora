@@ -10,6 +10,7 @@ const ProfileItemsRight = ({ user }) => {
     // States
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
     const [viewMethod, setViewMethod] = useState("list");
+    const [posts, setPosts] = useState([]);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
@@ -34,6 +35,12 @@ const ProfileItemsRight = ({ user }) => {
         }
     }, [isPostModalOpen])
 
+    useEffect(() => {
+        if (user?.posts) {
+            setPosts(user?.posts);
+        }
+    }, [user?.posts]);
+
     return (
         <div className="col-span-3">
             {/* ---- Post Creation feature only if the same user profile ---- */}
@@ -42,7 +49,7 @@ const ProfileItemsRight = ({ user }) => {
                     <div className="w-full mb-5">
                         <CreatePost onOpenModal={openPostModal} user={user} />
 
-                        {isPostModalOpen && <PostModal onClose={closePostModal} />}
+                        {isPostModalOpen && <PostModal onClose={closePostModal} setPosts={setPosts} />}
 
                         {/* ---- Post View ---- */}
                         <div className="mt-5">
@@ -54,11 +61,11 @@ const ProfileItemsRight = ({ user }) => {
 
             {/* ---- User Posts ---- */}
             {
-                ((user?.posts && user?.posts?.length > 0) && viewMethod === "list") ? (
-                    <AllPosts posts={user?.posts} />
+                ((posts && posts?.length > 0) && viewMethod === "list") ? (
+                    <AllPosts posts={posts} />
                 )
-                : ((user?.posts && user?.posts?.length > 0) && viewMethod === "grid") ? (
-                    <GridPosts posts={user?.posts} />
+                : ((posts && posts?.length > 0) && viewMethod === "grid") ? (
+                    <GridPosts posts={posts} />
                 ) : <h2 className="text-xl text-center">No posts available for this user</h2>
             }
         </div>
