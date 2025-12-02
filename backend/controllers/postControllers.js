@@ -114,7 +114,7 @@ const reactPost = async (req, res) => {
                 console.log("Updating react");
             }
         }
-        
+
         res.json({
             message: "Reacted successfully",
             status: "OK",
@@ -130,16 +130,16 @@ const reactPost = async (req, res) => {
 const commentPost = async (req, res) => {
     try {
         const { comment, image, postId } = req.body;
-        const post = await Post.findByIdAndUpdate(postId, {
-            $push: {
-                comments: {
-                    comment,
-                    image,
-                    commentedBy: req.user.id,
-                    commentedAt: new Date()
-                }
-            }
-        }).populate("comments.commentedBy", "firstname lastname profilePicture username");
+        const post = await Post.findById(postId);
+        
+        post.comments.push({
+            comment,
+            image,
+            commentedBy: req.user.id,
+            commentedAt: new Date()
+        });
+        
+        await (await post.save()).populate("comments.commentedBy", "firstname lastname profilePicture username");
 
         res.json({
             message: "Commented successfully",
