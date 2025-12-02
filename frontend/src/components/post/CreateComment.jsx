@@ -7,7 +7,7 @@ import { FaTimes } from "react-icons/fa";
 import { PiPaperPlaneRightFill } from "react-icons/pi";
 import { useCommentPostMutation } from "../../../api/authApi";
 
-const CreateComment = ({ commentText, setCommentText, commentFile, setCommentFile, commentRef, postId }) => {
+const CreateComment = ({ commentText, setCommentText, setAllComments, commentFile, setCommentFile, commentRef, postId }) => {
     // States
     // const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -49,7 +49,7 @@ const CreateComment = ({ commentText, setCommentText, commentFile, setCommentFil
                 if (commentResponse.status === "OK") {
                     setCommentText("");
                     setCommentFile(null);
-                    console.log(commentResponse);
+                    setAllComments(commentResponse.comments);
                 }
             }
         } catch (e) {

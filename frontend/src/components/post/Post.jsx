@@ -32,6 +32,7 @@ const Post = ({ post }) => {
     const [showComments, setShowComments] = useState(false);
     const [commentText, setCommentText] = useState("");
     const [commentFile, setCommentFile] = useState(null);
+    const [allComments, setAllComments] = useState([]);
 
     const [showOptions, setShowOptions] = useState(false);
 
@@ -54,6 +55,10 @@ const Post = ({ post }) => {
     useEffect(() => {
         if (showComments) commentRef.current.focus();
     }, [showComments]);
+
+    useEffect(() => {
+        if(comments.length > 0) setAllComments(comments);
+    }, [comments]);
 
     // useEffect to sync and set the usersReaction to state
     useEffect(() => {
@@ -281,7 +286,17 @@ const Post = ({ post }) => {
 
             {/* ---- Comments ---- */}
             {
-                showComments && <CreateComment commentText={commentText} setCommentText={setCommentText} commentFile={commentFile} setCommentFile={setCommentFile} commentRef={commentRef} postId={_id} />
+                showComments && <CreateComment commentText={commentText} setCommentText={setCommentText} setAllComments={setAllComments} commentFile={commentFile} setCommentFile={setCommentFile} commentRef={commentRef} postId={_id} />
+            }
+
+            {
+                allComments.length > 0 && <div>
+                    {allComments.map((comment, index) => (
+                        <div key={index}>
+                            <p>{comment.comment}</p>
+                        </div>
+                    ))}
+                </div>
             }
         </li>
     )
