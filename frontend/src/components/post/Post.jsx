@@ -128,6 +128,8 @@ const Post = ({ post }) => {
 
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
 
+    console.log("All comments: ", allComments);
+
     return (
         <li className="w-full max-w-[640px] bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] transition-[var(--transition-default)]">
             {/* ---- Post Heading ---- */}

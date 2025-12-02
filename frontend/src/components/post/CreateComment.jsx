@@ -2,20 +2,25 @@ import { useSelector } from "react-redux";
 import defaultAvatar from "../../../public/default images/avatar.png"
 import { MdEmojiEmotions } from 'react-icons/md';
 import { LuFiles } from 'react-icons/lu';
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { PiPaperPlaneRightFill } from "react-icons/pi";
-import { useCommentPostMutation } from "../../../api/authApi";
+import { useCommentPostMutation, useUploadImageMutation } from "../../../api/authApi";
+import dataURIToBlob from "../../helpers/dataURIToBlob";
 
 const CreateComment = ({ commentText, setCommentText, setAllComments, commentFile, setCommentFile, commentRef, postId }) => {
     // States
     // const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
 
     // Commenting API
-    const [commentPost, { isLoading: isCommenting }] = useCommentPostMutation();
+    const [commentPost] = useCommentPostMutation();
+
+    // Image upload API
+    const [uploadImage] = useUploadImageMutation();
 
     // Extra hooks
     const fileInputRef = useRef(null);
@@ -36,8 +41,37 @@ const CreateComment = ({ commentText, setCommentText, setAllComments, commentFil
         if (commentText.trim() === "" && commentFile === null) return;
 
         try {
-            if (commentFile !== null) {
+            setLoading(true);
 
+            if (commentFile !== null) {
+                const blob = await dataURIToBlob(commentFile);
+                const path = `${userInfo.username}/comments/${Date.now()}`;
+
+                const formData = new FormData();
+                formData.append("files", blob);
+                formData.append("path", path);
+
+                console.log(blob);
+                for (let [key, value] of formData.entries()) {
+                    console.log(key, value);
+                }
+
+                // Upload the image
+                const uploadResponse = await uploadImage({formData}).unwrap();
+                const imageUrl = uploadResponse.images[0].url;
+
+                // Post the comment with the image url
+                const commentResponse = await commentPost({
+                    comment: commentText,
+                    image: imageUrl,
+                    postId
+                }).unwrap();
+
+                if (commentResponse.status === "OK") {
+                    setCommentText("");
+                    setCommentFile(null);
+                    setAllComments(commentResponse.comments);
+                }
             }
             else {
                 const commentResponse = await commentPost({
@@ -48,12 +82,13 @@ const CreateComment = ({ commentText, setCommentText, setAllComments, commentFil
 
                 if (commentResponse.status === "OK") {
                     setCommentText("");
-                    setCommentFile(null);
                     setAllComments(commentResponse.comments);
                 }
             }
         } catch (e) {
             console.log("ERROR while commenting: ", e);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -101,7 +136,7 @@ const CreateComment = ({ commentText, setCommentText, setAllComments, commentFil
                         </div>
 
                         {
-                            isCommenting ? (
+                            loading ? (
                                 <div className="flex items-center justify-center">
                                     <div className="w-[18px] h-[18px] animate-spin rounded-full border-border border-[3px] border-t-[var(--color-primary)]"></div>
                                 </div>
@@ -121,7 +156,7 @@ const CreateComment = ({ commentText, setCommentText, setAllComments, commentFil
             {/* ---- File Preview ---- */}
             {
                 commentFile && (
-                    <div className="w-30 h-30 mt-2 overflow-hidden relative left-16 rounded-xl group">
+                    <div className="w-30 h-30  overflow-hidden relative left-10 rounded-xl group">
                         {
                             commentFile.type.startsWith("image") ? (
                                 <img src={URL.createObjectURL(commentFile)} alt="Preview" className="object-cover w-full h-full group-hover:opacity-40" />

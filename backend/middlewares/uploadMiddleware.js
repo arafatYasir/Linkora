@@ -1,6 +1,7 @@
 const fs = require("fs");
 
 const uploadMiddleware = async (req, res, next) => {
+    console.log(req);
     try {
         if(!req.files || Object.keys(req.files).length === 0) {
             return res.status(400).json({
