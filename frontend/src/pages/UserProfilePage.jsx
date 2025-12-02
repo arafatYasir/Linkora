@@ -16,6 +16,7 @@ import { MdOutlineNightlight } from "react-icons/md";
 const UserProfilePage = () => {
     // States
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
+    const [posts, setPosts] = useState([]);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
@@ -30,10 +31,7 @@ const UserProfilePage = () => {
     let isOwnProfile = !username || username.trim() === "" || username.trim() === userInfo.username;
 
     // Fetching user data
-    const { data: user, isLoading, error: userError } = useGetUserQuery(isOwnProfile ? userInfo.username : username);
-
-    // Post fetching api
-    const { data: posts, refetch: refetchPosts } = useGetUserPostsQuery(userInfo._id, { skip: userInfo.profilePicture !== userInfo?.posts[0]?.user?.profilePicture ? false : true });
+    const { data: user, isLoading, error: userError, refetch: refetchUser } = useGetUserQuery(isOwnProfile ? userInfo.username : username);
 
     // User Profile
     const userProfile = user;
@@ -63,17 +61,6 @@ const UserProfilePage = () => {
             }
         }
     }, [user]);
-
-    // useEffect to handle re-fetched post data
-    useEffect(() => {
-        if (posts && posts.length > 0) {
-            dispatch(updatePosts(posts));
-
-            const userData = JSON.parse(localStorage.getItem("userInfo"));
-            userData.posts = [...posts];
-            localStorage.setItem("userInfo", JSON.stringify(userData));
-        }
-    }, [posts, dispatch]);
 
     // useEffect to control body color theme
     useEffect(() => {
@@ -110,7 +97,7 @@ const UserProfilePage = () => {
                         <CoverPhoto user={userProfile} defaultCover={defaultCover} isImagesLoading={isImagesLoading} images={images} />
 
                         {/* ---- Profile Picture & Infos ---- */}
-                        <ProfilePictureInfos user={userProfile} defaultPhoto={defaultPhoto} refetchPosts={refetchPosts} isImagesLoading={isImagesLoading} images={images} />
+                        <ProfilePictureInfos user={userProfile} defaultPhoto={defaultPhoto} refetchUser={refetchUser} isImagesLoading={isImagesLoading} images={images} />
                     </div>
 
                     {/* ---- Profile Items ---- */}

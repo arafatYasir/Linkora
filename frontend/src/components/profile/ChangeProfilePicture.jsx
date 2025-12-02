@@ -10,7 +10,7 @@ import { useCreatePostMutation, useUpdateProfilePictureMutation, useUploadImageM
 import { addPost, setProfilePicture } from '../../slices/authSlice';
 import PhotosGroup from './PhotosGroup';
 
-const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, images = [] }) => {
+const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) => {
     // States
     const [picture, setPicture] = useState(null);
     const [pictureUrl, setPictureUrl] = useState(null);
@@ -122,8 +122,8 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchPosts, images = [] })
 
         localStorage.setItem("userInfo", JSON.stringify(userData));
 
-        // Re-fetch posts to remove old profile picture url from posts
-        refetchPosts();
+        // Re-fetch user to apply the changes on the profile page
+        refetchUser();
     }
 
     const savePostInLocal = (post) => {

@@ -8,7 +8,7 @@ import { FiUserCheck, FiUserX } from "react-icons/fi";
 import { FaSquarePlus } from "react-icons/fa6";
 import { useAcceptRequestMutation, useAddFriendMutation, useCancelRequestMutation, useDeleteRequestMutation, useUnfollowMutation, useUnfriendMutation, useFollowMutation } from "../../../api/authApi";
 
-const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading, images }) => {
+const ProfilePictureInfos = ({ user, defaultPhoto, refetchUser, isImagesLoading, images }) => {
     // States
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [relationship, setRelationship] = useState(null);
@@ -139,7 +139,7 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchPosts, isImagesLoading
                     )
                 }
                 {
-                    showUploadModal && <ChangeProfilePicture setShowUploadModal={setShowUploadModal} refetchPosts={refetchPosts} isImagesLoading={isImagesLoading} images={images} />
+                    showUploadModal && <ChangeProfilePicture setShowUploadModal={setShowUploadModal} refetchUser={refetchUser} isImagesLoading={isImagesLoading} images={images} />
                 }
             </div>
 
