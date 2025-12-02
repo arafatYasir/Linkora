@@ -9,6 +9,7 @@ import Reacts from "./Reacts";
 import { useEffect, useState } from "react";
 import { useRef } from "react";
 import CreateComment from "./CreateComment";
+import Comments from "./Comments";
 import PostOptions from "./PostOptions";
 import { useReactPostMutation } from "../../../api/authApi";
 
@@ -127,8 +128,6 @@ const Post = ({ post }) => {
     }
 
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
-
-    console.log("All comments: ", allComments);
 
     return (
         <li className="w-full max-w-[640px] bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] transition-[var(--transition-default)]">
@@ -299,13 +298,7 @@ const Post = ({ post }) => {
             }
 
             {
-                allComments.length > 0 && <div>
-                    {allComments.map((comment, index) => (
-                        <div key={index}>
-                            <p>{comment.comment}</p>
-                        </div>
-                    ))}
-                </div>
+                allComments.length > 0 && <Comments comments={allComments} />
             }
         </li>
     )
