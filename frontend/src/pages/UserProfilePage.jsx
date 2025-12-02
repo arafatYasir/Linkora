@@ -62,6 +62,14 @@ const UserProfilePage = () => {
         }
     }, [user]);
 
+    // useEffect to save posts to redux and localstorage
+    useEffect(() => {
+        if (user?.posts) {
+            setPosts(user?.posts);
+            console.log(user?.posts);
+        }
+    }, [user?.posts]);
+
     // useEffect to control body color theme
     useEffect(() => {
         const body = document.querySelector("body");
@@ -101,7 +109,7 @@ const UserProfilePage = () => {
                     </div>
 
                     {/* ---- Profile Items ---- */}
-                    <ProfileItems user={userProfile} isImagesLoading={isImagesLoading} images={images} />
+                    <ProfileItems user={userProfile} posts={posts} setPosts={setPosts} isImagesLoading={isImagesLoading} images={images} />
                 </div>
             )}
         </div>

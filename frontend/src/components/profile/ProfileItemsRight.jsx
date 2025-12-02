@@ -6,11 +6,10 @@ import AllPosts from "../post/AllPosts";
 import PostViewControl from "../post/PostViewControl";
 import GridPosts from "../post/GridPosts";
 
-const ProfileItemsRight = ({ user }) => {
+const ProfileItemsRight = ({ user, posts, setPosts }) => {
     // States
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
     const [viewMethod, setViewMethod] = useState("list");
-    const [posts, setPosts] = useState([]);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
@@ -33,13 +32,7 @@ const ProfileItemsRight = ({ user }) => {
         else {
             body.style.overflowY = "scroll";
         }
-    }, [isPostModalOpen])
-
-    useEffect(() => {
-        if (user?.posts) {
-            setPosts(user?.posts);
-        }
-    }, [user?.posts]);
+    }, [isPostModalOpen]);
 
     return (
         <div className="col-span-3">
