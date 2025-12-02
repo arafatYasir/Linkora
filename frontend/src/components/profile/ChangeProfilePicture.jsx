@@ -93,7 +93,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
             setPictureUrl(null);
             setIsPreviousImage(false);
         }
-    }, [picture, pictureUrl, isPreviousImage]);
+    }, [picture]);
 
     useEffect(() => {
         const handleCloseUploadModal = (e) => {
@@ -105,7 +105,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
         document.addEventListener("mousedown", handleCloseUploadModal);
 
         return () => document.removeEventListener("mousedown", handleCloseUploadModal);
-    }, []);
+    }, [picture]);
 
     // Functions
     const handleFileChange = (e) => {
