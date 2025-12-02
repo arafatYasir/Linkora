@@ -129,7 +129,7 @@ const reactPost = async (req, res) => {
 
 const commentPost = async (req, res) => {
     try {
-        const {comment, image, postId} = req.body;
+        const { comment, image, postId } = req.body;
         const post = await Post.findByIdAndUpdate(postId, {
             $push: {
                 comments: {
