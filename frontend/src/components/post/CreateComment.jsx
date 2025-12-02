@@ -5,13 +5,17 @@ import { LuFiles } from 'react-icons/lu';
 import { useRef } from "react";
 import { FaTimes } from "react-icons/fa";
 import { PiPaperPlaneRightFill } from "react-icons/pi";
+import { useCommentPostMutation } from "../../../api/authApi";
 
-const CreateComment = ({ comment, setComment, commentFile, setCommentFile, commentRef }) => {
+const CreateComment = ({ commentText, setCommentText, commentFile, setCommentFile, commentRef, postId }) => {
     // States
     // const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
+
+    // Commenting API
+    const [commentPost, { isLoading: isCommenting }] = useCommentPostMutation();
 
     // Extra hooks
     const fileInputRef = useRef(null);
@@ -26,6 +30,31 @@ const CreateComment = ({ comment, setComment, commentFile, setCommentFile, comme
         }
 
         setCommentFile(file);
+    }
+
+    const handleComment = async () => {
+        if (commentText.trim() === "" && commentFile === null) return;
+
+        try {
+            if (commentFile !== null) {
+
+            }
+            else {
+                const commentResponse = await commentPost({
+                    comment: commentText,
+                    image: null,
+                    postId
+                }).unwrap();
+
+                if (commentResponse.status === "OK") {
+                    setCommentText("");
+                    setCommentFile(null);
+                    console.log(commentResponse);
+                }
+            }
+        } catch (e) {
+            console.log("ERROR while commenting: ", e);
+        }
     }
 
     return (
@@ -51,10 +80,11 @@ const CreateComment = ({ comment, setComment, commentFile, setCommentFile, comme
                     <textarea
                         type="text"
                         placeholder={`${userInfo.firstname} write a public comment...`}
-                        className="w-full border border-[var(--color-border)] pt-[6px] pb-[30px] px-4 rounded-2xl focus:outline-none resize-none"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
+                        className="w-full border border-[var(--color-border)] pt-[6px] pb-[50px] px-4 rounded-2xl focus:outline-none resize-none"
+                        value={commentText}
+                        onChange={(e) => setCommentText(e.target.value)}
                         ref={commentRef}
+                        onKeyUp={(e) => e.key === "Enter" ? handleComment() : null}
                     />
 
                     <div className="flex justify-between w-[95%] absolute bottom-7 left-3 translate-y-1/2">
@@ -70,14 +100,20 @@ const CreateComment = ({ comment, setComment, commentFile, setCommentFile, comme
                             </button>
                         </div>
 
-                        <button
-                            onClick={() => {
-                                
-                            }}
-                            className="p-2 hover:bg-border rounded-full flex items-center justify-center cursor-pointer"
-                        >
-                            <PiPaperPlaneRightFill size={18} />
-                        </button>
+                        {
+                            isCommenting ? (
+                                <div className="flex items-center justify-center">
+                                    <div className="w-[18px] h-[18px] animate-spin rounded-full border-border border-[3px] border-t-[var(--color-primary)]"></div>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={handleComment}
+                                    className="p-2 hover:bg-border rounded-full flex items-center justify-center cursor-pointer"
+                                >
+                                    <PiPaperPlaneRightFill size={18} />
+                                </button>
+                            )
+                        }
                     </div>
                 </div>
             </div>

@@ -28,10 +28,12 @@ const Post = ({ post }) => {
     const [totalReacts, setTotalReacts] = useState(null);
     const [allReactionCounts, setAllReactionCounts] = useState(null);
     const [isReacting, setIsReacting] = useState(false);
+
     const [showComments, setShowComments] = useState(false);
-    const [showOptions, setShowOptions] = useState(false);
-    const [comment, setComment] = useState("");
+    const [commentText, setCommentText] = useState("");
     const [commentFile, setCommentFile] = useState(null);
+
+    const [showOptions, setShowOptions] = useState(false);
 
     // Extra hooks
     const commentRef = useRef(null);
@@ -279,7 +281,7 @@ const Post = ({ post }) => {
 
             {/* ---- Comments ---- */}
             {
-                showComments && <CreateComment comment={comment} setComment={setComment} commentFile={commentFile} setCommentFile={setCommentFile} commentRef={commentRef} />
+                showComments && <CreateComment commentText={commentText} setCommentText={setCommentText} commentFile={commentFile} setCommentFile={setCommentFile} commentRef={commentRef} postId={_id} />
             }
         </li>
     )
