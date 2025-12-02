@@ -18,7 +18,7 @@ const createPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
     try {
-        const posts = await Post.find({}).populate("user", "firstname lastname username profilePicture coverPhoto gender").sort({ createdAt: -1 });
+        const posts = await Post.find({}).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username").sort({ createdAt: -1 });
 
         const postsWithReaction = posts.map(post => {
             const reactionsCount = {};
@@ -48,7 +48,7 @@ const getAllPosts = async (req, res) => {
 const getUserPosts = async (req, res) => {
     try {
         const { id } = req.params;
-        const posts = await Post.find({ user: id }).populate("user", "firstname lastname username profilePicture coverPhoto gender").sort({ createdAt: -1 });
+        const posts = await Post.find({ user: id }).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username").sort({ createdAt: -1 });
 
         const postsWithReaction = posts.map(post => {
             const reactionsCount = {};
