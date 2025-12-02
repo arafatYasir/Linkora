@@ -49,7 +49,7 @@ const Comment = ({ comment }) => {
                 )}
 
                 {/* ---- Comment Time ---- */}
-                <p className="text-xs text-[var(--color-text-secondary)] mt-1 ml-4">
+                <p className="text-xs text-[var(--color-text-secondary)] mt-1">
                     {commentedTime}
                 </p>
             </div>
