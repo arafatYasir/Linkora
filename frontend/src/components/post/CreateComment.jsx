@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import defaultAvatar from "../../../public/default images/avatar.png"
 import { MdEmojiEmotions } from 'react-icons/md';
 import { LuFiles } from 'react-icons/lu';
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import { PiPaperPlaneRightFill } from "react-icons/pi";
 import { useCommentPostMutation, useUploadImageMutation } from "../../../api/authApi";
@@ -24,6 +24,13 @@ const CreateComment = ({ commentText, setCommentText, setAllComments, commentFil
 
     // Extra hooks
     const fileInputRef = useRef(null);
+
+    // Auto resize textarea
+    useEffect(() => {
+        if(commentRef.current) {
+            commentRef.current.style.height = commentRef.current.scrollHeight + "px";
+        }
+    }, [commentText]);
 
     // Functions
     const handleFileUpload = (e) => {
@@ -51,13 +58,8 @@ const CreateComment = ({ commentText, setCommentText, setAllComments, commentFil
                 formData.append("files", blob);
                 formData.append("path", path);
 
-                console.log(blob);
-                for (let [key, value] of formData.entries()) {
-                    console.log(key, value);
-                }
-
                 // Upload the image
-                const uploadResponse = await uploadImage({formData}).unwrap();
+                const uploadResponse = await uploadImage({ formData }).unwrap();
                 const imageUrl = uploadResponse.images[0].url;
 
                 // Post the comment with the image url
@@ -102,7 +104,7 @@ const CreateComment = ({ commentText, setCommentText, setAllComments, commentFil
                         className="w-full h-full object-cover"
                     />
                 </div>
-                <div className="w-full relative">
+                <div className="w-full border border-[var(--color-border)] bg-bg rounded-2xl overflow-hidden">
                     {/* File Input */}
                     <input
                         type="file"
@@ -115,14 +117,14 @@ const CreateComment = ({ commentText, setCommentText, setAllComments, commentFil
                     <textarea
                         type="text"
                         placeholder={`${userInfo.firstname} write a public comment...`}
-                        className="w-full border border-[var(--color-border)] pt-[6px] pb-[50px] px-4 rounded-2xl focus:outline-none resize-none"
+                        className="w-full bg-transparent pt-3 px-4 focus:outline-none resize-none overflow-y-auto"
                         value={commentText}
                         onChange={(e) => setCommentText(e.target.value)}
                         ref={commentRef}
-                        onKeyUp={(e) => e.key === "Enter" ? handleComment() : null}
+                        rows={2}
                     />
 
-                    <div className="flex justify-between w-[95%] absolute bottom-7 left-3 translate-y-1/2">
+                    <div className="flex justify-between px-3 pb-2">
                         <div className="flex items-center">
                             <button className="p-2 hover:bg-border rounded-full flex items-center justify-center cursor-pointer">
                                 <MdEmojiEmotions size={18} />

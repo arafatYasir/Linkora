@@ -22,9 +22,9 @@ const Comment = ({ comment }) => {
             </Link>
 
             {/* ---- Comment Content ---- */}
-            <div className="flex-1">
+            <div className="w-full">
                 {/* ---- Comment Bubble ---- */}
-                <div className="bg-[var(--color-bg)] rounded-2xl px-4 py-2 inline-block max-w-full">
+                <div className="bg-[var(--color-bg)] rounded-2xl px-4 py-2 inline-block max-w-[93%]">
                     {/* ---- Name ---- */}
                     <Link
                         to={`/profile/${username}`}

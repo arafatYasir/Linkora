@@ -42,7 +42,7 @@ const GridPost = ({ post }) => {
 
                 {/* ---- Text ---- */}
                 <div>
-                    <p className="text-xs font-semibold">{(text && text?.length > 30) ? `${text?.slice(0, 30)}...` : text}</p>
+                    <p className="text-xs font-semibold">{(text && text?.length > 35) ? `${text?.slice(0, 35)}...` : text}</p>
                     <span className="text-[11px] font-semibold text-primary">{postedTime}</span>
                 </div>
             </div>
