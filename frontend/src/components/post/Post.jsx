@@ -199,7 +199,7 @@ const Post = ({ post }) => {
                             </div>
                         ) : (
                             <div className="text-lg leading-[1]">
-                                <p className="px-4">{text}</p>
+                                <p className="px-4 text-[15px] leading-[20px]">{text}</p>
 
                                 {images && images.length > 0 && (
                                     <div className="flex flex-wrap mt-4">

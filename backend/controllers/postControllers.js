@@ -1,4 +1,5 @@
 const Post = require("../models/postModel");
+const User = require("../models/userModel");
 
 const createPost = async (req, res) => {
     try {
@@ -18,8 +19,21 @@ const createPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
     try {
-        const posts = await Post.find({}).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username").sort({ createdAt: -1 });
+        // const posts = await Post.find({}).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username").sort({ createdAt: -1 });
+        // First find all the posts of the user
+        const userPosts = await Post.find({user: req.user.id}).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username");
 
+        // Find the peoples he is following to and get all the posts of those people
+        const userFollowing = await User.findById(req.user.id).select("following");
+        const followingPosts = await Post.find({user: {$in: userFollowing.following}}).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username");
+
+        // Merge his own posts and his following peoples posts
+        const posts = [...userPosts, ...followingPosts];
+
+        // Sort the posts by createdAt in ascending order
+        posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        // Add users reaction and reactions count to each post
         const postsWithReaction = posts.map(post => {
             const reactionsCount = {};
 
