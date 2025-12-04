@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaTimes, FaImage, FaVideo, FaFileAlt } from "react-icons/fa";
 import { backgrounds } from "../../constants/postBackgrounds";
 import { useCreatePostMutation, useUploadImageMutation } from "../../../api/authApi";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import dataURIToBlob from "../../helpers/dataURIToBlob";
 
 const PostModal = ({ onClose, setPosts }) => {
@@ -19,9 +19,6 @@ const PostModal = ({ onClose, setPosts }) => {
     // RTK Query
     const [createPost] = useCreatePostMutation();
     const [uploadImage] = useUploadImageMutation();
-
-    // Extra hooks
-    const dispatch = useDispatch();
 
     // Functions
     const handleFileChange = (e) => {

@@ -21,11 +21,11 @@ const getAllPosts = async (req, res) => {
     try {
         // const posts = await Post.find({}).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username").sort({ createdAt: -1 });
         // First find all the posts of the user
-        const userPosts = await Post.find({user: req.user.id}).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username");
+        const userPosts = await Post.find({ user: req.user.id }).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username");
 
         // Find the peoples he is following to and get all the posts of those people
         const userFollowing = await User.findById(req.user.id).select("following");
-        const followingPosts = await Post.find({user: {$in: userFollowing.following}}).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username");
+        const followingPosts = await Post.find({ user: { $in: userFollowing.following } }).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username");
 
         // Merge his own posts and his following peoples posts
         const posts = [...userPosts, ...followingPosts];
@@ -145,14 +145,14 @@ const commentPost = async (req, res) => {
     try {
         const { comment, image, postId } = req.body;
         const post = await Post.findById(postId);
-        
+
         post.comments.push({
             comment,
             image,
             commentedBy: req.user.id,
             commentedAt: new Date()
         });
-        
+
         await (await post.save()).populate("comments.commentedBy", "firstname lastname profilePicture username");
 
         res.json({
@@ -167,4 +167,35 @@ const commentPost = async (req, res) => {
     }
 }
 
-module.exports = { createPost, getAllPosts, getUserPosts, reactPost, commentPost };
+const savePost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await User.findById(req.user.id);
+
+        const isAlreadySaved = user.savedPosts.find(post => post.toString() === id);
+
+        if(isAlreadySaved) {
+            return res.status(400).json({
+                error: "Post already saved!"
+            });
+        }
+
+        user.savedPosts.push({
+            post: id,
+            savedAt: new Date()
+        });
+        await user.save();
+
+        res.json({
+            message: "Post saved successfully",
+            status: "OK",
+            savedPosts: user.savedPosts
+        });
+    } catch (e) {
+        res.status(404).json({
+            error: e.message
+        })
+    }
+}
+
+module.exports = { createPost, getAllPosts, getUserPosts, reactPost, commentPost, savePost };
