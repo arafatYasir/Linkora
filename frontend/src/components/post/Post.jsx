@@ -48,6 +48,8 @@ const Post = ({ post }) => {
     // Reaction api
     const [reactPost] = useReactPostMutation();
 
+    console.log(post.isSaved);
+
     useEffect(() => {
         if (totalReactions) {
             setTotalReacts(totalReactions);
@@ -176,7 +178,7 @@ const Post = ({ post }) => {
                     </div>
                     {/* ---- Post Options ---- */}
                     {
-                        showOptions && <PostOptions user={user} optionsRef={optionsRef} />
+                        showOptions && <PostOptions user={user} optionsRef={optionsRef} postId={_id} />
                     }
                 </div>
             </div>

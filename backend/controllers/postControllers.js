@@ -19,7 +19,6 @@ const createPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
     try {
-        // const posts = await Post.find({}).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username").sort({ createdAt: -1 });
         // First find all the posts of the user
         const userPosts = await Post.find({ user: req.user.id }).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username");
 
@@ -172,9 +171,9 @@ const savePost = async (req, res) => {
         const { id } = req.params;
         const user = await User.findById(req.user.id);
 
-        const isAlreadySaved = user.savedPosts.find(post => post.toString() === id);
+        const isAlreadySaved = user.savedPosts.find(item => item.post.toString() === id);
 
-        if(isAlreadySaved) {
+        if (isAlreadySaved) {
             return res.status(400).json({
                 error: "Post already saved!"
             });
@@ -198,4 +197,20 @@ const savePost = async (req, res) => {
     }
 }
 
-module.exports = { createPost, getAllPosts, getUserPosts, reactPost, commentPost, savePost };
+const deletePost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await Post.findByIdAndDelete(id);
+
+        res.json({
+            message: "Post deleted successfully",
+            status: "OK"
+        });
+    } catch (e) {
+        res.status(404).json({
+            error: e.message
+        })
+    }
+}
+
+module.exports = { createPost, getAllPosts, getUserPosts, reactPost, commentPost, savePost, deletePost };
