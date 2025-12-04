@@ -102,7 +102,7 @@ const UserProfilePage = () => {
                 <div>
                     <div className="relative">
                         {/* ---- Cover Photo ---- */}
-                        <CoverPhoto user={userProfile} defaultCover={defaultCover} isImagesLoading={isImagesLoading} images={images} />
+                        <CoverPhoto user={userProfile} defaultCover={defaultCover} isImagesLoading={isImagesLoading} images={images} refetchUser={refetchUser} />
 
                         {/* ---- Profile Picture & Infos ---- */}
                         <ProfilePictureInfos user={userProfile} defaultPhoto={defaultPhoto} refetchUser={refetchUser} isImagesLoading={isImagesLoading} images={images} />

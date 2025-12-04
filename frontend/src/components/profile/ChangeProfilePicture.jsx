@@ -7,7 +7,6 @@ import { PiFrameCorners } from "react-icons/pi";
 import { getCroppedImage } from '../../helpers/cropImage';
 import { FaUpload } from "react-icons/fa6";
 import { useCreatePostMutation, useUpdateProfilePictureMutation, useUploadImageMutation } from '../../../api/authApi';
-import { addPost, setProfilePicture } from '../../slices/authSlice';
 import PhotosGroup from './PhotosGroup';
 
 const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) => {
@@ -163,10 +162,6 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
                     setCrop({ x: 0, y: 0 });
                     setZoom(1);
                 }
-
-                // Saving that profile picture changing post in local
-                const post = { ...postResponse.post };
-                post.user = userInfo;
 
                 // Re-fetching user's full data to reflect the changes everywhere
                 refetchUser();

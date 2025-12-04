@@ -7,10 +7,9 @@ import Cropper from "react-easy-crop"
 import { FaGlobe } from "react-icons/fa"
 import { useCreatePostMutation, useUpdateCoverPhotoMutation, useUploadImageMutation } from "../../../../api/authApi"
 import { getCroppedImage } from "../../../helpers/cropImage"
-import { addPost, setCoverPhoto } from "../../../slices/authSlice"
 import ChooseCoverPhoto from "./ChooseCoverPhoto"
 
-const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
+const CoverPhoto = ({ user, defaultCover, isImagesLoading, images, refetchUser }) => {
     // States
     const [showCoverOptions, setShowCoverOptions] = useState(false);
     const [showChooseModal, setShowChooseModal] = useState(false);
@@ -132,28 +131,6 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
         }
     }
 
-    const saveCoverPhotoInLocal = (url) => {
-        // Set in redux
-        dispatch(setCoverPhoto(url));
-
-        // Set in localstorage
-        const userData = JSON.parse(localStorage.getItem("userInfo"));
-        userData.coverPhoto = url;
-
-        localStorage.setItem("userInfo", JSON.stringify(userData));
-    }
-
-    const savePostInLocal = (post) => {
-        // Set in redux
-        dispatch(addPost(post));
-
-        // Set in localstorage
-        const userData = JSON.parse(localStorage.getItem("userInfo"));
-        userData.posts = [...userData.posts, post];
-
-        localStorage.setItem("userInfo", JSON.stringify(userData));
-    }
-
     const handleUpload = async () => {
         try {
             setLoading(true);
@@ -190,15 +167,9 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images }) => {
                 setCrop({ x: 0, y: 0 });
                 setUploadingState(null);
             }
-            // Saving that profile picture url in local
-            const coverPhotoUrl = updateResponse.url;
-            saveCoverPhotoInLocal(coverPhotoUrl);
 
-            // Saving that profile picture changing post in local
-            const post = { ...postResponse.post };
-            post.user = userInfo;
-
-            savePostInLocal(post);
+            // Re-fetching user's full data to reflect the changes everywhere
+            refetchUser();
 
             // Reset input file value
             if (inputFileRef.current) {
