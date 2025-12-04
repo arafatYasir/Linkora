@@ -22,7 +22,7 @@ const HomePage = () => {
     const { data: user } = useGetUserQuery(userInfo.username);
 
     // Fetching posts
-    const { data: allPosts } = useGetAllPostsQuery();
+    const { data: allPosts, refetch: refetchPosts } = useGetAllPostsQuery();
 
     const openPostModal = () => {
         setIsPostModalOpen(true);
@@ -65,7 +65,7 @@ const HomePage = () => {
             localStorage.setItem("userInfo", JSON.stringify(user));
         }
     }, [user, dispatch]);
-    
+
     return (
         <div className="container mx-auto">
             <div className="flex gap-x-5 mb-10">
@@ -90,7 +90,7 @@ const HomePage = () => {
 
             {/* ---- All Posts ---- */}
             {
-                posts.length > 0 && <AllPosts posts={posts} />
+                posts.length > 0 && <AllPosts posts={posts} setPosts={setPosts} />
             }
         </div>
     )

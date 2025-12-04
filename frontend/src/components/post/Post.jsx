@@ -22,7 +22,7 @@ const reactionColors = {
     Angry: "#E9710F"
 };
 
-const Post = ({ post }) => {
+const Post = ({ post, setPosts }) => {
     // States
     const [showReacts, setShowReacts] = useState(false);
     const [react, setReact] = useState(null);
@@ -178,7 +178,7 @@ const Post = ({ post }) => {
                     </div>
                     {/* ---- Post Options ---- */}
                     {
-                        showOptions && <PostOptions user={user} optionsRef={optionsRef} postId={_id} />
+                        showOptions && <PostOptions user={user} optionsRef={optionsRef} postId={_id} setPosts={setPosts} />
                     }
                 </div>
             </div>

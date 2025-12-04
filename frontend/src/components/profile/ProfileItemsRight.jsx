@@ -55,7 +55,7 @@ const ProfileItemsRight = ({ user, posts, setPosts }) => {
             {/* ---- User Posts ---- */}
             {
                 ((posts && posts?.length > 0) && viewMethod === "list") ? (
-                    <AllPosts posts={posts} />
+                    <AllPosts posts={posts} setPosts={setPosts} />
                 )
                 : ((posts && posts?.length > 0) && viewMethod === "grid") ? (
                     <GridPosts posts={posts} />
