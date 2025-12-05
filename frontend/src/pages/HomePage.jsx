@@ -6,6 +6,7 @@ import CreatePost from "../components/post/CreatePost";
 import PostModal from "../components/post/PostModal";
 import AllPosts from "../components/post/AllPosts";
 import { useGetAllPostsQuery, useGetUserQuery } from "../../api/authApi";
+import SearchBar from "../components/SearchBar";
 
 const HomePage = () => {
     // States
@@ -68,6 +69,10 @@ const HomePage = () => {
 
     return (
         <div className="container mx-auto">
+            <div className="bg-border py-2">
+                <SearchBar />
+            </div>
+
             <div className="flex gap-x-5 mb-10">
                 {
                     !userInfo && <>
