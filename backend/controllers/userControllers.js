@@ -772,4 +772,61 @@ const search = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unFollow, unFriend, deleteRequest, search };
+const addToSearchHistory = async (req, res) => {
+    try {
+        const { searchedUser } = req.body;
+
+        // Try to update the existing search history
+        const updateResult = await User.updateOne(
+            {
+                _id: req.user.id,
+                "search.user": searchedUser
+            },
+            {
+                $set: {
+                    "search.$.createdAt": new Date()
+                }
+            }
+        )
+
+        // If document wasn't modified then it means the history doesn't exist
+        if(updateResult.modifiedCount === 0) {
+            await User.updateOne(
+                {
+                    _id: req.user.id
+                },
+                {
+                    $push: {
+                        search: {
+                            user: searchedUser,
+                            createdAt: new Date()
+                        }
+                    }
+                }
+            );
+        }
+
+        res.json({message: "Search history updated."});
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+const searchHistory = async (req, res) => {
+    try {
+        const searchHistory = await User.findById(req.user.id).select("search").populate("search.user", "firstname lastname username profilePicture details");
+
+        res.json({
+            status: "OK",
+            data: searchHistory.search
+        })
+    } catch (e) {
+        res.status(400).json({
+            error: e.message 
+        })
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unFollow, unFriend, deleteRequest, search, addToSearchHistory, searchHistory };

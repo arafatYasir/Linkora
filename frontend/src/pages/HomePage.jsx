@@ -6,7 +6,7 @@ import CreatePost from "../components/post/CreatePost";
 import PostModal from "../components/post/PostModal";
 import AllPosts from "../components/post/AllPosts";
 import { useGetAllPostsQuery, useGetUserQuery } from "../../api/authApi";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "../components/search/SearchBar";
 
 const HomePage = () => {
     // States

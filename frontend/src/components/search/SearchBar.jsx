@@ -1,23 +1,31 @@
 import { useState, useRef, useEffect } from "react"
-import SearchIcon from "../icons/SearchIcon";
-import { useSearchQuery, useLazySearchQuery } from "../../api/authApi";
-import { Link } from "react-router-dom";
+import SearchIcon from "../../icons/SearchIcon";
+import { useLazySearchQuery, useAddToSearchHistoryMutation, useGetSearchHistoryQuery } from "../../../api/authApi";
+import SearchItem from "./SearchItem";
+import { IoMdClose } from "react-icons/io";
 
 const SearchBar = () => {
     // States
     const [text, setText] = useState("");
     const [isFocused, setIsFocused] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
+    const [recentSearches, setRecentSearches] = useState([]);
 
     // Extra hooks
     const searchRef = useRef(null);
 
     // Searching api
-    const [search, { data, isLoading }] = useLazySearchQuery();
+    const [search, { data: result }] = useLazySearchQuery();
+
+    // Adding to search history api
+    const [addToSearchHistory] = useAddToSearchHistoryMutation();
+
+    // Get search history api
+    const { data: searchHistory } = useGetSearchHistoryQuery();
 
     // When text changes searching happens
     useEffect(() => {
-        if(text.trim() !== "") {
+        if (text.trim() !== "") {
             search(text);
         }
         else {
@@ -25,15 +33,21 @@ const SearchBar = () => {
         }
     }, [text]);
 
+    // When search result changes update the state
     useEffect(() => {
-        if(data?.data) {
-            setSearchResults(data.data);
+        if (result?.data?.length > 0) {
+            setSearchResults(result.data);
         }
-    }, [data]);
+    }, [result]);
 
-    console.log(searchResults)
+    // When search history changes update the state
+    useEffect(() => {
+        if (searchHistory?.data?.length > 0) {
+            setRecentSearches([...searchHistory.data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+        }
+    }, [searchHistory]);
 
-    // Handle click outside to close
+    // Click outside to close the search bar card
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -45,7 +59,7 @@ const SearchBar = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    // Handle ESC key
+    // Handle ESC key to close the search bar card
     useEffect(() => {
         const handleEscape = (e) => {
             if (e.key === "Escape") setIsFocused(false);
@@ -55,10 +69,28 @@ const SearchBar = () => {
         return () => document.removeEventListener("keydown", handleEscape);
     }, []);
 
+    // Clear the search bar
     const handleClear = () => {
         setText("");
         setSearchResults([]);
     };
+
+    // Add to search history
+    const handleAddToSearchHistory = async (id) => {
+        try {
+            const res = await addToSearchHistory(id);
+        } catch (e) {
+            console.log("ERROR while adding to search history:", e);
+        }
+    }
+
+    const removeFromSearchHistory = async (id) => {
+        try {
+
+        } catch (e) {
+
+        }
+    }
 
     return (
         <>
@@ -84,11 +116,9 @@ const SearchBar = () => {
                     {text && (
                         <button
                             onClick={handleClear}
-                            className="absolute right-4 p-0.5 rounded-full hover:bg-border transition cursor-pointer"
+                            className="absolute right-3 p-1.5 rounded-full hover:bg-border transition cursor-pointer"
                         >
-                            <svg className="w-4.5 h-4.5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
+                            <IoMdClose />
                         </button>
                     )}
                 </div>
@@ -100,44 +130,23 @@ const SearchBar = () => {
                         border border-border overflow-hidden
                         animate-slideDown
                     `}>
-                        {/* ---- Results container with max height ---- */}
-                        <div className="max-h-[calc(40vh)] overflow-y-auto custom-scrollbar">
+                        {/* ---- Results container ---- */}
+                        <div className="max-h-[calc(50vh)] overflow-y-auto custom-scrollbar">
                             {text.trim() === "" ? (
                                 // ---- Recent searches or suggestions ----
-                                <div className="p-4">
-                                    <h3 className="text-[15px] font-semibold mb-3">Recent Searches</h3>
+                                <div className="p-3">
+                                    <h3 className="text-[15px] font-semibold mb-3 px-2">Recent Searches</h3>
                                     <div className="space-y-2">
-                                        <div className="flex items-center gap-3 p-2 hover:bg-primary/10 rounded-lg cursor-pointer transition">
-                                            
-                                        </div>
+                                        {recentSearches?.map(({ user }) => (
+                                            <SearchItem key={user._id} user={user} add={handleAddToSearchHistory} remove={removeFromSearchHistory} type="recent" />
+                                        ))}
                                     </div>
                                 </div>
                             ) : searchResults.length > 0 ? (
                                 // ---- Search results ----
-                                <div className="p-2">
+                                <div className="p-3">
                                     {searchResults.map((result) => (
-                                        <Link
-                                            key={result._id}
-                                            to={`/profile/${result.username}`}
-                                            className="flex items-center gap-3 px-3 py-2 hover:bg-primary/10 rounded-lg cursor-pointer transition"
-                                        >
-                                            <div className="w-10 h-10 overflow-hidden rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                                                <img 
-                                                    src={result.profilePicture} 
-                                                    alt={`${result.firstname} ${result.lastname}'s Profile Picture`}
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
-
-                                            <div className="flex-1">
-                                                <p className="font-medium">{result.firstname} {result.lastname}</p>
-                                                <p className="text-xs capitalize">{result.details.bio.slice(0, 22)}...</p>
-                                            </div>
-
-                                            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                            </svg>
-                                        </Link>
+                                        <SearchItem key={result._id} user={result} add={handleAddToSearchHistory} remove={removeFromSearchHistory} type="result" />
                                     ))}
                                 </div>
                             ) : (

@@ -1,5 +1,5 @@
 const express = require("express");
-const { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, cancelRequest, follow, unFollow, acceptRequest, unFriend, deleteRequest, search } = require("../../controllers/userControllers");
+const { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, cancelRequest, follow, unFollow, acceptRequest, unFriend, deleteRequest, search, addToSearchHistory, searchHistory } = require("../../controllers/userControllers");
 const authMiddleware = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
@@ -31,5 +31,7 @@ router.delete("/delete-request/:id", authMiddleware, deleteRequest);
 
 // Search
 router.get("/search/:query", authMiddleware, search);
+router.put("/add-to-search-history", authMiddleware, addToSearchHistory);
+router.get("/search-history", authMiddleware, searchHistory);
 
 module.exports = router;
