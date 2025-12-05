@@ -1,25 +1,37 @@
 import { useState, useRef, useEffect } from "react"
 import SearchIcon from "../icons/SearchIcon";
+import { useSearchQuery, useLazySearchQuery } from "../../api/authApi";
+import { Link } from "react-router-dom";
 
 const SearchBar = () => {
+    // States
     const [text, setText] = useState("");
     const [isFocused, setIsFocused] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
+
+    // Extra hooks
     const searchRef = useRef(null);
 
-    // Mock data - replace with your actual search logic
-    const mockResults = [
-        { id: 1, name: "John Doe", type: "user" },
-        { id: 2, name: "Jane Smith", type: "user" },
-        { id: 3, name: "React Tutorial", type: "post" },
-        { id: 4, name: "JavaScript Tips", type: "post" },
-        { id: 5, name: "JavaScript Tips", type: "post" },
-        { id: 6, name: "JavaScript Tips", type: "post" },
-        { id: 7, name: "JavaScript Tips", type: "post" },
-        { id: 8, name: "JavaScript Tips", type: "post" },
-        { id: 9, name: "JavaScript Tips", type: "post" },
-        { id: 10, name: "JavaScript Tips", type: "post" },
-    ];
+    // Searching api
+    const [search, { data, isLoading }] = useLazySearchQuery();
+
+    // When text changes searching happens
+    useEffect(() => {
+        if(text.trim() !== "") {
+            search(text);
+        }
+        else {
+            setSearchResults([]);
+        }
+    }, [text]);
+
+    useEffect(() => {
+        if(data?.data) {
+            setSearchResults(data.data);
+        }
+    }, [data]);
+
+    console.log(searchResults)
 
     // Handle click outside to close
     useEffect(() => {
@@ -42,18 +54,6 @@ const SearchBar = () => {
         document.addEventListener("keydown", handleEscape);
         return () => document.removeEventListener("keydown", handleEscape);
     }, []);
-
-    // Filter results based on search text
-    useEffect(() => {
-        if (text.trim()) {
-            const filtered = mockResults.filter(item =>
-                item.name.toLowerCase().includes(text.toLowerCase())
-            );
-            setSearchResults(filtered);
-        } else {
-            setSearchResults([]);
-        }
-    }, [text]);
 
     const handleClear = () => {
         setText("");
@@ -108,13 +108,7 @@ const SearchBar = () => {
                                     <h3 className="text-[15px] font-semibold mb-3">Recent Searches</h3>
                                     <div className="space-y-2">
                                         <div className="flex items-center gap-3 p-2 hover:bg-primary/10 rounded-lg cursor-pointer transition">
-                                            <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
-                                                JD
-                                            </div>
-                                            <div>
-                                                <p className="font-medium">John Doe</p>
-                                                <p className="text-xs">User</p>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -122,23 +116,28 @@ const SearchBar = () => {
                                 // ---- Search results ----
                                 <div className="p-2">
                                     {searchResults.map((result) => (
-                                        <div
-                                            key={result.id}
-                                            className="flex items-center gap-3 p-3 hover:bg-primary/10 rounded-lg cursor-pointer transition"
+                                        <Link
+                                            key={result._id}
+                                            to={`/profile/${result.username}`}
+                                            className="flex items-center gap-3 px-3 py-2 hover:bg-primary/10 rounded-lg cursor-pointer transition"
                                         >
-                                            <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                                                {result.name.charAt(0)}
+                                            <div className="w-10 h-10 overflow-hidden rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                                <img 
+                                                    src={result.profilePicture} 
+                                                    alt={`${result.firstname} ${result.lastname}'s Profile Picture`}
+                                                    className="w-full h-full object-cover"
+                                                />
                                             </div>
 
                                             <div className="flex-1">
-                                                <p className="font-medium">{result.name}</p>
-                                                <p className="text-xs capitalize">{result.type}</p>
+                                                <p className="font-medium">{result.firstname} {result.lastname}</p>
+                                                <p className="text-xs capitalize">{result.details.bio.slice(0, 22)}...</p>
                                             </div>
-                                            
+
                                             <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                             </svg>
-                                        </div>
+                                        </Link>
                                     ))}
                                 </div>
                             ) : (

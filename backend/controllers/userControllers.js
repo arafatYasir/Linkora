@@ -755,4 +755,21 @@ const deleteRequest = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unFollow, unFriend, deleteRequest };
+const search = async (req, res) => {
+    try {
+        const { query } = req.params;
+
+        const users = await User.find({ $text: { $search: query } }).select("firstname lastname username profilePicture details");
+
+        res.json({
+            status: "OK",
+            data: users
+        });
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unFollow, unFriend, deleteRequest, search };
