@@ -4,8 +4,13 @@ import { useSelector } from "react-redux"
 import { FaFacebookMessenger, FaBell } from "react-icons/fa"
 import { CgMenuGridO } from "react-icons/cg"
 import { navIcons } from "../constants/navOptions"
+import { useState } from "react"
 
 const Navbar = () => {
+    // States
+    const [showIconName, setShowIconName] = useState(null);
+
+    // Redux states
     const { userInfo } = useSelector(state => state.auth);
 
     return (
@@ -29,12 +34,26 @@ const Navbar = () => {
                 {/* ---- Middle Part ---- */}
                 <div className="col-span-6 hidden md:flex w-full justify-center max-w-[600px] mx-auto h-full">
                     {navIcons.map((icon, index) => (
-                        <NavLink 
+                        <NavLink
                             to={icon.path}
                             key={index}
-                            className={({ isActive }) => `w-full max-w-[110px] h-full flex items-center justify-center hover:bg-bg transition group relative ${isActive ? 'text-primary border-b-2 border-b-primary' : 'text-text-secondary rounded-lg'}`}
+                            className={({ isActive }) => `w-full max-w-[110px] h-full flex items-center justify-center hover:bg-bg transition group relative ${isActive ? 'text-primary border-b-2 border-b-primary' : 'text-text-secondary rounded-lg'} relative`}
+                            onMouseEnter={() => {
+                                if(showIconName !== icon.name) {
+                                    setShowIconName(icon.name);
+                                }
+                            }}
+                            onMouseLeave={() => {
+                                setShowIconName(null);
+                            }}
                         >
                             <icon.icon size={24} />
+
+                            {showIconName === icon.name && (
+                                <span className="absolute bottom-[-30px] left-1/2 -translate-x-1/2 text-sm text-text-secondary px-2 py-1 bg-border rounded-lg">
+                                    {icon.name}
+                                </span>
+                            )}
                         </NavLink>
                     ))}
                 </div>

@@ -5,17 +5,21 @@ export const navIcons = [
     {
         icon: FaHome,
         path: "/",
+        name: "Home"
     },
     {
         icon: CgProfile,
         path: "/profile",
+        name: "Profile"
     },
     {
         icon: FaUsers,
         path: "/friends",
+        name: "Friends"
     },
     {
         icon: FaVideo,
         path: "/videos",
+        name: "Videos"
     }
 ];
