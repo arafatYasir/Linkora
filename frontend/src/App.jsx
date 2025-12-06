@@ -8,9 +8,9 @@ import VerificationPage from "./pages/VerificationPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import RootLayout from "./components/layouts/RootLayout";
 import UserProfilePage from "./pages/UserProfilePage";
+import ProfileLayout from "./components/layouts/ProfileLayout";
 
 const App = () => {
-
   return (
     <>
       <Routes>
@@ -18,8 +18,10 @@ const App = () => {
           <Route path="/" element={<RootLayout />}>
             <Route path="/" element={<HomePage />} />
           </Route>
-          <Route path="/profile" element={<UserProfilePage />} />
-          <Route path="/profile/:username" element={<UserProfilePage />} />
+          <Route path="/profile" element={<ProfileLayout />}>
+            <Route path="/profile" element={<UserProfilePage />} />
+            <Route path="/profile/:username" element={<UserProfilePage />} />
+          </Route>
         </Route>
 
         <Route element={<UserNotLoggedIn />}>
