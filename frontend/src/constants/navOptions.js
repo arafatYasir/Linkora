@@ -13,4 +13,4 @@ export const navIcons = [
         icon: FaVideo,
         path: "/videos",
     }
-]
+];
