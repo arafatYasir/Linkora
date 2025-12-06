@@ -8,7 +8,8 @@ import AllPosts from "../components/post/AllPosts";
 import { useGetAllPostsQuery, useGetUserQuery } from "../../api/authApi";
 import SearchBar from "../components/search/SearchBar";
 import Navbar from "../components/Navbar";
-import HomePageFriends from "../components/homepage friends/HomePageFriends";
+import HomePageFriends from "../components/homepage/HomePageFriends";
+import HomePageSidebar from "../components/homepage sidebar/HomePageSidebar";
 
 const HomePage = () => {
     // States
@@ -65,9 +66,7 @@ const HomePage = () => {
     return (
         <div className="grid grid-cols-12 gap-x-10">
             {/* ---- Left Section ---- */}
-            <div className="col-span-3">
-
-            </div>
+            <HomePageSidebar user={userInfo} />
 
             {/* ---- Posts ---- */}
             <div className="col-span-6">

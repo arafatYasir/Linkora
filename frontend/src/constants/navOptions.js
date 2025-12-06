@@ -1,4 +1,4 @@
-import { FaHome, FaUsers, FaVideo, FaUser } from "react-icons/fa"
+import { FaHome, FaUsers, FaVideo } from "react-icons/fa"
 import { CgProfile } from "react-icons/cg";
 
 export const navIcons = [

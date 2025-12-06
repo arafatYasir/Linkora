@@ -213,7 +213,7 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images, refetchUser }
                 )
             }
 
-            <div ref={coverRef} className="relative w-full h-[400px] mx-auto bg-border rounded-lg overflow-hidden">
+            <div ref={coverRef} className="relative w-full h-[400px] mx-auto bg-border rounded-b-lg overflow-hidden">
                 {/* ---- Cover Photo ---- */}
                 <div className="w-full h-full cover-photo">
                     {
