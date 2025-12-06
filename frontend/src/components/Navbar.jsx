@@ -10,15 +10,15 @@ const Navbar = () => {
 
     return (
         <header className="sticky top-0 z-50">
-            <nav className="bg-surface shadow-sm h-[56px] px-4 flex items-center justify-between border-b border-b-border">
+            <nav className="bg-surface shadow-sm h-[56px] px-4 grid grid-cols-12 items-center justify-between border-b border-b-border">
                 {/* ---- Left Part ---- */}
-                <div className="flex items-center gap-2">
+                <div className="col-span-3 flex items-center gap-2">
                     <NavLink to="/">
                         <img className="w-[40px] h-[40px]" src="/images/logo.svg" alt="Linkora Logo" />
                     </NavLink>
 
                     {/* ---- Search Bar ---- */}
-                    <SearchBar className="hidden lg:block" searchHistory={userInfo?.search} />
+                    <SearchBar className="hidden lg:block w-[240px]" searchHistory={userInfo?.search} />
 
                     {/* ---- Mobile Search Icon Placeholder ---- */}
                     <div className="lg:hidden w-[40px] h-[40px] bg-bg rounded-full flex items-center justify-center text-text-secondary">
@@ -27,7 +27,7 @@ const Navbar = () => {
                 </div>
 
                 {/* ---- Middle Part ---- */}
-                <div className="hidden md:flex flex-1 justify-center max-w-[600px] mx-auto h-full">
+                <div className="col-span-6 hidden md:flex w-full justify-center max-w-[600px] mx-auto h-full">
                     {navIcons.map((icon, index) => (
                         <NavLink 
                             to={icon.path}
@@ -40,7 +40,7 @@ const Navbar = () => {
                 </div>
 
                 {/* ---- Right Part ---- */}
-                <div className="flex items-center gap-2 xl:gap-3">
+                <div className="col-span-3 justify-end flex items-center gap-2 xl:gap-3">
                     <div className="w-[40px] h-[40px] bg-bg rounded-full flex items-center justify-center hover:bg-border transition cursor-pointer text-text-primary">
                         <CgMenuGridO size={24} />
                     </div>

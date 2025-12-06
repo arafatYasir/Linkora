@@ -1,4 +1,4 @@
-import { FaHome, FaVideo, FaStore, FaUsers, FaGamepad } from "react-icons/fa"
+import { FaHome, FaUsers, FaVideo } from "react-icons/fa"
 
 export const navIcons = [
     {
@@ -6,19 +6,11 @@ export const navIcons = [
         path: "/",
     },
     {
-        icon: FaVideo,
-        path: "/video",
-    },
-    {
-        icon: FaStore,
-        path: "/store",
-    },
-    {
         icon: FaUsers,
         path: "/friends",
     },
     {
-        icon: FaGamepad,
-        path: "/games",
-    },
+        icon: FaVideo,
+        path: "/videos",
+    }
 ]
