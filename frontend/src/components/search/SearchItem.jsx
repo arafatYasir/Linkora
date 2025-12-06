@@ -19,7 +19,6 @@ const SearchItem = ({ user, add, remove, type }) => {
 
                 <div className="flex-1">
                     <p className="font-medium">{user.firstname} {user.lastname}</p>
-                    <p className="text-xs capitalize">{user.details.bio.slice(0, 22)}...</p>
                 </div>
             </Link>
 
@@ -30,7 +29,7 @@ const SearchItem = ({ user, add, remove, type }) => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                     ) : (
-                        <button className="p-1.5 hover:bg-border rounded-full cursor-pointer" onClick={() => remove(user._id)}>
+                        <button className="p-1.5 hover:bg-border rounded-full cursor-pointer" onClick={remove}>
                             <IoMdClose />
                         </button>
                     )

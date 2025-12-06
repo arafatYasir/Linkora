@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react"
 import SearchIcon from "../../icons/SearchIcon";
-import { useLazySearchQuery, useAddToSearchHistoryMutation, useGetSearchHistoryQuery } from "../../../api/authApi";
+import { useLazySearchQuery, useAddToSearchHistoryMutation, useRemoveSearchHistoryMutation } from "../../../api/authApi";
 import SearchItem from "./SearchItem";
 import { IoMdClose } from "react-icons/io";
 
-const SearchBar = () => {
+const SearchBar = ({searchHistory}) => {
     // States
     const [text, setText] = useState("");
     const [isFocused, setIsFocused] = useState(false);
@@ -20,8 +20,8 @@ const SearchBar = () => {
     // Adding to search history api
     const [addToSearchHistory] = useAddToSearchHistoryMutation();
 
-    // Get search history api
-    const { data: searchHistory } = useGetSearchHistoryQuery();
+    // Remove from search history api
+    const [removeSearchHistory] = useRemoveSearchHistoryMutation();
 
     // When text changes searching happens
     useEffect(() => {
@@ -42,8 +42,8 @@ const SearchBar = () => {
 
     // When search history changes update the state
     useEffect(() => {
-        if (searchHistory?.data?.length > 0) {
-            setRecentSearches([...searchHistory.data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+        if (searchHistory?.length > 0) {
+            setRecentSearches([...searchHistory].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
         }
     }, [searchHistory]);
 
@@ -84,11 +84,17 @@ const SearchBar = () => {
         }
     }
 
+    // Remove from search history
     const removeFromSearchHistory = async (id) => {
+        const prev = recentSearches;
+
         try {
-
+            setRecentSearches(prev => prev.filter(i => i._id !== id));
+            await removeSearchHistory(id);
         } catch (e) {
+            console.log("ERROR while removing from search history:", e);
 
+            setRecentSearches(prev);
         }
     }
 
@@ -137,8 +143,14 @@ const SearchBar = () => {
                                 <div className="p-3">
                                     <h3 className="text-[15px] font-semibold mb-3 px-2">Recent Searches</h3>
                                     <div className="space-y-2">
-                                        {recentSearches?.map(({ user }) => (
-                                            <SearchItem key={user._id} user={user} add={handleAddToSearchHistory} remove={removeFromSearchHistory} type="recent" />
+                                        {recentSearches?.map(({ user, _id }) => (
+                                            <SearchItem 
+                                                key={_id} 
+                                                user={user} 
+                                                add={handleAddToSearchHistory} 
+                                                remove={() => removeFromSearchHistory(_id)} 
+                                                type="recent"
+                                            />
                                         ))}
                                     </div>
                                 </div>
@@ -146,7 +158,12 @@ const SearchBar = () => {
                                 // ---- Search results ----
                                 <div className="p-3">
                                     {searchResults.map((result) => (
-                                        <SearchItem key={result._id} user={result} add={handleAddToSearchHistory} remove={removeFromSearchHistory} type="result" />
+                                        <SearchItem 
+                                            key={result._id} 
+                                            user={result} 
+                                            add={handleAddToSearchHistory} 
+                                            type="result"
+                                        />
                                     ))}
                                 </div>
                             ) : (

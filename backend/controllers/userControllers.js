@@ -382,7 +382,7 @@ const getUser = async (req, res) => {
     try {
         const { username } = req.params;
         const mySelf = await User.findById(req.user.id);
-        const user = await User.findOne({ username }).select("-password -refreshToken -verificationTokenExpiry");
+        const user = await User.findOne({ username }).select("-password -refreshToken -verificationTokenExpiry").populate("search.user", "firstname lastname username profilePicture");
 
         const relationship = {
             friends: false,
@@ -790,7 +790,7 @@ const addToSearchHistory = async (req, res) => {
         )
 
         // If document wasn't modified then it means the history doesn't exist
-        if(updateResult.modifiedCount === 0) {
+        if (updateResult.modifiedCount === 0) {
             await User.updateOne(
                 {
                     _id: req.user.id
@@ -806,7 +806,7 @@ const addToSearchHistory = async (req, res) => {
             );
         }
 
-        res.json({message: "Search history updated."});
+        res.json({ message: "Search history updated." });
     } catch (e) {
         res.status(400).json({
             error: e.message
@@ -814,19 +814,28 @@ const addToSearchHistory = async (req, res) => {
     }
 }
 
-const searchHistory = async (req, res) => {
+const removeFromSearchHistory = async (req, res) => {
     try {
-        const searchHistory = await User.findById(req.user.id).select("search").populate("search.user", "firstname lastname username profilePicture details");
+        const { id } = req.params;
+        console.log(id);
+
+        await User.findByIdAndUpdate(req.user.id, {
+            $pull: {
+                search: {
+                    _id: id
+                }
+            }
+        });
 
         res.json({
-            status: "OK",
-            data: searchHistory.search
-        })
+            message: "Deleted search history.",
+            status: "OK"
+        });
     } catch (e) {
         res.status(400).json({
-            error: e.message 
+            error: e.message
         })
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unFollow, unFriend, deleteRequest, search, addToSearchHistory, searchHistory };
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unFollow, unFriend, deleteRequest, search, addToSearchHistory, removeFromSearchHistory };

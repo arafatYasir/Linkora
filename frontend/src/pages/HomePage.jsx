@@ -70,7 +70,7 @@ const HomePage = () => {
     return (
         <div className="container mx-auto">
             <div className="bg-border py-2">
-                <SearchBar />
+                <SearchBar searchHistory={user?.search} />
             </div>
 
             <div className="flex gap-x-5 mb-10">

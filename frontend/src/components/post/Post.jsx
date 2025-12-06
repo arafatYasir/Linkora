@@ -48,8 +48,6 @@ const Post = ({ post, setPosts }) => {
     // Reaction api
     const [reactPost] = useReactPostMutation();
 
-    console.log(post.isSaved);
-
     useEffect(() => {
         if (totalReactions) {
             setTotalReacts(totalReactions);
