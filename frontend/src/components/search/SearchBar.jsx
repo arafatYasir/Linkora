@@ -4,7 +4,7 @@ import { useLazySearchQuery, useAddToSearchHistoryMutation, useRemoveSearchHisto
 import SearchItem from "./SearchItem";
 import { IoMdClose } from "react-icons/io";
 
-const SearchBar = ({searchHistory}) => {
+const SearchBar = ({ searchHistory, className = "max-w-[280px]" }) => {
     // States
     const [text, setText] = useState("");
     const [isFocused, setIsFocused] = useState(false);
@@ -101,7 +101,7 @@ const SearchBar = ({searchHistory}) => {
     return (
         <>
             {/* ---- Search container ---- */}
-            <div ref={searchRef} className="relative z-50 mb-6 max-w-[280px]">
+            <div ref={searchRef} className={`relative z-50 ${className}`}>
                 {/* ---- Search input ---- */}
                 <div className={`
                     relative flex items-center bg-bg rounded-full
@@ -144,11 +144,11 @@ const SearchBar = ({searchHistory}) => {
                                     <h3 className="text-[15px] font-semibold mb-3 px-2">Recent Searches</h3>
                                     <div className="space-y-2">
                                         {recentSearches?.map(({ user, _id }) => (
-                                            <SearchItem 
-                                                key={_id} 
-                                                user={user} 
-                                                add={handleAddToSearchHistory} 
-                                                remove={() => removeFromSearchHistory(_id)} 
+                                            <SearchItem
+                                                key={_id}
+                                                user={user}
+                                                add={handleAddToSearchHistory}
+                                                remove={() => removeFromSearchHistory(_id)}
                                                 type="recent"
                                             />
                                         ))}
@@ -158,10 +158,10 @@ const SearchBar = ({searchHistory}) => {
                                 // ---- Search results ----
                                 <div className="p-3">
                                     {searchResults.map((result) => (
-                                        <SearchItem 
-                                            key={result._id} 
-                                            user={result} 
-                                            add={handleAddToSearchHistory} 
+                                        <SearchItem
+                                            key={result._id}
+                                            user={result}
+                                            add={handleAddToSearchHistory}
                                             type="result"
                                         />
                                     ))}

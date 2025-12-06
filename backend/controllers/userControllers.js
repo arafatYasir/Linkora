@@ -109,7 +109,6 @@ const newUser = async (req, res) => {
             message: "Registration successful! Please verify your email.",
         });
     } catch (e) {
-        console.log(e.message);
         res.status(404).json({ error: "Can't create a user." });
     }
 }
@@ -280,7 +279,6 @@ const refreshToken = async (req, res) => {
             accessToken: newAccessToken
         });
     } catch (e) {
-        console.log(e);
         res.status(400).json({
             error: e.message
         })
@@ -817,7 +815,6 @@ const addToSearchHistory = async (req, res) => {
 const removeFromSearchHistory = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id);
 
         await User.findByIdAndUpdate(req.user.id, {
             $pull: {

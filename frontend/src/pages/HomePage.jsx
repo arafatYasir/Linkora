@@ -7,6 +7,8 @@ import PostModal from "../components/post/PostModal";
 import AllPosts from "../components/post/AllPosts";
 import { useGetAllPostsQuery, useGetUserQuery } from "../../api/authApi";
 import SearchBar from "../components/search/SearchBar";
+import Navbar from "../components/Navbar";
+import HomePageFriends from "../components/homepage friends/HomePageFriends";
 
 const HomePage = () => {
     // States
@@ -31,13 +33,6 @@ const HomePage = () => {
 
     const closePostModal = () => {
         setIsPostModalOpen(false);
-    }
-
-    const handleLogOut = () => {
-        setTimeout(() => {
-            localStorage.removeItem("userInfo");
-            dispatch(logOutUser());
-        }, 100)
     }
 
     useEffect(() => {
@@ -68,35 +63,29 @@ const HomePage = () => {
     }, [user, dispatch]);
 
     return (
-        <div className="container mx-auto">
-            <div className="bg-border py-2">
-                <SearchBar searchHistory={user?.search} />
+        <div className="grid grid-cols-12 gap-x-10">
+            {/* ---- Left Section ---- */}
+            <div className="col-span-3">
+
             </div>
 
-            <div className="flex gap-x-5 mb-10">
+            {/* ---- Posts ---- */}
+            <div className="col-span-6">
+                {/* ---- Post Creation ---- */}
+                <div className="my-5">
+                    <CreatePost onOpenModal={openPostModal} user={userInfo} />
+
+                    {isPostModalOpen && <PostModal onClose={closePostModal} setPosts={setPosts} />}
+                </div>
+
+                {/* ---- All Posts ---- */}
                 {
-                    !userInfo && <>
-                        <Link to="/login">Login</Link>
-                        <Link to="/signup">Sign Up</Link>
-                    </>
+                    posts.length > 0 && <AllPosts posts={posts} setPosts={setPosts} />
                 }
-
-                <Link to="/profile" className="border p-2 rounded-lg">User: {userInfo.firstname + " " + userInfo.lastname} </Link>
-
-                {userInfo && <button onClick={handleLogOut} className="bg-[tomato] px-3 py-1 rounded-lg cursor-pointer hover:bg-orange-800 transition">Log Out</button>}
             </div>
 
-            {/* ---- Post Creation ---- */}
-            <div className="w-1/2 mb-5">
-                <CreatePost onOpenModal={openPostModal} user={userInfo} />
-
-                {isPostModalOpen && <PostModal onClose={closePostModal} setPosts={setPosts} />}
-            </div>
-
-            {/* ---- All Posts ---- */}
-            {
-                posts.length > 0 && <AllPosts posts={posts} setPosts={setPosts} />
-            }
+            {/* ---- Design a friends part like facebook here in this component ---- */}
+            <HomePageFriends friends={userInfo?.friends} />
         </div>
     )
 }

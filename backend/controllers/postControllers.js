@@ -109,8 +109,6 @@ const reactPost = async (req, res) => {
             })
 
             await post.save();
-
-            console.log("Adding react");
         }
         else {
             // If previous react and new react is same then delete react from post
@@ -118,13 +116,11 @@ const reactPost = async (req, res) => {
                 post.reacts.pull(hasAlreadyReacted._id);
 
                 await post.save();
-                console.log("Removing react");
             }
             else {
                 // If previous react and new react is not same then update react
                 post.reacts.find(react => react.reactedBy.toString() === req.user.id).react = react;
                 await post.save();
-                console.log("Updating react");
             }
         }
 

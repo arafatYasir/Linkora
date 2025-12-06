@@ -136,7 +136,7 @@ const Post = ({ post, setPosts }) => {
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
 
     return (
-        <li className="w-full max-w-[640px] bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] transition-[var(--transition-default)]">
+        <li className="w-full max-w-[800px] bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] transition-[var(--transition-default)]">
             {/* ---- Post Heading ---- */}
             <div className="flex items-center justify-between border-b pb-2 px-4 pt-4 border-b-[var(--color-border)]">
                 <div className="flex items-center gap-x-3">
@@ -193,7 +193,7 @@ const Post = ({ post, setPosts }) => {
                                     backgroundSize: "cover",
                                     backgroundPosition: "center",
                                 }}
-                                className="h-[400px] w-full text-center flex items-center justify-center text-3xl font-bold"
+                                className="h-[400px] w-full text-center flex items-center justify-center text-3xl font-bold px-2"
                             >
                                 {text}
                             </div>
