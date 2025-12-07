@@ -4,9 +4,7 @@ import Navbar from "../Navbar"
 const ProfileLayout = () => {
     return (
         <>
-            <header>
-                <Navbar />
-            </header>
+            <Navbar />
             <main>
                 <Outlet />
             </main>
