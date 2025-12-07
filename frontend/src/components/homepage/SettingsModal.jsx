@@ -24,7 +24,7 @@ const SettingsModal = forwardRef((props, ref) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-hidden">
             <div
                 ref={ref}
-                className="w-full max-w-xl max-h-[85vh] rounded-2xl shadow-2xl bg-surface border border-border flex flex-col overflow-hidden animate-[scaleIn_0.2s_ease-out]"
+                className="w-full max-w-xl max-h-[85vh] rounded-2xl shadow-2xl bg-surface border border-border flex flex-col overflow-hidden"
             >
                 {/* ---- Header ---- */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-surface sticky top-0 z-10">
@@ -39,7 +39,7 @@ const SettingsModal = forwardRef((props, ref) => {
                 </div>
 
                 {/* ---- Body ---- */}
-                <div className="overflow-y-auto custom-scrollbar p-6 space-y-8 scroll-smooth">
+                <div className="overflow-y-auto custom-scrollbar p-6 space-y-8">
                     {/* ---- Display & Accessibility ---- */}
                     <div>
                         <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-3">Display & Accessibility</h3>

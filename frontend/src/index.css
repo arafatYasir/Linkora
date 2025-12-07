@@ -136,3 +136,35 @@ li {
   height: 100%;
   object-fit: cover;
 }
+
+/* ---- Custom scrollbar for modals ---- */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+/* Smooth scrolling for all scrollable elements */
+.custom-scrollbar {
+  scroll-behavior: smooth;
+}

@@ -29,7 +29,7 @@ const Navbar = () => {
                 setShowDropdown(false);
             }
 
-            if(settingsRef.current && !settingsRef.current.contains(e.target)) {
+            if (settingsRef.current && !settingsRef.current.contains(e.target)) {
                 setShowSettings(false);
             }
         }
@@ -44,7 +44,7 @@ const Navbar = () => {
     useEffect(() => {
         const body = document.querySelector("body");
 
-        if(showSettings) {
+        if (showSettings) {
             body.style.overflow = "hidden";
         } else {
             body.style.overflowY = "scroll";
@@ -112,12 +112,14 @@ const Navbar = () => {
                         onClick={() => setShowDropdown(prev => !prev)}
                     >
                         {/* ---- Profile Picture ---- */}
-                        <div className="w-[40px] h-[40px] rounded-full overflow-hidden border border-border group active:scale-98 cursor-pointer">
-                            <img
-                                src={userInfo?.profilePicture || defaultAvatar}
-                                alt="Profile"
-                                className="w-full h-full object-cover"
-                            />
+                        <div className="w-[40px] h-[40px] rounded-full border border-border group active:scale-98 cursor-pointer">
+                            <div className="rounded-full overflow-hidden">
+                                <img
+                                    src={userInfo?.profilePicture || defaultAvatar}
+                                    alt="Profile"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
 
                             {/* ---- Down Arrow Button ---- */}
                             <button className="absolute bottom-0 -right-0.5 p-0.5 bg-border rounded-full group-hover:bg-primary transition cursor-pointer">
