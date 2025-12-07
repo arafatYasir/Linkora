@@ -40,16 +40,16 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 pb-4 border-b border-border">
                     <h2 className="text-xl font-semibold text-text-primary">
-                        Choose Profile Picture
+                        Choose Cover Photo
                     </h2>
                     <button
                         onClick={() => {
                             setShowChooseModal(false);
                         }}
-                        className="p-2 rounded-full transition-all duration-250 cursor-pointer text-[var(--color-text-secondary)] bg-border hover:bg-primary/50"
+                        className="p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary active:scale-95"
                         aria-label="Close"
                     >
-                        <IoMdClose size={20} />
+                        <IoMdClose size={22} />
                     </button>
                 </div>
 

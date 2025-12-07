@@ -32,6 +32,7 @@ const SettingsModal = forwardRef((props, ref) => {
                     <button
                         onClick={() => setShowSettings(false)}
                         className="p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary active:scale-95"
+                        aria-label="Close"
                     >
                         <IoMdClose size={22} />
                     </button>

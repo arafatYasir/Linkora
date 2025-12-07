@@ -242,10 +242,10 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
                             setPicture(null);
                             setShowUploadModal(false);
                         }}
-                        className="p-2 rounded-full transition-all duration-250 cursor-pointer text-[var(--color-text-secondary)] bg-border hover:bg-primary/50"
+                        className="p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary active:scale-95"
                         aria-label="Close"
                     >
-                        <IoMdClose size={20} />
+                        <IoMdClose size={22} />
                     </button>
                 </div>
 

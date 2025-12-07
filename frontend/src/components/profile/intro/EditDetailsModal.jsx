@@ -364,17 +364,17 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-y-auto">
             <div ref={introModalRef} className="w-full max-w-2xl rounded-xl shadow-lg overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border)] py-4">
                 {/* ---- Header ---- */}
                 <div className="flex items-center justify-between px-6 pb-4 border-b border-[var(--color-border)]">
                     <h2 className="text-xl font-semibold text-[var(--color-text-primary)]">Edit details</h2>
                     <button
                         onClick={onClose}
-                        className="p-2 rounded-full transition-all duration-250 cursor-pointer text-[var(--color-text-secondary)] bg-border hover:bg-primary/50"
+                        className="p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary active:scale-95"
                         aria-label="Close"
                     >
-                        <IoMdClose size={20} />
+                        <IoMdClose size={22} />
                     </button>
                 </div>
 
