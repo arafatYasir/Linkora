@@ -98,11 +98,11 @@ const Navbar = () => {
 
                 {/* ---- Right Part ---- */}
                 <div className="col-span-3 justify-end flex items-center gap-2 xl:gap-3">
-                    <div className="w-[40px] h-[40px] bg-bg rounded-full flex items-center justify-center hover:bg-border transition cursor-pointer text-text-primary">
+                    <div className="w-[40px] h-[40px] bg-bg rounded-full flex items-center justify-center hover:bg-border cursor-pointer text-text-primary">
                         <CgMenuGridO size={24} />
                     </div>
 
-                    <div className="w-[40px] h-[40px] bg-bg rounded-full flex items-center justify-center hover:bg-border transition cursor-pointer text-text-primary">
+                    <div className="w-[40px] h-[40px] bg-bg rounded-full flex items-center justify-center hover:bg-border cursor-pointer text-text-primary">
                         <FaBell size={20} />
                     </div>
 
@@ -122,7 +122,7 @@ const Navbar = () => {
                             </div>
 
                             {/* ---- Down Arrow Button ---- */}
-                            <button className="absolute bottom-0 -right-0.5 p-0.5 bg-border rounded-full group-hover:bg-primary transition cursor-pointer">
+                            <button className="absolute bottom-0 -right-0.5 p-0.5 bg-border rounded-full group-hover:bg-primary cursor-pointer">
                                 <FaAngleDown size={12} />
                             </button>
                         </div>

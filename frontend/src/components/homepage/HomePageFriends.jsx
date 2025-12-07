@@ -30,7 +30,7 @@ const HomePageFriends = ({ friends }) => {
                                         {/* ---- Online Indicator ---- */}
                                         <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-surface"></div>
                                     </div>
-                                    <span className="font-medium text-text-primary text-[15px] group-hover:text-text-primary transition">
+                                    <span className="font-medium text-text-primary text-[15px] group-hover:text-text-primary">
                                         {friend.firstname} {friend.lastname}
                                     </span>
                                 </Link>
