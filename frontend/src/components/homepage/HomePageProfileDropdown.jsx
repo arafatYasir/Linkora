@@ -2,7 +2,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { logOutUser } from "../../slices/authSlice";
 
-const HomePageProfileDropdown = () => {
+const HomePageProfileDropdown = ({ setShowSettings }) => {
+    // Extra hooks
     const dispatch = useDispatch();
 
     // Redux store
@@ -24,8 +25,11 @@ const HomePageProfileDropdown = () => {
                         Profile
                     </Link>
                 </li>
-                <li>
-                    <button className="px-4 py-2 text-text-primary hover:bg-border rounded-lg transition w-full text-left cursor-pointer">
+                <li onClick={() => setShowSettings(true)}>
+                    <button
+                        
+                        className="px-4 py-2 text-text-primary hover:bg-border rounded-lg transition w-full text-left cursor-pointer"
+                    >
                         Settings
                     </button>
                 </li>

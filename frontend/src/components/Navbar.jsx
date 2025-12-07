@@ -8,14 +8,17 @@ import { navIcons } from "../constants/navOptions"
 import { useEffect, useRef, useState } from "react"
 import defaultAvatar from "../../public/default images/avatar.png"
 import HomePageProfileDropdown from "./homepage/HomePageProfileDropdown";
+import SettingsModal from "./homepage/SettingsModal";
 
 const Navbar = () => {
     // States
     const [showIconName, setShowIconName] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
 
     // Extra hooks
     const dropdownRef = useRef(null);
+    const settingsRef = useRef(null);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
@@ -25,6 +28,10 @@ const Navbar = () => {
             if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
                 setShowDropdown(false);
             }
+
+            if(settingsRef.current && !settingsRef.current.contains(e.target)) {
+                setShowSettings(false);
+            }
         }
 
         document.addEventListener("mousedown", handleClickOutside);
@@ -33,6 +40,16 @@ const Navbar = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         }
     }, []);
+
+    useEffect(() => {
+        const body = document.querySelector("body");
+
+        if(showSettings) {
+            body.style.overflow = "hidden";
+        } else {
+            body.style.overflowY = "scroll";
+        }
+    }, [showSettings])
 
     return (
         <header className="sticky top-0 z-50">
@@ -91,11 +108,11 @@ const Navbar = () => {
 
                     <div
                         ref={dropdownRef}
-                        className="relative cursor-pointer active:scale-98"
+                        className="relative"
                         onClick={() => setShowDropdown(prev => !prev)}
                     >
                         {/* ---- Profile Picture ---- */}
-                        <div className="w-[40px] h-[40px] rounded-full overflow-hidden border border-border group">
+                        <div className="w-[40px] h-[40px] rounded-full overflow-hidden border border-border group active:scale-98 cursor-pointer">
                             <img
                                 src={userInfo?.profilePicture || defaultAvatar}
                                 alt="Profile"
@@ -109,10 +126,12 @@ const Navbar = () => {
                         </div>
 
                         {/* ---- Profile Dropdown ---- */}
-                        {showDropdown && <HomePageProfileDropdown />}
+                        {showDropdown && <HomePageProfileDropdown setShowSettings={setShowSettings} />}
                     </div>
                 </div>
             </nav>
+
+            {showSettings && <SettingsModal ref={settingsRef} setShowSettings={setShowSettings} />}
         </header>
     )
 }

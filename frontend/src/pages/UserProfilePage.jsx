@@ -88,16 +88,6 @@ const UserProfilePage = () => {
 
     return (
         <div className="max-w-[1100px] mx-auto">
-            {/* Light/Dark Theme Toggle Button */}
-            <button
-                onClick={() => {
-                    setTheme(prev => prev === "light" ? "dark" : "light");
-                }}
-                className="absolute top-10 right-10 w-10 h-10 flex items-center justify-center hover:bg-primary/50 rounded-full cursor-pointer transition-all duration-250"
-            >
-                {theme === "dark" ? <MdOutlineLightMode size={20} /> : <MdOutlineNightlight size={20} />}
-            </button>
-
             {userError?.status === 404 ? <NotFound /> : (
                 <div>
                     <div className="relative">
