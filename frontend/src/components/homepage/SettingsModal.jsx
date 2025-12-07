@@ -3,6 +3,9 @@ import { IoMdClose, IoMdMoon, IoMdSunny } from "react-icons/io";
 import { FaUserCircle, FaLock, FaShieldAlt } from "react-icons/fa";
 import { MdLanguage, MdNotifications, MdHelp } from "react-icons/md";
 import { BiChevronRight } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { setTheme } from "../../slices/authSlice";
+import { useSelector } from "react-redux";
 
 // Setting Items Configuration
 const accountSettings = [
@@ -19,6 +22,23 @@ const appSettings = [
 
 const SettingsModal = forwardRef((props, ref) => {
     const { setShowSettings } = props;
+
+    // Extra hooks
+    const dispatch = useDispatch();
+
+    // Redux states
+    const { theme } = useSelector(state => state.auth);
+
+    // Functions
+    const toggleTheme = () => {
+        const newTheme = theme === "light" ? "dark" : "light";
+
+        // Update localStorage
+        localStorage.setItem("theme", newTheme);
+
+        // Update Redux
+        dispatch(setTheme(newTheme));
+    }
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-hidden">
@@ -56,9 +76,12 @@ const SettingsModal = forwardRef((props, ref) => {
                                     </div>
                                 </div>
 
-                                {/* Toggle Switch Placeholder */}
-                                <div className="w-11 h-6 bg-border rounded-full relative cursor-pointer">
-                                    <div className="absolute left-1 top-1 w-4 h-4 bg-text-secondary rounded-full"></div>
+                                {/* ---- Toggle Switch ---- */}
+                                <div
+                                    onClick={toggleTheme}
+                                    className="w-11 h-6 bg-border rounded-full relative cursor-pointer"
+                                >
+                                    <div className={`absolute top-1 w-4 h-4 bg-text-secondary rounded-full transition-all ${theme === "dark" ? "translate-x-6" : "translate-x-1"}`}></div>
                                 </div>
                             </div>
                         </div>

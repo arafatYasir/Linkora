@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom"
-import { useGetAllPostsQuery, useGetUserPostsQuery, useGetUserQuery, useListImagesQuery } from "../../api/authApi";
-import { logOutUser, setUser } from "../slices/authSlice";
+import { useGetUserQuery, useListImagesQuery } from "../../api/authApi";
+import { setUser } from "../slices/authSlice";
 import NotFound from "../components/NotFound";
 import defaultCover from "../../public/default images/defaultcover.jpg"
 import defaultPhoto from "../../public/default images/avatar.png"
@@ -9,13 +9,8 @@ import { useEffect, useState } from "react";
 import CoverPhoto from "../components/profile/cover/CoverPhoto";
 import ProfilePictureInfos from "../components/profile/ProfilePictureInfos";
 import ProfileItems from "../components/profile/ProfileItems";
-import { updatePosts } from "../slices/authSlice";
-import { MdOutlineLightMode } from "react-icons/md";
-import { MdOutlineNightlight } from "react-icons/md";
 
 const UserProfilePage = () => {
-    // States
-    const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
     const [posts, setPosts] = useState([]);
 
     // Redux states
@@ -69,20 +64,6 @@ const UserProfilePage = () => {
             console.log(user?.posts);
         }
     }, [user?.posts]);
-
-    // useEffect to control body color theme
-    useEffect(() => {
-        const body = document.querySelector("body");
-
-        if (theme === "light") {
-            body.classList.remove("dark");
-            localStorage.setItem("theme", "light");
-        }
-        else {
-            body.classList.add("dark");
-            localStorage.setItem("theme", "dark");
-        }
-    }, [theme]);
     
     if (isLoading && !isOwnProfile) return <div className="text-3xl text-center">Loading...</div>
 

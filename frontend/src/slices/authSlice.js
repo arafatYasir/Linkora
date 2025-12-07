@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     userInfo: JSON.parse(localStorage.getItem("userInfo")) || null,
+    theme: localStorage.getItem("theme") || "light"
 }
 
 export const authSlice = createSlice({
@@ -26,10 +27,13 @@ export const authSlice = createSlice({
         },
         logOutUser: (state) => {
             state.userInfo = null;
+        },
+        setTheme: (state, action) => {
+            state.theme = action.payload;
         }
     },
 })
 
-export const { setUser, updatePosts, setProfilePicture, setCoverPhoto, setIntro, logOutUser } = authSlice.actions
+export const { setUser, updatePosts, setProfilePicture, setCoverPhoto, setIntro, logOutUser, setTheme } = authSlice.actions
 
 export default authSlice.reducer

@@ -9,8 +9,22 @@ import ForgotPassword from "./pages/ForgotPassword";
 import RootLayout from "./components/layouts/RootLayout";
 import UserProfilePage from "./pages/UserProfilePage";
 import ProfileLayout from "./components/layouts/ProfileLayout";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const App = () => {
+  const { theme } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    const body = document.querySelector("body");
+
+    if (theme === "dark") {
+      body.classList.add("dark");
+    } else {
+      body.classList.remove("dark");
+    }
+  }, [theme]);
+
   return (
     <>
       <Routes>

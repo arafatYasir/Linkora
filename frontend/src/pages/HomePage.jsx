@@ -1,13 +1,10 @@
 import { useDispatch, useSelector } from "react-redux"
-import { Link } from "react-router-dom"
-import { logOutUser, setUser } from "../slices/authSlice";
+import { setUser } from "../slices/authSlice";
 import { useEffect, useState } from "react";
 import CreatePost from "../components/post/CreatePost";
 import PostModal from "../components/post/PostModal";
 import AllPosts from "../components/post/AllPosts";
 import { useGetAllPostsQuery, useGetUserQuery } from "../../api/authApi";
-import SearchBar from "../components/search/SearchBar";
-import Navbar from "../components/Navbar";
 import HomePageFriends from "../components/homepage/HomePageFriends";
 import HomePageSidebar from "../components/homepage/HomePageSidebar";
 
