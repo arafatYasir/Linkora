@@ -9,7 +9,7 @@ import { useGetAllPostsQuery, useGetUserQuery } from "../../api/authApi";
 import SearchBar from "../components/search/SearchBar";
 import Navbar from "../components/Navbar";
 import HomePageFriends from "../components/homepage/HomePageFriends";
-import HomePageSidebar from "../components/homepage sidebar/HomePageSidebar";
+import HomePageSidebar from "../components/homepage/HomePageSidebar";
 
 const HomePage = () => {
     // States

@@ -7,7 +7,7 @@ const SearchItem = ({ user, add, remove, type }) => {
             <Link
                 to={`/profile/${user.username}`}
                 onClick={() => add(user._id)}
-                className="flex items-center gap-3 p-2 hover:bg-primary/10 rounded-lg cursor-pointer transition"
+                className="flex items-center gap-3 p-2 hover:bg-surface rounded-lg cursor-pointer transition"
             >
                 <div className="w-10 h-10 overflow-hidden rounded-full flex items-center justify-center text-white font-semibold text-sm">
                     <img

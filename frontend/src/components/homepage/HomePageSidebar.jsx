@@ -46,7 +46,7 @@ const HomePageSidebar = ({ user }) => {
                     </li>
                 </ul>
 
-                {/* ---- Footer / Copyright (Optional spacer) ---- */}
+                {/* ---- Copyright ---- */}
                 <div className="mt-auto border-t border-border my-4 pt-4 text-xs text-text-secondary px-2">
                     <p>Linkora © 2025</p>
                 </div>

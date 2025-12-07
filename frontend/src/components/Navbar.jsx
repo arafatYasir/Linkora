@@ -1,17 +1,38 @@
 import { NavLink, Link } from "react-router-dom"
 import SearchBar from "./search/SearchBar"
 import { useSelector } from "react-redux"
-import { FaFacebookMessenger, FaBell } from "react-icons/fa"
+import { FaBell } from "react-icons/fa"
+import { FaAngleDown } from "react-icons/fa6";
 import { CgMenuGridO } from "react-icons/cg"
 import { navIcons } from "../constants/navOptions"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import defaultAvatar from "../../public/default images/avatar.png"
+import HomePageProfileDropdown from "./homepage/HomePageProfileDropdown";
 
 const Navbar = () => {
     // States
     const [showIconName, setShowIconName] = useState(null);
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    // Extra hooks
+    const dropdownRef = useRef(null);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setShowDropdown(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+    }, []);
 
     return (
         <header className="sticky top-0 z-50">
@@ -39,7 +60,7 @@ const Navbar = () => {
                             key={index}
                             className={({ isActive }) => `w-full max-w-[110px] h-full flex items-center justify-center hover:bg-bg transition group relative ${isActive ? 'text-primary border-b-2 border-b-primary' : 'text-text-secondary rounded-lg'} relative`}
                             onMouseEnter={() => {
-                                if(showIconName !== icon.name) {
+                                if (showIconName !== icon.name) {
                                     setShowIconName(icon.name);
                                 }
                             }}
@@ -63,22 +84,33 @@ const Navbar = () => {
                     <div className="w-[40px] h-[40px] bg-bg rounded-full flex items-center justify-center hover:bg-border transition cursor-pointer text-text-primary">
                         <CgMenuGridO size={24} />
                     </div>
-                    <div className="w-[40px] h-[40px] bg-bg rounded-full flex items-center justify-center hover:bg-border transition cursor-pointer text-text-primary">
-                        <FaFacebookMessenger size={20} />
-                    </div>
+
                     <div className="w-[40px] h-[40px] bg-bg rounded-full flex items-center justify-center hover:bg-border transition cursor-pointer text-text-primary">
                         <FaBell size={20} />
                     </div>
 
-                    <Link to="/profile" className="flex items-center gap-2">
-                        <div className="w-[40px] h-[40px] rounded-full overflow-hidden border border-border">
+                    <div
+                        ref={dropdownRef}
+                        className="relative cursor-pointer active:scale-98"
+                        onClick={() => setShowDropdown(prev => !prev)}
+                    >
+                        {/* ---- Profile Picture ---- */}
+                        <div className="w-[40px] h-[40px] rounded-full overflow-hidden border border-border group">
                             <img
-                                src={userInfo?.profilePicture || "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"}
+                                src={userInfo?.profilePicture || defaultAvatar}
                                 alt="Profile"
                                 className="w-full h-full object-cover"
                             />
+
+                            {/* ---- Down Arrow Button ---- */}
+                            <button className="absolute bottom-0 -right-0.5 p-0.5 bg-border rounded-full group-hover:bg-primary transition cursor-pointer">
+                                <FaAngleDown size={12} />
+                            </button>
                         </div>
-                    </Link>
+
+                        {/* ---- Profile Dropdown ---- */}
+                        {showDropdown && <HomePageProfileDropdown />}
+                    </div>
                 </div>
             </nav>
         </header>
