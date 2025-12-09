@@ -21,16 +21,7 @@ const CustomSelect = ({ value, onChange, options, placeholder, paddingX, padding
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className={`
-                w-full rounded-[var(--radius-button)] border 
-                outline-none text-left flex items-center justify-between 
-                transition-[var(--transition-default)]
-                bg-[var(--color-bg)]
-                text-[var(--color-text-secondary)] cursor-pointer
-                border-[var(--color-border)]
-                ${value ? "text-[var(--color-text-primary)]" : ""}
-                ${isOpen ? "border-[var(--color-primary)] shadow-[var(--color-glow-green)]" : ""}
-                `}
+                className={`w-full rounded-[var(--radius-button)] border outline-none text-left flex items-center justify-between transition-[var(--transition-default)] bg-[var(--color-bg)] text-[var(--color-text-secondary)] cursor-pointer border-[var(--color-border)] ${value ? "text-[var(--color-text-primary)]" : ""} ${isOpen ? "border-[var(--color-primary)] shadow-[var(--color-glow-green)]" : ""}`}
                 style={{
                     padding: `${paddingY} ${paddingX}`
                 }}
@@ -38,24 +29,14 @@ const CustomSelect = ({ value, onChange, options, placeholder, paddingX, padding
                 <span>{value ? value : placeholder}</span>
 
                 <FaAngleDown
-                    className={`
-            w-5 h-5 transition-transform duration-200 
-            text-[var(--color-text-secondary)]
-            ${isOpen ? "rotate-180" : "rotate-0"}
-          `}
+                    className={`w-5 h-5 transition-transform duration-200 text-[var(--color-text-secondary)] ${isOpen ? "rotate-180" : "rotate-0"}`}
                 />
             </button>
 
             {/* --- Dropdown Menu --- */}
             {isOpen && (
                 <div
-                    className={`
-            absolute z-50 w-full mt-2 rounded-[var(--radius-button)]
-            border border-[var(--color-border)]
-            bg-[var(--color-surface)]
-            shadow-[var(--shadow-light)]
-            max-h-[200px] overflow-y-auto
-          `}
+                    className={`absolute z-50 w-full mt-2 rounded-[var(--radius-button)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-light)] max-h-[200px] overflow-y-auto custom-scrollbar`}
                 >
                     {options.map((option, index) => {
                         const active = value === option;
@@ -68,13 +49,7 @@ const CustomSelect = ({ value, onChange, options, placeholder, paddingX, padding
                                     onChange(option);
                                     setIsOpen(false);
                                 }}
-                                className={`
-                  w-full px-4 py-2.5 text-left transition-[var(--transition-default)]
-                  text-[var(--color-text-primary)]
-                  hover:bg-primary/30
-                  ${active ? "border border-primary rounded-lg" : "hover:bg-primary/20"}
-                   cursor-pointer
-                `}
+                                className={`w-full px-4 py-2.5 text-left transition-[var(--transition-default)] text-[var(--color-text-primary)] hover:bg-primary/30 ${active ? "border border-primary rounded-lg" : "hover:bg-primary/20"} cursor-pointer`}
                             >
                                 {option}
                             </button>

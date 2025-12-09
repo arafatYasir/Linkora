@@ -39,7 +39,7 @@
 
   /* Glass & Transitions */
   --backdrop-blur: blur(12px);
-  --transition-default: all 0.25s ease;
+  --transition-default: 0.25s ease;
 }
 
 /* Light Theme Defaults */
@@ -64,7 +64,11 @@
   --box-shadow: var(--shadow-dark);
 }
 
-/* 🌐 Global Styles */
+/* Global Styles */
+* {
+  line-height: 1;
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-text);

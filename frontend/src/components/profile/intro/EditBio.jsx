@@ -2,7 +2,7 @@ import { useState } from "react"
 
 const EditBio = ({ bio, onCancel, onSave, loading }) => {
     const [editedText, setEditedText] = useState(bio);
-    console.log(editedText);
+    
     return (
         <div>
             <textarea

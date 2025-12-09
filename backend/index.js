@@ -9,13 +9,9 @@ const cookieParser = require("cookie-parser");
 const routes = require("./routes/index");
 const databaseConfig = require("./database/databaseConfig");
 const port = process.env.PORT;
-const { connectRabbitMQ } = require("./config/rabbitmq");
 
 // Connecting to mongodb
 databaseConfig();
-
-// Connect to RabbitMQ
-connectRabbitMQ();
 
 // CORS
 app.use(cors({
