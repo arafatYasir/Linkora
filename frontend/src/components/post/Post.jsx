@@ -193,7 +193,7 @@ const Post = ({ post, setPosts }) => {
                                     backgroundSize: "cover",
                                     backgroundPosition: "center",
                                 }}
-                                className="h-[400px] w-full text-center flex items-center justify-center text-3xl font-bold px-2"
+                                className="h-[400px] w-full text-white text-center flex items-center justify-center text-3xl font-bold px-2"
                             >
                                 {text}
                             </div>

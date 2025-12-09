@@ -7,6 +7,7 @@ const Post = require("../models/postModel");
 const Code = require("../models/code");
 const bcrypt = require("bcrypt");
 const generateCode = require("../helpers/generateCode");
+const publishEmailJob = require("../queues/emailProducer");
 
 
 const newUser = async (req, res) => {
@@ -102,13 +103,18 @@ const newUser = async (req, res) => {
         await user.save();
 
         // Sending verification email
-        await sendVerificationEmail(user.email, verificationURL);
+        await publishEmailJob({
+            type: "verification",
+            email: user.email,
+            url: verificationURL
+        });
 
         // Sending user data response
         res.send({
             message: "Registration successful! Please verify your email.",
         });
     } catch (e) {
+        console.log(e);
         res.status(404).json({ error: "Can't create a user." });
     }
 }
@@ -171,7 +177,11 @@ const loginUser = async (req, res) => {
                 const reVerificationTokenExpiry = new Date(Date.now() + 15 * 60 * 1000);
                 const reVerificationURL = `${process.env.BASE_URL}/verify/${reVerificationToken}`;
 
-                sendVerificationEmail(userExists.email, reVerificationURL);
+                await publishEmailJob({
+                    type: "verification",
+                    email: userExists.email,
+                    url: reVerificationURL
+                });
 
                 userExists.verificationTokenExpiry = reVerificationTokenExpiry;
                 await userExists.save();
@@ -323,7 +333,11 @@ const resetCode = async (req, res) => {
 
         await newCode.save();
 
-        sendPasswordResetCode(user.email, code);
+        await publishEmailJob({
+            type: "passwordReset",
+            email: user.email,
+            code: code
+        });
 
         res.send({
             message: "Password reset code is sent to your mail!"
