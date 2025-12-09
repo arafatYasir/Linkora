@@ -1,7 +1,6 @@
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useAddUserMutation } from "../../api/authApi";
-import { FaLock } from "react-icons/fa"
 import { FiLock, FiUser } from "react-icons/fi";
 import { MdOutlineMailOutline } from "react-icons/md";
 import CustomInput from "../components/common/CustomInput";

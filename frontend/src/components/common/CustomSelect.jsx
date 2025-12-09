@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { FaAngleDown } from "react-icons/fa6";
+import { TfiAngleDown } from "react-icons/tfi";
 
 const CustomSelect = ({ value, onChange, options, placeholder, paddingX, paddingY }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,8 +29,9 @@ const CustomSelect = ({ value, onChange, options, placeholder, paddingX, padding
             >
                 <span>{value ? value : placeholder}</span>
 
-                <FaAngleDown
-                    className={`w-5 h-5 transition-transform duration-200 text-[var(--color-text-secondary)] ${isOpen ? "rotate-180" : "rotate-0"}`}
+                <TfiAngleDown
+                    className={`transition-transform duration-200 text-[var(--color-text-secondary)] ${isOpen ? "rotate-180" : "rotate-0"}`}
+                    size={14}
                 />
             </button>
 
