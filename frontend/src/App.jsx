@@ -46,7 +46,20 @@ const App = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
         </Route>
       </Routes>
-      <ToastContainer />
+
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick={true}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme={theme}
+      />
     </>
   )
 }
