@@ -40,8 +40,6 @@ const SignUpPage = () => {
     setMessage(signUpMutation.data.message);
   }
 
-  console.log(formData)
-
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-bg">
       <div className="w-full max-w-md">
@@ -152,7 +150,7 @@ const SignUpPage = () => {
                 <CustomSelect
                   placeholder="Day"
                   value={formData.day}
-                  setValue={(value) => setFormData(prev => ({ ...prev, day: value }))}
+                  onChange={(value) => setFormData(prev => ({ ...prev, day: value }))}
                   options={Array.from({ length: 31 }, (_, i) => i + 1)}
                   paddingX="12px"
                   paddingY="12px"
@@ -163,7 +161,7 @@ const SignUpPage = () => {
                 <CustomSelect
                   placeholder="Month"
                   value={formData.month}
-                  setValue={(value) => setFormData(prev => ({ ...prev, month: value }))}
+                  onChange={(value) => setFormData(prev => ({ ...prev, month: value }))}
                   options={Array.from({ length: 12 }, (_, i) => i + 1)}
                   paddingX="12px"
                   paddingY="12px"
@@ -174,7 +172,7 @@ const SignUpPage = () => {
                 <CustomSelect
                   placeholder="Year"
                   value={formData.year}
-                  setValue={(value) => setFormData(prev => ({ ...prev, year: value }))}
+                  onChange={(value) => setFormData(prev => ({ ...prev, year: value }))}
                   options={Array.from({ length: 101 }, (_, i) => new Date().getFullYear() - i)}
                   paddingX="12px"
                   paddingY="12px"
@@ -198,12 +196,7 @@ const SignUpPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-5 rounded-lg font-semibold text-white transition-all hover:opacity-90"
-              style={{
-                background: 'var(--color-gradient-primary)',
-                cursor: isLoading ? 'not-allowed' : 'pointer',
-                opacity: isLoading ? 0.7 : 1
-              }}
+              className={`w-full py-3 px-5 rounded-lg font-semibold text-white bg-gradient-primary transition-[var(--transition-default)] ${isLoading ? "bg-primary-hover/80 cursor-not-allowed opacity-70" : "bg-primary-hover cursor-pointer opacity-100"} active:scale-98 hover:bg-primary-hover/80`}
             >
               {isLoading ? "Creating..." : "Create an Account"}
             </button>

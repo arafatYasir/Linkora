@@ -1,6 +1,11 @@
 const GenderBtn = ({ formData, handleChange, gender }) => {
     return (
-        <label className={`flex items-center gap-2 cursor-pointer px-4 py-3 rounded-lg border border-border transition-all bg-bg ${formData.gender === gender ? "text-primary-hover" : "text-text-primary"} hover:border-primary-hover`}>
+        <label 
+            className={`flex items-center gap-2 cursor-pointer px-4 py-3 rounded-lg border border-border bg-bg ${formData.gender === gender ? "text-primary-hover" : "text-text-primary"} hover:border-primary-hover`}
+            style={{
+                transition: "var(--transition-default) border"
+            }}
+        >
             <input
                 type="radio"
                 name="gender"
