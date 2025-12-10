@@ -153,7 +153,7 @@ const Post = ({ post, setPosts }) => {
                         <p>
                             <Link
                                 to={`/profile/${user.username}`}
-                                className="hover:underline"
+                                className="hover:underline font-semibold"
                             >
                                 {user.firstname + " " + user.lastname}
                             </Link>
@@ -164,12 +164,12 @@ const Post = ({ post, setPosts }) => {
                             </span>
                         </p>
 
-                        <span className="block text-sm text-primary">{postedTime}</span>
+                        <span className="block text-[13px] font-semibold text-primary mt-1.5">{postedTime}</span>
                     </div>
                 </div>
                 <div className="relative">
                     <div
-                        className="w-8 h-8 flex items-center justify-center cursor-pointer rounded-full hover:bg-text-secondary"
+                        className="w-10 h-10 flex items-center justify-center cursor-pointer rounded-full transition-all hover:bg-bg"
                         onClick={() => setShowOptions(prev => !prev)}
                     >
                         <HiDotsHorizontal className="cursor-pointer text-xl" />
@@ -192,6 +192,7 @@ const Post = ({ post, setPosts }) => {
                                     backgroundRepeat: "no-repeat",
                                     backgroundSize: "cover",
                                     backgroundPosition: "center",
+                                    lineHeight: "36px"
                                 }}
                                 className="h-[400px] w-full text-white text-center flex items-center justify-center text-3xl font-bold px-2"
                             >
@@ -199,7 +200,7 @@ const Post = ({ post, setPosts }) => {
                             </div>
                         ) : (
                             <div className="text-lg leading-[1]">
-                                <p className="px-4 text-[15px] leading-[20px]">{text}</p>
+                                <p className="px-4 text-[15px]" style={{lineHeight: "20px"}}>{text}</p>
 
                                 {images && images.length > 0 && (
                                     <div className="flex flex-wrap mt-4">
@@ -221,7 +222,7 @@ const Post = ({ post, setPosts }) => {
                 {/* ---- Reactions & Comments ---- */}
                 <div className="flex items-center justify-between mb-2 px-4">
                     {/* ---- Reactions & Count ---- */}
-                    <div className="flex items-center gap-x-1.5 cursor-pointer">
+                    <div className="flex items-center gap-x-1.5">
                         {/* ---- Reactions ---- */}
                         <div className="flex items-center space-x-[-2px]">
                             {allReactionCounts && Object.keys(allReactionCounts).map((react, index) => {
@@ -243,7 +244,7 @@ const Post = ({ post, setPosts }) => {
                     </div>
 
                     {/* ---- Comments & Count ---- */}
-                    <p className="cursor-pointer hover:underline">{allComments.length > 0 ? `${allComments.length} comments` : ""}</p>
+                    <p>{allComments.length > 0 ? `${allComments.length} comments` : ""}</p>
                 </div>
             </div>
 
@@ -254,7 +255,7 @@ const Post = ({ post, setPosts }) => {
 
                 {/* ---- Buttons ---- */}
                 <button
-                    className="flex items-center justify-center gap-2 relative w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1.5 rounded-lg transition-all duration-250"
+                    className="flex items-center justify-center gap-2 relative w-1/3 h-8 text-center cursor-pointer hover:bg-primary/30 rounded-lg transition-all duration-250"
                     onMouseOver={() => {
                         clearTimeout(timerRef.current);
                         timerRef.current = setTimeout(() => setShowReacts(true), 200)
@@ -283,7 +284,7 @@ const Post = ({ post, setPosts }) => {
                 </button>
 
                 <button
-                    className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1.5 rounded-lg transition-all duration-250"
+                    className="flex items-center justify-center gap-2 w-1/3 h-8 text-center cursor-pointer hover:bg-primary/30 rounded-lg transition-all duration-250"
                     onClick={() => {
                         setShowComments(prev => !prev);
                     }}
@@ -292,7 +293,7 @@ const Post = ({ post, setPosts }) => {
                     <span>Comment</span>
                 </button>
 
-                <button className="flex items-center justify-center gap-2 w-1/3 text-center cursor-pointer hover:bg-primary/30 py-1.5 rounded-lg transition-all">
+                <button className="flex items-center justify-center gap-2 w-1/3 h-8 text-center cursor-pointer hover:bg-primary/30 rounded-lg transition-all">
                     <IoMdShareAlt size={20} />
                     <span>Share</span>
                 </button>

@@ -140,7 +140,7 @@ const ProfileIntro = ({ user, details }) => {
             {/* ---- Body ---- */}
             <div>
                 {/* ---- Introduction ---- */}
-                <div className="mt-4 space-y-3">
+                <div className="mt-4 space-y-4">
                     {(introInfos.bio && !addBio && !editBio) && <Bio text={introInfos.bio} />}
 
                     {introInfos.pronoun && <Pronoun pronoun={introInfos.pronoun} />}

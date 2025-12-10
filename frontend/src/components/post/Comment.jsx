@@ -34,7 +34,7 @@ const Comment = ({ comment }) => {
                     </Link>
 
                     {/* Comment Text */}
-                    <p className="text-[15px] leading-snug break-words">{commentText}</p>
+                    <p className="text-[15px] leading-snug break-words mt-1.5">{commentText}</p>
                 </div>
 
                 {/* Comment Image (if exists) */}
