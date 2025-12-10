@@ -1,6 +1,7 @@
-const CustomInput = ({ value, setValue, placeholder, paddingX, paddingY, width = "auto", fontSize = "16px", borderWidth = "1px", backgroundColor = "transparent" }) => {
+const CustomInput = ({ type, value, setValue, placeholder, paddingX, paddingY, width = "auto", fontSize = "16px", borderWidth = "1px", backgroundColor = "transparent" }) => {
     return (
         <input
+            type={type}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder={placeholder}

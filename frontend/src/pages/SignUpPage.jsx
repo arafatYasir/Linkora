@@ -68,6 +68,7 @@ const SignUpPage = () => {
                   <FiUser size={20} />
                 </div>
                 <CustomInput
+                  type="text"
                   value={formData.firstname}
                   setValue={(value) => setFormData(prev => ({ ...prev, firstname: value }))}
                   placeholder="First name"
@@ -84,6 +85,7 @@ const SignUpPage = () => {
                   <FiUser size={20} />
                 </div>
                 <CustomInput
+                  type="text"
                   value={formData.lastname}
                   setValue={(value) => setFormData(prev => ({ ...prev, lastname: value }))}
                   placeholder="Last name"
@@ -101,6 +103,7 @@ const SignUpPage = () => {
                 <MdOutlineMailOutline size={22} />
               </div>
               <CustomInput
+                type="email"
                 value={formData.email}
                 setValue={(value) => setFormData(prev => ({ ...prev, email: value }))}
                 placeholder="Email address"
@@ -117,6 +120,7 @@ const SignUpPage = () => {
                 <FiLock size={20} />
               </div>
               <CustomInput
+                type="password"
                 value={formData.password}
                 setValue={(value) => setFormData(prev => ({ ...prev, password: value }))}
                 placeholder="Password"
@@ -133,6 +137,7 @@ const SignUpPage = () => {
                 <FiLock size={20} />
               </div>
               <CustomInput
+                type="password"
                 value={formData.confirmPassword}
                 setValue={(value) => setFormData(prev => ({ ...prev, confirmPassword: value }))}
                 placeholder="Confirm password"

@@ -57,7 +57,8 @@ const UserModel = new Schema({
     },
     gender: {
         type: String,
-        require: true
+        require: true,
+        enum: ["Male", "Female", "Other"]
     },
     verified: {
         type: Boolean,
