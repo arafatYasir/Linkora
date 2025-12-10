@@ -12,7 +12,7 @@ const CustomInput = ({ value, setValue, placeholder, paddingX, paddingY, width =
                 borderWidth: borderWidth,
                 background: backgroundColor
             }}
-            className="rounded-lg px-3 py-1 border-[var(--color-border)] focus:outline-none focus:border-primary focus:shadow-[var(--color-glow-green)]"
+            className="rounded-lg px-3 py-1 border-[var(--color-border)] focus:outline-none focus:border-primary focus:shadow-[var(--color-glow-green)] hover:border-primary-hover"
         />
     )
 }

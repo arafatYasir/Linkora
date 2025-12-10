@@ -5,6 +5,7 @@ import { FiLock, FiUser } from "react-icons/fi";
 import { MdOutlineMailOutline } from "react-icons/md";
 import CustomInput from "../components/common/CustomInput";
 import CustomSelect from "../components/common/CustomSelect";
+import GenderBtn from "../components/signup/GenderBtn";
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
@@ -38,6 +39,8 @@ const SignUpPage = () => {
 
     setMessage(signUpMutation.data.message);
   }
+
+  console.log(formData)
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-bg">
@@ -184,51 +187,10 @@ const SignUpPage = () => {
             {/* ---- Gender Selection ---- */}
             <div>
               <label className="block text-sm font-medium mb-2 text-text-secondary">Gender</label>
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2 cursor-pointer px-4 py-3 rounded-lg border transition-all" style={{
-                  backgroundColor: 'var(--color-bg)',
-                  borderColor: formData.gender === "Male" ? 'var(--color-primary-hover)' : 'var(--color-border)',
-                  boxShadow: formData.gender === "Male" ? 'var(--color-glow-green)' : 'none',
-                  color: formData.gender === "Male" ? 'var(--color-primary-hover)' : 'var(--color-text-primary)',
-                }}>
-                  <input
-                    type="radio"
-                    name="gender"
-                    id="male"
-                    value="Male"
-                    onChange={handleChange}
-                    checked={formData.gender === "Male"}
-                    className="appearance-none w-5 h-5 rounded-full border-2 cursor-pointer transition-all"
-                    style={{
-                      borderColor: formData.gender === "Male" ? 'var(--color-primary-hover)' : 'var(--color-border)',
-                      backgroundColor: formData.gender === "Male" ? 'var(--color-primary-hover)' : 'transparent',
-                      boxShadow: formData.gender === "Male" ? 'inset 0 0 0 3px var(--color-surface)' : 'none'
-                    }}
-                  />
-                  <span style={{ color: 'var(--color-text-primary)' }}>Male</span>
-                </label>
-
-                <label className="flex items-center gap-2 cursor-pointer px-4 py-3 rounded-lg border transition-all" style={{
-                  backgroundColor: 'var(--color-bg)',
-                  borderColor: formData.gender === "Female" ? 'var(--color-primary-hover)' : 'var(--color-border)',
-                  boxShadow: formData.gender === "Female" ? 'var(--color-glow-green)' : 'none'
-                }}>
-                  <input
-                    type="radio"
-                    name="gender"
-                    id="female"
-                    value="Female"
-                    onChange={handleChange}
-                    checked={formData.gender === "Female"}
-                    className="appearance-none w-5 h-5 rounded-full border-2 cursor-pointer transition-all"
-                    style={{
-                      borderColor: formData.gender === "Female" ? 'var(--color-primary-hover)' : 'var(--color-border)',
-                      backgroundColor: formData.gender === "Female" ? 'var(--color-primary-hover)' : 'transparent',
-                      boxShadow: formData.gender === "Female" ? 'inset 0 0 0 3px var(--color-surface)' : 'none'
-                    }}
-                  />
-                  <span style={{ color: 'var(--color-text-primary)' }}>Female</span>
-                </label>
+              <div className="grid grid-cols-3 gap-3">
+                <GenderBtn formData={formData} handleChange={handleChange} gender="Male" />
+                <GenderBtn formData={formData} handleChange={handleChange} gender="Female" />
+                <GenderBtn formData={formData} handleChange={handleChange} gender="Other" />
               </div>
             </div>
 

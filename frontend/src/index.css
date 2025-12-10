@@ -27,7 +27,7 @@
 
   /* Gradients & Effects */
   --color-gradient-primary: linear-gradient(135deg, #00e07b, #00b967);
-  --color-glow-green: 0 0 8px rgba(0, 224, 123, 0.5);
+  --color-glow-green: 0 0 6px rgba(0, 224, 123, 0.5);
 
   /* Layout & Components */
   --radius-card: 12px;

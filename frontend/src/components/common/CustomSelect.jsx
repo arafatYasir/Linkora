@@ -22,7 +22,7 @@ const CustomSelect = ({ value, onChange, options, placeholder, paddingX, padding
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-full rounded-[var(--radius-button)] border outline-none text-left flex items-center justify-between transition-[var(--transition-default)] bg-[var(--color-bg)] text-[var(--color-text-secondary)] cursor-pointer border-[var(--color-border)] ${value ? "text-[var(--color-text-primary)]" : ""} ${isOpen ? "border-[var(--color-primary)] shadow-[var(--color-glow-green)]" : ""}`}
+                className={`w-full rounded-[var(--radius-button)] border outline-none text-left flex items-center justify-between transition-[var(--transition-default)] bg-[var(--color-bg)] text-[var(--color-text-secondary)] cursor-pointer border-[var(--color-border)] ${value ? "text-[var(--color-text-primary)]" : ""} ${isOpen ? "border-[var(--color-primary)] shadow-[var(--color-glow-green)]" : ""} hover:border-primary-hover`}
                 style={{
                     padding: `${paddingY} ${paddingX}`
                 }}
@@ -51,7 +51,7 @@ const CustomSelect = ({ value, onChange, options, placeholder, paddingX, padding
                                     onChange(option);
                                     setIsOpen(false);
                                 }}
-                                className={`w-full px-4 py-2.5 text-left transition-[var(--transition-default)] text-[var(--color-text-primary)] hover:bg-primary/30 ${active ? "border border-primary rounded-lg" : "hover:bg-primary/20"} cursor-pointer`}
+                                className={`w-full px-4 py-2.5 text-left transition-[var(--transition-default)] text-text-primary hover:bg-primary/30 ${active ? "border border-primary rounded-lg" : "hover:bg-primary/20"} cursor-pointer`}
                             >
                                 {option}
                             </button>
