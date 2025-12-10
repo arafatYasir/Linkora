@@ -21,6 +21,8 @@ const SignUpPage = () => {
   });
   const [addUser, { isLoading, error }] = useAddUserMutation();
   const [message, setMessage] = useState("");
+  let formError = {};
+  const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
   const handleChange = (e) => {
     setFormData(prev => ({
@@ -30,9 +32,97 @@ const SignUpPage = () => {
   }
 
   const handleSubmit = async (e) => {
+    // Prevent default behavior
     e.preventDefault();
 
-    // There will be obviously form validation
+    // Reset the formError
+    formError = {};
+
+    // First name validation
+    if(formData.firstname.trim() === "") {
+      formError.firstname = "First name is required";
+    }
+    else if(formData.firstname[0] !== formData.firstname[0].toUpperCase()) {
+      formError.firstname = "Name must start with uppercase letter";
+    }
+
+    // Last name validation
+    if(formData.lastname.trim() === "") {
+      formError.lastname = "Last name is required";
+    }
+    else if(formData.lastname[0] !== formData.lastname[0].toUpperCase()) {
+      formError.lastname = "Name must start with uppercase letter";
+    }
+
+    // Email validation
+    if(formData.email.trim() === "") {
+      formError.email = "Email is required";
+    }
+    else if(!emailRegex.test(formData.email)) {
+      formError.email = "Invalid email format";
+    }
+
+    // Password validation
+    if(formData.password.trim() === "") {
+      formError.password = "Password is required";
+    }
+    else if(formData.password.length < 8) {
+      formError.password = "Password must be at least 8 characters long";
+    }
+
+    // Confirm password validation
+    if(formData.confirmPassword.trim() === "") {
+      formError.confirmPassword = "Confirm password is required";
+    }
+    else if(formData.confirmPassword !== formData.password) {
+      formError.confirmPassword = "Passwords do not match";
+    }
+
+    // Gender validation
+    if(formData.gender.trim() === "") {
+      formError.gender = "Gender is required";
+    }
+    else if(!formData.gender.includes(["Male", "Female", "Other"])) {
+      formError.gender = "Invalid gender";
+    }
+
+    // Day validation
+    if(formData.day.trim() === "") {
+      formError.day = "Day is required";
+    }
+    else if(formData.day < 1 || formData.day > 31) {
+      formError.day = "Invalid day";
+    }
+
+    // Month validation
+    if(formData.month.trim() === "") {
+      formError.month = "Month is required";
+    }
+    else if(formData.month < 1 || formData.month > 12) {
+      formError.month = "Invalid month";
+    }
+
+    // Year validation
+    if(formData.year.trim() === "") {
+      formError.year = "Year is required";
+    }
+    else if(formData.year < 1925 || formData.year > new Date().getFullYear()) {
+      formError.year = "Invalid year";
+    }
+
+    // 18 years old validation
+    const today = new Date();
+    const birthDate = new Date(formData.year, formData.month, formData.day);
+    const age = today - birthDate;
+
+    if(age < 18 * 12 * 30 * 24 * 60 * 60 * 1000) {
+      formError.age = "You must be at least 18 years old";
+    }
+
+    // Checking if any error exists. If any exists then return else let the user signup
+    if(Object.keys(formError).length > 0) {
+      return;
+    }
 
     // Creating the user if everything is ok
     const signUpMutation = await addUser(formData);
