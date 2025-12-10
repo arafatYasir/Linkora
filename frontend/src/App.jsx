@@ -11,6 +11,7 @@ import UserProfilePage from "./pages/UserProfilePage";
 import ProfileLayout from "./components/layouts/ProfileLayout";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import { ToastContainer } from "react-toastify"
 
 const App = () => {
   const { theme } = useSelector(state => state.auth);
@@ -45,6 +46,7 @@ const App = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
         </Route>
       </Routes>
+      <ToastContainer />
     </>
   )
 }
