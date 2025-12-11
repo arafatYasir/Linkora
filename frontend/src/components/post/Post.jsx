@@ -96,8 +96,6 @@ const Post = ({ post, setPosts }) => {
         const prevAllReactionCounts = allReactionCounts;
         const prevTotalReacts = totalReacts;
 
-        console.log(prevReact, reactType)
-
         // Setting local state values for optimistic ui updates
         setReact(prev => prev === reactType ? null : reactType);
         if (prevReact === reactType) {
@@ -167,7 +165,7 @@ const Post = ({ post, setPosts }) => {
                         <span className="block text-[13px] font-semibold text-primary mt-1.5">{postedTime}</span>
                     </div>
                 </div>
-                <div className="relative">
+                <div className="relative" ref={optionsRef}>
                     <div
                         className="w-10 h-10 flex items-center justify-center cursor-pointer rounded-full transition-all hover:bg-bg"
                         onClick={() => setShowOptions(prev => !prev)}
@@ -176,7 +174,7 @@ const Post = ({ post, setPosts }) => {
                     </div>
                     {/* ---- Post Options ---- */}
                     {
-                        showOptions && <PostOptions user={user} optionsRef={optionsRef} postId={_id} setPosts={setPosts} />
+                        showOptions && <PostOptions user={user} postId={_id} setPosts={setPosts} />
                     }
                 </div>
             </div>

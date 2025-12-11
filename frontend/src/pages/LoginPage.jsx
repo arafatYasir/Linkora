@@ -109,7 +109,7 @@ const LoginPage = () => {
                 />
               </div>
               {formError?.email && (
-                <p className="text-red-400 text-sm mt-1.5">{formError?.email}</p>
+                <p className="text-error text-sm mt-1.5">{formError?.email}</p>
               )}
             </div>
 
@@ -133,7 +133,7 @@ const LoginPage = () => {
                 />
               </div>
               {formError?.password && (
-                <p className="text-red-400 text-sm mt-1.5">{formError?.password}</p>
+                <p className="text-error text-sm mt-1.5">{formError?.password}</p>
               )}
             </div>
 

@@ -197,7 +197,7 @@ const SignUpPage = () => {
                   />
                 </div>
                 {/* Error Message */}
-                {formError?.firstname && <p className="text-red-400 text-sm mt-1.5">{formError?.firstname}</p>}
+                {formError?.firstname && <p className="text-error text-sm mt-1.5">{formError?.firstname}</p>}
               </div>
 
               {/* ---- Last Name ---- */}
@@ -218,7 +218,7 @@ const SignUpPage = () => {
                   />
                 </div>
                 {/* Error Message */}
-                {formError?.lastname && <p className="text-red-400 text-sm mt-1.5">{formError?.lastname}</p>}
+                {formError?.lastname && <p className="text-error text-sm mt-1.5">{formError?.lastname}</p>}
               </div>
             </div>
 
@@ -240,7 +240,7 @@ const SignUpPage = () => {
                 />
               </div>
               {/* Error Message */}
-              {formError?.email && <p className="text-red-400 text-sm mt-1.5">{formError?.email}</p>}
+              {formError?.email && <p className="text-error text-sm mt-1.5">{formError?.email}</p>}
             </div>
 
             {/* ---- Password Field ---- */}
@@ -262,7 +262,7 @@ const SignUpPage = () => {
 
               </div>
               {/* Error Message */}
-              {formError?.password && <p className="text-red-400 text-sm mt-1.5">{formError?.password}</p>}
+              {formError?.password && <p className="text-error text-sm mt-1.5">{formError?.password}</p>}
             </div>
 
             {/* ---- Confirm Password Field ---- */}
@@ -283,7 +283,7 @@ const SignUpPage = () => {
                 />
               </div>
               {/* Error Message */}
-              {formError?.confirmPassword && <p className="text-red-400 text-sm mt-1.5">{formError?.confirmPassword}</p>}
+              {formError?.confirmPassword && <p className="text-error text-sm mt-1.5">{formError?.confirmPassword}</p>}
             </div>
 
             {/* ---- Date of Birth ---- */}
@@ -303,7 +303,7 @@ const SignUpPage = () => {
                       width="100%"
                     />
                     {/* Error Message */}
-                    {formError?.day && <p className="text-red-400 text-sm mt-1.5">{formError?.day}</p>}
+                    {formError?.day && <p className="text-error text-sm mt-1.5">{formError?.day}</p>}
                   </div>
 
                   <div>
@@ -318,7 +318,7 @@ const SignUpPage = () => {
                       width="100%"
                     />
                     {/* Error Message */}
-                    {formError?.month && <p className="text-red-400 text-sm mt-1.5">{formError?.month}</p>}
+                    {formError?.month && <p className="text-error text-sm mt-1.5">{formError?.month}</p>}
                   </div>
 
                   <div>
@@ -333,12 +333,12 @@ const SignUpPage = () => {
                       width="100%"
                     />
                     {/* Error Message */}
-                    {formError?.year && <p className="text-red-400 text-sm mt-1.5">{formError?.year}</p>}
+                    {formError?.year && <p className="text-error text-sm mt-1.5">{formError?.year}</p>}
                   </div>
                 </div>
 
                 {/* Error Message */}
-                {formError?.age && <p className="text-red-400 text-sm mt-1.5">{formError?.age}</p>}
+                {formError?.age && <p className="text-error text-sm mt-1.5">{formError?.age}</p>}
               </div>
             </div>
 
@@ -351,7 +351,7 @@ const SignUpPage = () => {
                 <GenderBtn formData={formData} handleChange={handleChange} gender="Other" />
               </div>
               {/* Error Message */}
-              {formError?.gender && <p className="text-red-400 text-sm mt-1.5">{formError?.gender}</p>}
+              {formError?.gender && <p className="text-error text-sm mt-1.5">{formError?.gender}</p>}
             </div>
 
             {/* ---- Submit Button ---- */}

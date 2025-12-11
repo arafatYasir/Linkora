@@ -364,7 +364,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-y-auto custom-scrollbar">
             <div ref={introModalRef} className="w-full max-w-2xl rounded-xl shadow-lg overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border)] py-4">
                 {/* ---- Header ---- */}
                 <div className="flex items-center justify-between px-6 pb-4 border-b border-[var(--color-border)]">

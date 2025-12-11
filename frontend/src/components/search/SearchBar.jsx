@@ -104,7 +104,7 @@ const SearchBar = ({ searchHistory, className = "max-w-[280px]" }) => {
             <div ref={searchRef} className={`relative z-50 ${className}`}>
                 {/* ---- Search input ---- */}
                 <div className={`
-                    relative flex items-center bg-bg rounded-full
+                    relative flex items-center bg-bg rounded-full h-10
                 `}>
                     {/* ---- Search icon ---- */}
                     <SearchIcon width={20} height={20} />

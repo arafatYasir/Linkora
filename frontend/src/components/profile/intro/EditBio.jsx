@@ -2,7 +2,7 @@ import { useState } from "react"
 
 const EditBio = ({ bio, onCancel, onSave, loading }) => {
     const [editedText, setEditedText] = useState(bio);
-    
+
     return (
         <div>
             <textarea
@@ -16,18 +16,18 @@ const EditBio = ({ bio, onCancel, onSave, loading }) => {
 
             <p className="text-xs text-right">{100 - editedText.length} characters remaining</p>
 
-            <div className="flex justify-end gap-x-1 mt-1">
+            <div className="flex justify-end gap-x-1 mt-2">
                 <button
                     onClick={onCancel}
                     disabled={loading}
-                    className="py-2 px-4 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-text-primary/20 hover:bg-text-primary/40 "
+                    className="py-2 px-4 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-text-primary/20 hover:bg-text-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Cancel
                 </button>
                 <button
                     onClick={() => onSave("single", {}, "bio", editedText)}
                     disabled={loading}
-                    className="px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary hover:bg-primary-hover"
+                    className="px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {loading ? "Saving..." : "Save"}
                 </button>

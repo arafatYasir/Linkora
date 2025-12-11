@@ -72,7 +72,7 @@ const SettingsModal = forwardRef((props, ref) => {
                                     </div>
                                     <div>
                                         <p className="font-medium text-text-primary">Dark Mode</p>
-                                        <p className="text-xs text-text-secondary">Adjust the appearance of Linkora</p>
+                                        <p className="text-xs text-text-secondary mt-1.5">Adjust the appearance of Linkora</p>
                                     </div>
                                 </div>
 
