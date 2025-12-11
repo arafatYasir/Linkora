@@ -387,7 +387,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
                             <div>
                                 <button
                                     onClick={handleSwitchEditMode}
-                                    className="py-2.5 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-border hover:bg-primary/50 "
+                                    className="py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-border hover:bg-primary/50 "
                                 >
                                     <MdEdit size={20} />
                                 </button>

@@ -13,7 +13,7 @@ const CoverOption = ({ option, setShowCoverOptions, setShowChooseModal, inputFil
     return (
         <button
             onClick={handleClick}
-            className="font-semibold flex items-center gap-x-3 hover:bg-primary/50 cursor-pointer p-1.5 rounded-md transition-all duration-250"
+            className="font-semibold flex items-center gap-x-3 hover:bg-primary/50 cursor-pointer p-2 rounded-md transition-all duration-250"
         >
             <option.icon size={20} />
             <span>{option.name}</span>
