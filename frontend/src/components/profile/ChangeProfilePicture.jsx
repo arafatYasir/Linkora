@@ -233,7 +233,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-scroll">
             <div ref={uploadModalRef} className={`w-full max-w-2xl rounded-xl shadow-lg overflow-hidden bg-surface border border-border ${picture ? "mt-26" : "mt-0"} py-4`}>
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 pb-4 border-b border-border">
+                <div className="flex items-center justify-center relative pb-4 border-b border-border">
                     <h2 className="text-xl font-semibold text-text-primary">
                         Choose Profile Picture
                     </h2>
@@ -242,7 +242,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
                             setPicture(null);
                             setShowUploadModal(false);
                         }}
-                        className="p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary active:scale-95"
+                        className="absolute right-4 p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary active:scale-95"
                         aria-label="Close"
                     >
                         <IoMdClose size={22} />
@@ -252,7 +252,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
                 {/* ---- Conditional Description Input ---- */}
                 {
                     picture && (
-                        <div className="px-6 mt-4">
+                        <div className="px-4 mt-4">
                             <label htmlFor="caption">Caption (optional)</label>
                             <textarea
                                 placeholder="Description"
@@ -330,7 +330,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
                 {/* ---- All Initial Buttons (Upload, Frame, Edit) - Conditionally Rendering (Cancel, Save) ---- */}
                 {
                     (picture && !imageSaved) ? (
-                        <div className="px-6 flex items-center justify-end gap-4">
+                        <div className="px-4 flex items-center justify-end gap-4">
                             <button
                                 onClick={handleCancel}
                                 className="w-[15%] py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer  hover:bg-border"
@@ -345,7 +345,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
                             </button>
                         </div>
                     ) : (
-                        <div className="px-6 pt-4 flex items-center justify-between">
+                        <div className="px-4 pt-4 flex items-center justify-between">
                             {/* ---- Upload Btn ---- */}
                             <div className="w-[44%]">
                                 <button
@@ -399,7 +399,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
                 {/* ---- Other Images ---- */}
                 {
                     !picture && (
-                        <div className="px-6 mt-4 flex flex-col gap-y-2 font-[Inter]">
+                        <div className="px-4 mt-4 flex flex-col gap-y-2 font-[Inter]">
                             {/* ---- Profile Pictures ---- */}
                             {
                                 (profilePictures.length > 0) && <PhotosGroup groupName="Profile Pictures" images={profilePictures} select={true} setImage={setPicture} cols={5} />

@@ -38,7 +38,7 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
             <div ref={chooseModalRef} className={`w-full max-w-xl rounded-xl shadow-lg overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border)] py-4`}>
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 pb-4 border-b border-border">
+                <div className="flex items-center justify-center relative pb-4 border-b border-border">
                     <h2 className="text-xl font-semibold text-text-primary">
                         Choose Cover Photo
                     </h2>
@@ -46,7 +46,7 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
                         onClick={() => {
                             setShowChooseModal(false);
                         }}
-                        className="p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary active:scale-95"
+                        className="absolute right-4 p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary active:scale-95"
                         aria-label="Close"
                     >
                         <IoMdClose size={22} />
@@ -54,7 +54,7 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
                 </div>
 
                 {/* Body */}
-                <div className="px-6 pt-4 max-h-[70vh] overflow-y-auto flex flex-col gap-y-2">
+                <div className="px-4 pt-4 max-h-[70vh] overflow-y-auto flex flex-col gap-y-2">
                     {
                         isImagesLoading ? <ChoosePhotosSkeleton /> : (
                             <>

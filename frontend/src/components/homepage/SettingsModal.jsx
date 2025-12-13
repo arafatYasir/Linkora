@@ -47,11 +47,11 @@ const SettingsModal = forwardRef((props, ref) => {
                 className="w-full max-w-xl max-h-[85vh] rounded-2xl shadow-2xl bg-surface border border-border flex flex-col overflow-hidden"
             >
                 {/* ---- Header ---- */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-surface sticky top-0 z-10">
-                    <h2 className="text-xl font-bold text-text-primary">Settings</h2>
+                <div className="flex items-center justify-center py-4 border-b border-border bg-surface sticky top-0 z-10">
+                    <h2 className="text-xl font-bold text-text-primary">Account Settings</h2>
                     <button
                         onClick={() => setShowSettings(false)}
-                        className="p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary active:scale-95"
+                        className="absolute right-4 p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary active:scale-95"
                         aria-label="Close"
                     >
                         <IoMdClose size={22} />
@@ -59,7 +59,7 @@ const SettingsModal = forwardRef((props, ref) => {
                 </div>
 
                 {/* ---- Body ---- */}
-                <div className="overflow-y-auto custom-scrollbar p-6 space-y-8">
+                <div className="overflow-y-auto custom-scrollbar p-4 space-y-8">
                     {/* ---- Display & Accessibility ---- */}
                     <div>
                         <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-3">Display & Accessibility</h3>
@@ -127,7 +127,5 @@ const SettingsModal = forwardRef((props, ref) => {
         </div>
     );
 });
-
-SettingsModal.displayName = "SettingsModal";
 
 export default SettingsModal;

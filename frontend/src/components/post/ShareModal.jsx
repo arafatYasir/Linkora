@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { IoMdClose, IoMdLink } from "react-icons/io";
-import { FaGlobeAmericas, FaCaretDown } from "react-icons/fa"; // Icons for that Facebook "Public" dropdown look
+import { FaGlobeAmericas, FaCaretDown } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import defaultPhoto from "/default images/avatar.png";
 
 const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLink prop if you want to pass the link to copy
     const { userInfo } = useSelector((state) => state.auth);
@@ -37,13 +38,13 @@ const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLi
                 className="w-full max-w-lg rounded-xl shadow-lg bg-surface border border-border overflow-hidden transform transition-all"
             >
                 {/* ---- Header ---- */}
-                <div className="relative flex items-center justify-center px-4 py-4 border-b border-border">
+                <div className="relative flex items-center justify-center py-4 border-b border-border">
                     <h2 className="text-xl font-bold text-text-primary">
                         Share Post
                     </h2>
                     <button
                         onClick={onClose}
-                        className="absolute right-4 p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary transition-colors"
+                        className="absolute right-4 p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary transition-colors active:scale-95"
                         aria-label="Close"
                     >
                         <IoMdClose size={22} />
@@ -52,22 +53,25 @@ const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLi
 
                 {/* ---- Body ---- */}
                 <div className="p-4">
-                    {/* User Info Section (Facebook Style) */}
                     <div className="flex items-center gap-3 mb-4">
-                        <img
-                            src={userInfo?.profilePicture || "https://dummyimage.com/100x100/ccc/fff"}
-                            alt={userInfo?.username}
-                            className="w-10 h-10 rounded-full object-cover border border-border"
-                        />
+                        {/* Profile Picture & Name */}
+                        <div className="w-10 h-10 overflow-hidden rounded-full">
+                            <img
+                                src={userInfo.profilePicture || defaultPhoto}
+                                alt={userInfo.firstname + " " + userInfo.lastname}
+                                className="w-full h-full object-cover border"
+                            />
+                        </div>
                         <div className="flex flex-col items-start">
                             <span className="font-semibold text-text-primary leading-tight">
-                                {userInfo?.fullName || userInfo?.username}
+                                {userInfo.firstname + " " + userInfo.lastname}
                             </span>
-                            {/* "Public" Badge/Dropdown lookalike */}
-                            <div className="flex items-center gap-1 mt-0.5 px-2 py-0.5 bg-bg/50 rounded-md border border-border text-xs text-text-secondary cursor-pointer hover:bg-border/50 transition-colors">
-                                <FaGlobeAmericas size={10} />
+
+                            {/* View Badge/Dropdown */}
+                            <div className="flex items-center gap-1 mt-1.5 px-2 py-0.5 bg-bg/50 rounded-md border border-border text-sm text-text-secondary cursor-pointer hover:bg-border/50 transition-colors">
+                                <FaGlobeAmericas size={12} />
                                 <span>Public</span>
-                                <FaCaretDown size={10} />
+                                <FaCaretDown size={12} />
                             </div>
                         </div>
                     </div>
@@ -78,18 +82,16 @@ const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLi
                             placeholder="Say something about this..."
                             value={caption}
                             onChange={(e) => setCaption(e.target.value)}
-                            className="w-full min-h-[120px] bg-transparent text-lg text-text-primary placeholder:text-text-secondary/60 resize-none outline-none border-none focus:ring-0 p-0"
+                            className="w-full min-h-[120px] bg-transparent text-text-primary placeholder:text-text-secondary/60 resize-none outline-none border-none focus:ring-0 p-0"
                             autoFocus
                         />
                     </div>
-
-                    {/* Optional: Add Link Preview Card here if you have the data, currently just input area as requested */}
 
                     {/* Actions / Copy Link */}
                     <div className="flex items-center justify-between mt-4">
                         <button
                             onClick={handleCopyLink}
-                            className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors text-sm font-medium px-2 py-1 rounded-lg bg-border/30 hover:bg-border/50 cursor-pointer"
+                            className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors text-sm font-medium px-2 py-1 rounded-lg bg-border/50 hover:bg-border cursor-pointer"
                         >
                             <IoMdLink size={20} />
                             <span>Copy link</span>
@@ -101,8 +103,7 @@ const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLi
                 <div className="p-4 border-t border-border">
                     <button
                         onClick={onSubmit}
-                        className="w-full py-2.5 rounded-lg bg-primary text-white font-semibold text-[15px] hover:bg-primary-hover active:scale-[0.98] transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={!caption.trim()}
+                        className="w-full py-2.5 rounded-lg bg-primary text-white font-semibold text-[15px] hover:bg-primary-hover active:scale-[0.98] transition-all duration-200 shadow-md cursor-pointer hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Share now
                     </button>
