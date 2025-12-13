@@ -83,7 +83,7 @@ const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLi
                             value={caption}
                             onChange={(e) => setCaption(e.target.value)}
                             style={{lineHeight: "22px"}}
-                            className="w-full min-h-[120px] bg-transparent text-text-primary placeholder:text-text-secondary/60 resize-none outline-none border-none focus:ring-0 p-0"
+                            className="w-full min-h-[140px] bg-transparent text-text-primary placeholder:text-text-secondary/60 resize-none outline-none border-none focus:ring-0 p-0 custom-scrollbar"
                             autoFocus
                         />
                     </div>

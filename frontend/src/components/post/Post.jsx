@@ -88,6 +88,17 @@ const Post = ({ post, setPosts }) => {
         }
     }, []);
 
+    // Controlling body scroll lock/unlock depending on share modal state
+    useEffect(() => {
+        const body = document.querySelector("body");
+
+        if (showShareModal) {
+            body.style.overflow = "hidden";
+        } else {
+            body.style.overflowY = "auto";
+        }
+    }, [showShareModal]);
+
     // Functions
     const handleReact = async (reactType) => {
         if (isReacting) return;
