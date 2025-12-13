@@ -12,6 +12,7 @@ import CreateComment from "./CreateComment";
 import Comments from "./Comments";
 import PostOptions from "./PostOptions";
 import { useReactPostMutation } from "../../../api/authApi";
+import ShareModal from "./ShareModal";
 
 const reactionColors = {
     Like: "#2078F4",
@@ -34,6 +35,7 @@ const Post = ({ post, setPosts }) => {
     const [commentText, setCommentText] = useState("");
     const [commentFile, setCommentFile] = useState(null);
     const [allComments, setAllComments] = useState([]);
+    const [showShareModal, setShowShareModal] = useState(false);
 
     const [showOptions, setShowOptions] = useState(false);
 
@@ -131,6 +133,10 @@ const Post = ({ post, setPosts }) => {
         }
     }
 
+    const handleSharePost = () => {
+
+    }
+
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
 
     return (
@@ -198,7 +204,7 @@ const Post = ({ post, setPosts }) => {
                             </div>
                         ) : (
                             <div className="text-lg leading-[1]">
-                                <p className="px-4 text-[15px]" style={{lineHeight: "20px"}}>{text}</p>
+                                <p className="px-4 text-[15px]" style={{ lineHeight: "20px" }}>{text}</p>
 
                                 {images && images.length > 0 && (
                                     <div className="flex flex-wrap mt-4">
@@ -291,17 +297,23 @@ const Post = ({ post, setPosts }) => {
                     <span>Comment</span>
                 </button>
 
-                <button className="flex items-center justify-center gap-2 w-1/3 h-8 text-center cursor-pointer hover:bg-primary/30 rounded-lg transition-all">
+                <button
+                    onClick={() => setShowShareModal(true)}
+                    className="flex items-center justify-center gap-2 w-1/3 h-8 text-center cursor-pointer hover:bg-primary/30 rounded-lg transition-all">
                     <IoMdShareAlt size={20} />
                     <span>Share</span>
                 </button>
             </div>
 
+            {/* ---- Share Modal ---- */}
+            {
+                showShareModal && <ShareModal onClose={() => setShowShareModal(false)} handleSharePost={handleSharePost} />
+            }
+
             {/* ---- Comments ---- */}
             {
                 showComments && <CreateComment commentText={commentText} setCommentText={setCommentText} setAllComments={setAllComments} commentFile={commentFile} setCommentFile={setCommentFile} commentRef={commentRef} postId={_id} />
             }
-
             {
                 allComments.length > 0 && <Comments comments={allComments} />
             }

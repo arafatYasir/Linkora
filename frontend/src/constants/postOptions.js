@@ -22,9 +22,8 @@ export const postOptions = {
     ],
     visitor: [
         { id: 1, name: "Save Post", icon: FaBookmark },
-        { id: 2, name: "Share Post", icon: FaShare },
-        { id: 3, name: "Hide Post", icon: FaEyeSlash },
-        { id: 4, name: "Hide all from this user", icon: FaUserSlash },
-        { id: 5, name: "Copy Link", icon: FaLink },
+        { id: 2, name: "Hide Post", icon: FaEyeSlash },
+        { id: 3, name: "Hide all from this user", icon: FaUserSlash },
+        { id: 4, name: "Copy Link", icon: FaLink },
     ]
 };
