@@ -61,18 +61,18 @@ const HomePage = () => {
     }, [user, dispatch]);
 
     return (
-        <div className="grid grid-cols-12 gap-x-10">
+        <div className="grid grid-cols-12 gap-x-10 items-start mt-5">
             {/* ---- Left Section ---- */}
             <HomePageSidebar user={userInfo} />
 
             {/* ---- Posts ---- */}
             <div className="col-span-6">
                 {/* ---- Post Creation ---- */}
-                <div className="my-5">
+                <div className="mb-5">
                     <CreatePost onOpenModal={openPostModal} user={userInfo} />
-
-                    {isPostModalOpen && <PostModal onClose={closePostModal} setPosts={setPosts} />}
                 </div>
+
+                {isPostModalOpen && <PostModal onClose={closePostModal} setPosts={setPosts} />}
 
                 {/* ---- All Posts ---- */}
                 {
