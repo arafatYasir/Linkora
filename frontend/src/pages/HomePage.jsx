@@ -61,7 +61,7 @@ const HomePage = () => {
     }, [user, dispatch]);
 
     return (
-        <div className="grid grid-cols-12 gap-x-10 items-start mt-5">
+        <div className="grid grid-cols-12 gap-x-10 items-start mt-5 min-h-screen">
             {/* ---- Left Section ---- */}
             <HomePageSidebar user={userInfo} />
 

@@ -4,8 +4,8 @@ import defaultAvatar from "../../../public/default images/avatar.png";
 
 const HomePageSidebar = ({ user }) => {
     return (
-        <div className="col-span-3 hidden xl:block pl-2">
-            <div className="sticky top-[76px] max-h-[calc(100vh-76px)] overflow-y-auto custom-scrollbar">
+        <div className="col-span-3 hidden xl:block pl-2 sticky top-[76px] overflow-y-auto custom-scrollbar">
+            <div>
                 <ul className="space-y-1 mb-2">
                     {/* ---- Profile ---- */}
                     <li>

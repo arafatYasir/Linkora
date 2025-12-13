@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 const HomePageFriends = ({ friends }) => {
     return (
-        <div className="col-span-3 hidden xl:block pr-2">
-            <div className="sticky top-[76px] max-h-[calc(100vh-76px)] overflow-y-auto custom-scrollbar">
+        <div className="col-span-3 hidden xl:block pr-2 sticky top-[76px] overflow-y-auto custom-scrollbar">
+            <div>
                 {/* ---- Header ---- */}
                 <div className="flex items-center justify-between mb-4 px-2">
                     <h3 className="text-text-secondary font-semibold text-[15px]">Contacts</h3>
