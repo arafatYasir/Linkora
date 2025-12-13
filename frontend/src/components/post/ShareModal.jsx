@@ -103,7 +103,7 @@ const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLi
                     <button
                         onClick={onSubmit}
                         className="w-full py-2.5 rounded-lg bg-primary text-white font-semibold text-[15px] hover:bg-primary-hover active:scale-[0.98] transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={!caption.trim()} // Optional: disable if empty, or allow sharing without caption
+                        disabled={!caption.trim()}
                     >
                         Share now
                     </button>

@@ -45,7 +45,7 @@ const PostOption = ({ option, postId, setPosts }) => {
     }
 
     return (
-        <button onClick={handleClick} className="font-semibold flex items-center gap-x-3 hover:bg-primary/50 cursor-pointer p-1.5 rounded-md transition-all duration-250">
+        <button onClick={handleClick} className="font-semibold flex items-center gap-x-3 hover:bg-primary/50 cursor-pointer p-2 rounded-md transition-all duration-250">
             {
                 loading ? <span>Loading...</span> : (
                     <>

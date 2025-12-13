@@ -7,7 +7,7 @@ const PostOptions = ({ user, postId, setPosts }) => {
 
     return (
         <div 
-            className="absolute z-50 top-10 right-0 w-[300px] px-3 py-4 bg-[var(--color-bg)] rounded-lg shadow-lg border border-[var(--color-border)] flex flex-col gap-y-2"
+            className="absolute z-50 top-10 right-0 w-[300px] px-3 py-4 bg-[var(--color-bg)] rounded-lg shadow-lg border border-[var(--color-border)] flex flex-col"
         >
             {
                 userInfo._id === user._id ? (
