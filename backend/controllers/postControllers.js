@@ -209,4 +209,39 @@ const deletePost = async (req, res) => {
     }
 }
 
-module.exports = { createPost, getAllPosts, getUserPosts, reactPost, commentPost, savePost, deletePost };
+const sharePost = async (req, res) => {
+    try {
+        const { postId, caption } = req.body;
+        const post = await Post.findById(postId);
+
+        if (!post) {
+            return res.status(404).json({
+                error: "Post not found!"
+            });
+        }
+
+        // If post is available then add the post to users shared posts
+        await User.findByIdAndUpdate(req.user.id, {
+            $push: {
+                sharedPosts: {
+                    post,
+                    caption,
+                    sharedAt: new Date()
+                }
+            }
+        });
+
+        res.json({
+            message: "Post shared successfully",
+            status: "OK"
+        });
+
+    } catch (e) {
+        res.status(404).json({
+            error: "Something went wrong!"
+        });
+        console.log(e);
+    }
+}
+
+module.exports = { createPost, getAllPosts, getUserPosts, reactPost, commentPost, savePost, deletePost, sharePost };

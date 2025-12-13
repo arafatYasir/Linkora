@@ -192,6 +192,22 @@ const UserModel = new Schema({
             }
         }
     ],
+    sharedPosts: [
+        {
+            post: {
+                type: ObjectId,
+                ref: "post"
+            },
+            caption: {
+                type: String,
+                default: ""
+            },
+            sharedAt: {
+                type: Date,
+                require: true
+            }
+        }
+    ],
     accessToken: {
         type: String
     },
