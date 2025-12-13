@@ -307,7 +307,7 @@ const Post = ({ post, setPosts }) => {
 
             {/* ---- Share Modal ---- */}
             {
-                showShareModal && <ShareModal onClose={() => setShowShareModal(false)} handleSharePost={handleSharePost} />
+                showShareModal && <ShareModal onClose={() => setShowShareModal(false)} handleSharePost={handleSharePost} postLink={`/posts/${_id}`} />
             }
 
             {/* ---- Comments ---- */}

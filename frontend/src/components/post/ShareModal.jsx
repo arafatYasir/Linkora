@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { IoMdClose, IoMdLink } from "react-icons/io";
 import { FaGlobeAmericas, FaCaretDown } from "react-icons/fa"; // Icons for that Facebook "Public" dropdown look
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLink prop if you want to pass the link to copy
     const { userInfo } = useSelector((state) => state.auth);
@@ -20,10 +21,8 @@ const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLi
     }, [onClose]);
 
     const handleCopyLink = () => {
-        // Fallback if postLink isn't passed yet, just for demo
-        const linkToCopy = postLink || window.location.href;
-        navigator.clipboard.writeText(linkToCopy);
-        alert("Link copied to clipboard!"); // Replace with your toast notification if you have one
+        navigator.clipboard.writeText(window.location.origin + postLink);
+        toast.success("Link copied to clipboard!");
     };
 
     const onSubmit = () => {
@@ -90,7 +89,7 @@ const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLi
                     <div className="flex items-center justify-between mt-4">
                         <button
                             onClick={handleCopyLink}
-                            className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors text-sm font-medium px-2 py-1 rounded-lg hover:bg-border/30"
+                            className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors text-sm font-medium px-2 py-1 rounded-lg bg-border/30 hover:bg-border/50 cursor-pointer"
                         >
                             <IoMdLink size={20} />
                             <span>Copy link</span>
