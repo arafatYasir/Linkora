@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Post from "./Post";
 
-const AllPosts = ({ posts, setPosts }) => {
+const AllPosts = ({ posts }) => {
     const [sortedPosts, setSortedPosts] = useState([]);
 
     useEffect(() => {
@@ -13,7 +13,7 @@ const AllPosts = ({ posts, setPosts }) => {
     return (
         <ul className="space-y-5">
             {sortedPosts.map(post => (
-                <Post key={post._id} post={post} setPosts={setPosts} />
+                <Post key={post._id} post={post} />
             ))}
         </ul>
     )

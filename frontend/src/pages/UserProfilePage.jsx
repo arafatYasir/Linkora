@@ -5,16 +5,16 @@ import { setUser } from "../slices/authSlice";
 import NotFound from "../components/NotFound";
 import defaultCover from "../../public/default images/defaultcover.jpg"
 import defaultPhoto from "../../public/default images/avatar.png"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import CoverPhoto from "../components/profile/cover/CoverPhoto";
 import ProfilePictureInfos from "../components/profile/ProfilePictureInfos";
 import ProfileItems from "../components/profile/ProfileItems";
+import { setPosts } from "../slices/postsSlice";
 
 const UserProfilePage = () => {
-    const [posts, setPosts] = useState([]);
-
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
+    const { posts } = useSelector(state => state.posts);
 
     // Extra hooks
     const dispatch = useDispatch();
@@ -60,11 +60,10 @@ const UserProfilePage = () => {
     // useEffect to save posts to redux and localstorage
     useEffect(() => {
         if (user?.posts) {
-            setPosts(user?.posts);
-            console.log(user?.posts);
+            dispatch(setPosts(user.posts));
         }
     }, [user?.posts]);
-    
+
     if (isLoading && !isOwnProfile) return <div className="text-3xl text-center">Loading...</div>
 
     return (
@@ -80,7 +79,7 @@ const UserProfilePage = () => {
                     </div>
 
                     {/* ---- Profile Items ---- */}
-                    <ProfileItems user={userProfile} posts={posts} setPosts={setPosts} isImagesLoading={isImagesLoading} images={images} />
+                    <ProfileItems user={userProfile} posts={posts} isImagesLoading={isImagesLoading} images={images} />
                 </div>
             )}
         </div>

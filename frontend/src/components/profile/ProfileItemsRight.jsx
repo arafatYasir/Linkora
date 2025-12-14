@@ -6,7 +6,7 @@ import AllPosts from "../post/AllPosts";
 import PostViewControl from "../post/PostViewControl";
 import GridPosts from "../post/GridPosts";
 
-const ProfileItemsRight = ({ user, posts, setPosts }) => {
+const ProfileItemsRight = ({ user, posts }) => {
     // States
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
     const [viewMethod, setViewMethod] = useState("list");
@@ -42,7 +42,7 @@ const ProfileItemsRight = ({ user, posts, setPosts }) => {
                     <div className="w-full mb-5">
                         <CreatePost onOpenModal={openPostModal} user={user} />
 
-                        {isPostModalOpen && <PostModal onClose={closePostModal} setPosts={setPosts} />}
+                        {isPostModalOpen && <PostModal onClose={closePostModal} />}
 
                         {/* ---- Post View ---- */}
                         <div className="mt-5">
@@ -55,7 +55,7 @@ const ProfileItemsRight = ({ user, posts, setPosts }) => {
             {/* ---- User Posts ---- */}
             {
                 ((posts && posts?.length > 0) && viewMethod === "list") ? (
-                    <AllPosts posts={posts} setPosts={setPosts} />
+                    <AllPosts posts={posts} />
                 )
                 : ((posts && posts?.length > 0) && viewMethod === "grid") ? (
                     <GridPosts posts={posts} />

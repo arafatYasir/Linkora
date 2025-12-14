@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import defaultPhoto from "/default images/avatar.png";
 import { useCreatePostMutation, useSharePostMutation } from "../../../api/authApi";
+import { addPost } from "../../slices/postsSlice";
 
 const ShareModal = ({ onClose, postLink, postId }) => {
     // States
@@ -61,7 +62,21 @@ const ShareModal = ({ onClose, postLink, postId }) => {
                 const post = { ...createPostResponse.post };
                 post.user = userInfo;
 
-                
+                // Adding the post in redux store
+                dispatch(addPost({
+                    ...post,
+                    reactionsCount: {
+                        Like: 0,
+                        Love: 0,
+                        Haha: 0,
+                        Wow: 0,
+                        Sad: 0,
+                        Angry: 0
+                    },
+                    totalReactions: 0,
+                    usersReaction: null,
+                    comments: []
+                }));
             }
         } catch (e) {
             toast.error("Failed to share the post!");

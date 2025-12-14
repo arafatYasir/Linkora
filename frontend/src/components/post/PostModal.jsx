@@ -2,10 +2,11 @@ import { useState } from "react";
 import { FaTimes, FaImage, FaVideo, FaFileAlt } from "react-icons/fa";
 import { backgrounds } from "../../constants/postBackgrounds";
 import { useCreatePostMutation, useUploadImageMutation } from "../../../api/authApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import dataURIToBlob from "../../helpers/dataURIToBlob";
+import { addPost } from "../../slices/postsSlice";
 
-const PostModal = ({ onClose, setPosts }) => {
+const PostModal = ({ onClose }) => {
     // States
     const [text, setText] = useState("");
     const [files, setFiles] = useState([]);
@@ -15,6 +16,9 @@ const PostModal = ({ onClose, setPosts }) => {
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
+
+    // Extra hooks
+    const dispatch = useDispatch();
 
     // RTK Query
     const [createPost] = useCreatePostMutation();
@@ -102,8 +106,8 @@ const PostModal = ({ onClose, setPosts }) => {
             const post = { ...res.post };
             post.user = userInfo;
 
-            // Saving that post in local state to immediately show the post
-            setPosts(prev => [...prev, {
+            // Adding the post in redux store
+            dispatch(addPost({
                 ...post,
                 reactionsCount: {
                     Like: 0,
@@ -116,7 +120,7 @@ const PostModal = ({ onClose, setPosts }) => {
                 totalReactions: 0,
                 usersReaction: null,
                 comments: []
-            }]);
+            }));
         } catch (e) {
             console.log("ERROR on submission to post: ", e.message);
         } finally {

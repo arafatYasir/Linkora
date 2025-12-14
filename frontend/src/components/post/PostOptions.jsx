@@ -2,7 +2,7 @@ import { useSelector } from "react-redux"
 import { postOptions } from "../../constants/postOptions"
 import PostOption from "./PostOption";
 
-const PostOptions = ({ user, postId, setPosts }) => {
+const PostOptions = ({ user, postId }) => {
     const { userInfo } = useSelector(state => state.auth);
 
     return (
@@ -12,11 +12,11 @@ const PostOptions = ({ user, postId, setPosts }) => {
             {
                 userInfo._id === user._id ? (
                     postOptions.creator.map(option => (
-                        <PostOption key={option.id} option={option} postId={postId} setPosts={setPosts} />
+                        <PostOption key={option.id} option={option} postId={postId} />
                     ))
                 ) : (
                     postOptions.visitor.map(option => (
-                        <PostOption key={option.id} option={option} postId={postId} setPosts={setPosts} />
+                        <PostOption key={option.id} option={option} postId={postId} />
                     ))
                 )
             }

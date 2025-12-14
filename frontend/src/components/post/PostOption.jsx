@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { useDeletePostMutation, useSavePostMutation } from "../../../api/authApi"
+import { useDispatch } from "react-redux";
+import { postDelete } from "../../slices/postsSlice";
 
-const PostOption = ({ option, postId, setPosts }) => {
+const PostOption = ({ option, postId }) => {
     // States
     const [loading, setLoading] = useState(false);
+
+    // Extra hooks
+    const dispatch = useDispatch();
+
     // Post saving api
     const [savePost] = useSavePostMutation();
 
@@ -27,7 +33,7 @@ const PostOption = ({ option, postId, setPosts }) => {
             const res = await deletePost(postId).unwrap();
 
             if (res.status === "OK") {
-                setPosts(prev => prev.filter(post => post._id !== postId));
+                dispatch(postDelete(postId.toString()));
             }
         } catch (e) {
             console.error("Error while deleting post", e);
