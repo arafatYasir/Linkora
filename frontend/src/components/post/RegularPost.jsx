@@ -39,7 +39,8 @@ const RegularPost = ({ user,
     showShareModal,
     setShowShareModal,
     commentRef,
-    setAllComments }) => {
+    setAllComments 
+}) => {
     return (
         <li className="w-full bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] transition-[var(--transition-default)]">
             {/* ---- Post Heading ---- */}

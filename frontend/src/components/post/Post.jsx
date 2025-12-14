@@ -138,14 +138,6 @@ const Post = ({ post }) => {
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
 
     return (
-        //     {
-        //         type === "shared-post" ? (
-        //         <SharedPost />
-        //     ) : (
-        //         
-        //     )
-        // }
-
         type === "shared-post" ? (
             <SharedPost />
         ) : (
@@ -188,9 +180,7 @@ const Post = ({ post }) => {
                 setShowShareModal={setShowShareModal}
             />
         )
-
-
-    )
+    );
 }
 
 export default Post
