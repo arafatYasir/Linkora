@@ -20,7 +20,13 @@ const createPost = async (req, res) => {
 const getAllPosts = async (req, res) => {
     try {
         // First find all the posts of the user
-        const userPosts = await Post.find({ user: req.user.id }).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username");
+        const userPosts = await Post.find({ user: req.user.id }).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username").populate({
+            path: "sharedPost",
+            populate: {
+                path: "user",
+                select: "firstname lastname username profilePicture coverPhoto gender"
+            }
+        });
 
         // Find the peoples he is following to and get all the posts of those people
         const userFollowing = await User.findById(req.user.id).select("following");

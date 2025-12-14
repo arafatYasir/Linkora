@@ -36,7 +36,7 @@ const Post = ({ post }) => {
     const optionsRef = useRef(null);
 
     // Extracting data from post
-    const { _id, text, type, user, background, comments, images, usersReaction, reactionsCount, totalReactions } = post;
+    const { _id, text, type, user, background, comments, images, usersReaction, sharedPost, reactionsCount, totalReactions } = post;
 
     // Reaction api
     const [reactPost] = useReactPostMutation();
@@ -139,7 +139,43 @@ const Post = ({ post }) => {
 
     return (
         type === "shared-post" ? (
-            <SharedPost />
+            <SharedPost
+                // Key Data
+                user={user}
+                type={type}
+                postedTime={postedTime}
+                text={text}
+                sharedPost={sharedPost} // Passing the original post data
+                _id={_id}
+
+                // Reaction States & Logic
+                reactionColors={reactionColors}
+                allReactionCounts={allReactionCounts}
+                totalReacts={totalReacts}
+                showReacts={showReacts}
+                setShowReacts={setShowReacts}
+                react={react}
+                timerRef={timerRef}
+                handleReact={handleReact}
+
+                // Options Menu Logic
+                optionsRef={optionsRef}
+                showOptions={showOptions}
+                setShowOptions={setShowOptions}
+
+                // Comments & Sharing Logic
+                showComments={showComments}
+                setShowComments={setShowComments}
+                commentText={commentText}
+                setCommentText={setCommentText}
+                commentFile={commentFile}
+                setCommentFile={setCommentFile}
+                allComments={allComments}
+                setAllComments={setAllComments}
+                commentRef={commentRef}
+                showShareModal={showShareModal}
+                setShowShareModal={setShowShareModal}
+            />
         ) : (
             <RegularPost
                 // Key Data
