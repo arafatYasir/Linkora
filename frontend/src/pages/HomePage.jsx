@@ -7,14 +7,15 @@ import AllPosts from "../components/post/AllPosts";
 import { useGetAllPostsQuery, useGetUserQuery } from "../../api/authApi";
 import HomePageFriends from "../components/homepage/HomePageFriends";
 import HomePageSidebar from "../components/homepage/HomePageSidebar";
+import { setPosts } from "../slices/postsSlice";
 
 const HomePage = () => {
     // States
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-    const [posts, setPosts] = useState([]);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
+    const { posts } = useSelector(state => state.posts);
 
     // Extra hooks
     const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const HomePage = () => {
     const { data: user } = useGetUserQuery(userInfo.username);
 
     // Fetching posts
-    const { data: allPosts, refetch: refetchPosts } = useGetAllPostsQuery();
+    const { data: allPosts } = useGetAllPostsQuery();
 
     const openPostModal = () => {
         setIsPostModalOpen(true);
@@ -46,7 +47,7 @@ const HomePage = () => {
 
     useEffect(() => {
         if (allPosts) {
-            setPosts(allPosts);
+            dispatch(setPosts(allPosts));
         }
     }, [allPosts]);
 
