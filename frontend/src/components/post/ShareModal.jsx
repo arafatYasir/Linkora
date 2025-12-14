@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { IoMdClose, IoMdLink } from "react-icons/io";
 import { FaGlobeAmericas, FaCaretDown } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import defaultPhoto from "/default images/avatar.png";
 import { useCreatePostMutation, useSharePostMutation } from "../../../api/authApi";
@@ -17,6 +17,7 @@ const ShareModal = ({ onClose, postLink, postId }) => {
 
     // Extra hooks
     const modalRef = useRef(null);
+    const dispatch = useDispatch();
 
     // Post sharing api
     const [sharePost] = useSharePostMutation();
@@ -49,7 +50,7 @@ const ShareModal = ({ onClose, postLink, postId }) => {
             const sharePostResponse = await sharePost({ postId, caption }).unwrap();
 
             // If post share is successful then create a "post"
-            if (sharePostResponse.message === "OK") {
+            if (sharePostResponse.status === "OK") {
                 console.log("Gonna create the post");
                 const createPostResponse = await createPost({
                     type: "shared-post",
@@ -58,7 +59,7 @@ const ShareModal = ({ onClose, postLink, postId }) => {
                     background: null,
                     user: userInfo._id,
                     sharedPost: postId
-                });
+                }).unwrap();
 
                 // Extracting post and pushing the userInfo on the post
                 const post = { ...createPostResponse.post };
