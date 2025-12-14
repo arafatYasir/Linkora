@@ -210,7 +210,7 @@ const Post = ({ post }) => {
                                 {text}
                             </div>
                         ) : (
-                            <div className="text-lg leading-[1]">
+                            <div className="text-lg">
                                 <p className="px-4 text-[15px]" style={{ lineHeight: "20px" }}>{text}</p>
 
                                 {images && images.length > 0 && (
@@ -267,7 +267,7 @@ const Post = ({ post }) => {
                 {/* ---- Buttons ---- */}
                 <button
                     className="flex items-center justify-center gap-2 relative w-1/3 h-8 text-center cursor-pointer hover:bg-primary/30 rounded-lg transition-all duration-250"
-                    onMouseOver={() => {
+                    onMouseEnter={() => {
                         clearTimeout(timerRef.current);
                         timerRef.current = setTimeout(() => setShowReacts(true), 200)
                     }}

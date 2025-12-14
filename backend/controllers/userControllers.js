@@ -422,7 +422,7 @@ const getUser = async (req, res) => {
             relationship.receivedRequest = true;
         }
 
-        const posts = await Post.find({ user: user._id }).populate("user").populate("comments.commentedBy", "firstname lastname profilePicture username").sort({ createdAt: -1 });
+        const posts = await Post.find({ user: user._id }).populate("user", "-password -refreshToken -verificationTokenExpiry -accessToken -details -friends -followers -following -verified -updatedAt -createdAt -friendRequests -savedPosts -search -sharedPosts -day -month -year").populate("comments.commentedBy", "firstname lastname profilePicture username").sort({ createdAt: -1 });
 
         const postsWithReaction = posts.map(post => {
             const reactionsCount = {};

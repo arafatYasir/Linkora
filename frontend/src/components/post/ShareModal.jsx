@@ -35,6 +35,7 @@ const ShareModal = ({ onClose, postLink, postId }) => {
         return () => document.removeEventListener("mousedown", handleOutsideClick);
     }, [onClose]);
 
+    // Functions
     const handleCopyLink = () => {
         navigator.clipboard.writeText(window.location.origin + postLink);
         toast.success("Link copied to clipboard!");
@@ -49,6 +50,7 @@ const ShareModal = ({ onClose, postLink, postId }) => {
 
             // If post share is successful then create a "post"
             if (sharePostResponse.message === "OK") {
+                console.log("Gonna create the post");
                 const createPostResponse = await createPost({
                     type: "shared-post",
                     images: [],
