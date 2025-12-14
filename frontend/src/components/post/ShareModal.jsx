@@ -4,11 +4,24 @@ import { FaGlobeAmericas, FaCaretDown } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import defaultPhoto from "/default images/avatar.png";
+import { useCreatePostMutation, useSharePostMutation } from "../../../api/authApi";
 
-const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLink prop if you want to pass the link to copy
-    const { userInfo } = useSelector((state) => state.auth);
+const ShareModal = ({ onClose, postLink, postId }) => {
+    // States
     const [caption, setCaption] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    // Redux states
+    const { userInfo } = useSelector((state) => state.auth);
+
+    // Extra hooks
     const modalRef = useRef(null);
+
+    // Post sharing api
+    const [sharePost] = useSharePostMutation();
+
+    // Post creating api
+    const [createPost] = useCreatePostMutation();
 
     // Close modal when clicking outside
     useEffect(() => {
@@ -26,8 +39,38 @@ const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLi
         toast.success("Link copied to clipboard!");
     };
 
-    const onSubmit = () => {
-        handleSharePost(caption);
+    const handleSharePost = async () => {
+        try {
+            setLoading(true);
+
+            // First save the post to the database
+            const sharePostResponse = await sharePost({ postId, caption }).unwrap();
+
+            // If post share is successful then create a "post"
+            if (sharePostResponse.message === "OK") {
+                const createPostResponse = await createPost({
+                    type: "shared-post",
+                    images: [],
+                    text: caption,
+                    background: null,
+                    user: userInfo._id,
+                    sharedPost: postId
+                });
+
+                // Extracting post and pushing the userInfo on the post
+                const post = { ...createPostResponse.post };
+                post.user = userInfo;
+
+                
+            }
+        } catch (e) {
+            toast.error("Failed to share the post!");
+            console.error(e);
+        } finally {
+            setLoading(false);
+        }
+
+        // Close modal
         onClose();
     };
 
@@ -82,7 +125,7 @@ const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLi
                             placeholder="Say something about this..."
                             value={caption}
                             onChange={(e) => setCaption(e.target.value)}
-                            style={{lineHeight: "22px"}}
+                            style={{ lineHeight: "22px" }}
                             className="w-full min-h-[140px] bg-transparent text-text-primary placeholder:text-text-secondary/60 resize-none outline-none border-none focus:ring-0 p-0 custom-scrollbar"
                             autoFocus
                         />
@@ -103,10 +146,11 @@ const ShareModal = ({ onClose, handleSharePost, postLink }) => { // Added postLi
                 {/* ---- Footer / Share Button ---- */}
                 <div className="p-4 border-t border-border">
                     <button
-                        onClick={onSubmit}
+                        onClick={handleSharePost}
+                        disabled={loading}
                         className="w-full py-2.5 rounded-lg bg-primary text-white font-semibold text-[15px] hover:bg-primary-hover active:scale-[0.98] transition-all duration-200 shadow-md cursor-pointer hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Share now
+                        {loading ? "Sharing..." : "Share now"}
                     </button>
                 </div>
             </div>

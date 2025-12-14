@@ -98,7 +98,7 @@ const PostModal = ({ onClose, setPosts }) => {
                 }
             }
 
-            // Extracting post and pushing the userinfo on the post
+            // Extracting post and pushing the userInfo on the post
             const post = { ...res.post };
             post.user = userInfo;
 

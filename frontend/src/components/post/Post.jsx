@@ -144,10 +144,6 @@ const Post = ({ post, setPosts }) => {
         }
     }
 
-    const handleSharePost = () => {
-
-    }
-
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
 
     return (
@@ -318,7 +314,7 @@ const Post = ({ post, setPosts }) => {
 
             {/* ---- Share Modal ---- */}
             {
-                showShareModal && <ShareModal onClose={() => setShowShareModal(false)} handleSharePost={handleSharePost} postLink={`/posts/${_id}`} />
+                showShareModal && <ShareModal onClose={() => setShowShareModal(false)} postLink={`/posts/${_id}`} postId={_id} />
             }
 
             {/* ---- Comments ---- */}

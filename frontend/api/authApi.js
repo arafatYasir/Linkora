@@ -191,8 +191,15 @@ export const authApi = createApi({
                 url: `/api/v1/remove-from-search-history/${id}`,
                 method: "DELETE"
             })
+        }),
+        sharePost: build.mutation({
+            query: ({postId, caption}) => ({
+                url: `/api/v1/posts/share-post`,
+                method: "POST",
+                body: { postId, caption }
+            })
         })
     }),
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserPostsQuery, useGetUserQuery, useListImagesQuery, useUpdateProfilePictureMutation, useUpdateCoverPhotoMutation, useUpdateProfileIntroMutation, useAddFriendMutation, useCancelRequestMutation, useAcceptRequestMutation, useFollowMutation, useUnfollowMutation, useUnfriendMutation, useDeleteRequestMutation, useReactPostMutation, useCommentPostMutation, useSavePostMutation, useDeletePostMutation, useSearchQuery, useLazySearchQuery, useAddToSearchHistoryMutation, useRemoveSearchHistoryMutation } = authApi;
+export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserPostsQuery, useGetUserQuery, useListImagesQuery, useUpdateProfilePictureMutation, useUpdateCoverPhotoMutation, useUpdateProfileIntroMutation, useAddFriendMutation, useCancelRequestMutation, useAcceptRequestMutation, useFollowMutation, useUnfollowMutation, useUnfriendMutation, useDeleteRequestMutation, useReactPostMutation, useCommentPostMutation, useSavePostMutation, useDeletePostMutation, useSearchQuery, useLazySearchQuery, useAddToSearchHistoryMutation, useRemoveSearchHistoryMutation, useSharePostMutation } = authApi;

@@ -233,7 +233,7 @@ const sharePost = async (req, res) => {
 
         res.json({
             message: "Post shared successfully",
-            status: "OK"
+            status: "OK",
         });
 
     } catch (e) {
