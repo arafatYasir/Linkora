@@ -10,7 +10,7 @@ const ProfileItemsLeft = ({ user, isImagesLoading, images }) => {
 
             <ProfilePhotos user={user} isImagesLoading={isImagesLoading} images={images} />
             
-            <div className="sticky top-0">
+            <div className="sticky top-[56px]">
                 <FriendsList friends={user?.friends} />
             </div>
         </div>

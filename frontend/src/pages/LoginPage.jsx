@@ -58,7 +58,6 @@ const LoginPage = () => {
       dispatch(setUser(res));
       localStorage.setItem("userInfo", JSON.stringify(res));
       
-      toast.success("Login successful!");
       setFormData({ email: "", password: "" });
       navigate("/"); // Redirect to home after login
     } catch (e) {

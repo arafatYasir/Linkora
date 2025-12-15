@@ -1,6 +1,6 @@
 import { IoIosCamera } from "react-icons/io"
 import { editOptions } from "../../../constants/coverPhoto"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import CoverOption from "./CoverOption"
 import { useCallback, useEffect, useRef, useState } from "react"
 import Cropper from "react-easy-crop"
@@ -8,6 +8,7 @@ import { FaGlobe } from "react-icons/fa"
 import { useCreatePostMutation, useUpdateCoverPhotoMutation, useUploadImageMutation } from "../../../../api/authApi"
 import { getCroppedImage } from "../../../helpers/cropImage"
 import ChooseCoverPhoto from "./ChooseCoverPhoto"
+import { toast } from "react-toastify"
 
 const CoverPhoto = ({ user, defaultCover, isImagesLoading, images, refetchUser }) => {
     // States
@@ -34,7 +35,6 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images, refetchUser }
     const inputFileRef = useRef(null);
     const coverRef = useRef(null);
     const chooseModalRef = useRef(null);
-    const dispatch = useDispatch();
 
     // useEffect to close things
     useEffect(() => {
@@ -103,7 +103,6 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images, refetchUser }
     }, []);
 
     const handleImageChange = (e) => {
-        console.log("Adding another one");
         const imageFile = e.target.files[0];
         setImage(imageFile);
     }
@@ -127,7 +126,7 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images, refetchUser }
             setCrop({ x: 0, y: 0 });
             setUploadingState("saved");
         } catch (e) {
-            console.log("Error cropping image: ", e)
+            console.error("Error cropping image: ", e)
         }
     }
 
@@ -175,8 +174,11 @@ const CoverPhoto = ({ user, defaultCover, isImagesLoading, images, refetchUser }
             if (inputFileRef.current) {
                 inputFileRef.current.value = "";
             }
+
+            toast.success("Cover photo updated!");
         } catch (e) {
-            console.log("Error while uploading cover photo: ", e);
+            console.error("Error while uploading cover photo: ", e);
+            toast.error("Failed to update cover photo!");
         } finally {
             setLoading(false);
         }

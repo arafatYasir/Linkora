@@ -6,6 +6,7 @@ import { HiPencil } from "react-icons/hi2";
 import CustomSelect from "../../common/CustomSelect"
 import ButtonPair from "../../common/ButtonPair";
 import IntroDetailsButton from "../../common/IntroDetailsButton";
+import { toast } from "react-toastify";
 
 const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
     const introModalRef = useRef(null);
@@ -144,12 +145,12 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
                 setLoading(true);
 
                 if (jobValue.trim() !== "" && workValue.trim() === "") {
-                    alert("Please enter your workplace name");
+                    toast.error("Please enter workplace name");
                     setLoading(false);
                     return;
                 }
                 else if (jobValue.trim() === "" && workValue.trim() !== "") {
-                    alert("Please the job name");
+                    toast.error("Please enter job name");
                     setLoading(false);
                     return;
                 }

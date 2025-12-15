@@ -116,7 +116,7 @@ const RegularPost = ({ user,
                                                 key={index}
                                                 src={image}
                                                 alt={`${user.firstname} ${user.lastname}'s post image ${index + 1}`}
-                                                className={`${type === "profile-picture" ? "w-[400px] h-[400px] mx-auto rounded-full" : "w-full max-h-[600px]"} object-cover`}
+                                                className={`${type === "profile-picture" ? "w-full h-full" : "w-full"} object-cover`}
                                             />
                                         ))}
                                     </div>

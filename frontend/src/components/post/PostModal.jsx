@@ -5,6 +5,7 @@ import { useCreatePostMutation, useUploadImageMutation } from "../../../api/auth
 import { useDispatch, useSelector } from "react-redux";
 import dataURIToBlob from "../../helpers/dataURIToBlob";
 import { addPost } from "../../slices/postsSlice";
+import { toast } from "react-toastify";
 
 const PostModal = ({ onClose }) => {
     // States
@@ -50,7 +51,6 @@ const PostModal = ({ onClose }) => {
                 }).unwrap();
 
                 if (res.status === "OK") {
-                    alert(res.message);
                     setText("");
                     setBackground("");
                     setShowBackgrounds(false);
@@ -93,7 +93,6 @@ const PostModal = ({ onClose }) => {
                 }).unwrap();
 
                 if (res.status === "OK") {
-                    alert(res.message);
                     setText("");
                     setFiles([]);
                     setBackground("");
@@ -121,8 +120,11 @@ const PostModal = ({ onClose }) => {
                 usersReaction: null,
                 comments: []
             }));
+
+            toast.success("Post created!");
         } catch (e) {
             console.log("ERROR on submission to post: ", e.message);
+            toast.error("Failed to create post!");
         } finally {
             setLoading(false);
         }

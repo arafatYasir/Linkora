@@ -8,6 +8,7 @@ import { getCroppedImage } from '../../helpers/cropImage';
 import { FaUpload } from "react-icons/fa6";
 import { useCreatePostMutation, useUpdateProfilePictureMutation, useUploadImageMutation } from '../../../api/authApi';
 import PhotosGroup from './PhotosGroup';
+import { toast } from "react-toastify";
 
 const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) => {
     // States
@@ -170,8 +171,11 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
                 if (fileInputRef.current) {
                     fileInputRef.current.value = "";
                 }
+
+                toast.success("Profile picture updated!");
             } catch (e) {
-                console.log("Error while uploading the profile picture: ", e);
+                console.error("Error while uploading the profile picture: ", e);
+                toast.error("Failed to update profile picture!");
             } finally {
                 setLoading(false);
             }
@@ -220,7 +224,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
             setImageSaved(true);
             setEditingMode(false);
         } catch (e) {
-            console.log("Error cropping image: ", e);
+            console.error("Error cropping image: ", e);
         }
     }
 

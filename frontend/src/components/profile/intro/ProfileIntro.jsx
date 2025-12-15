@@ -120,9 +120,12 @@ const ProfileIntro = ({ user, details }) => {
                 // Reset states
                 if (addBio) setAddBio(false);
                 else if (editBio) setEditBio(false);
+
+                toast.success("Updated!");
             }
         } catch (e) {
-            console.log("Error while saving bio: ", e);
+            console.error("Error while saving bio: ", e);
+            toast.error("Failed to update!");
         } finally {
             setLoading(false);
         }
