@@ -152,10 +152,10 @@ const RegularPost = ({ user,
 
                     <p className="flex gap-4">
                         {/* ---- Comments & Count ---- */}
-                        <span>{allComments.length > 0 ? `${allComments.length} comments` : ""}</span>
+                        <span>{allComments.length > 0 ? `${allComments.length} comment${allComments.length > 1 ? "s" : ""}` : ""}</span>
 
                         {/* ---- Shares & Count ---- */}
-                        <span>{shares.length > 0 ? `${shares.length} shares` : ""}</span>
+                        <span>{shares.length > 0 ? `${shares.length} share${shares.length > 1 ? "s" : ""}` : ""}</span>
                     </p>
                 </div>
             </div>
