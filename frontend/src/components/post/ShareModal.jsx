@@ -83,11 +83,6 @@ const ShareModal = ({ onClose, postLink, postId, originalPostedTime }) => {
                     usersReaction: null,
                     comments: []
                 }));
-
-                console.log({
-                    ...post,
-                    sharedPost
-                });
             }
         } catch (e) {
             toast.error("Failed to share the post!");

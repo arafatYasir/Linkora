@@ -39,7 +39,7 @@ const postSchema = new mongoose.Schema({
             },
             commentedAt: {
                 type: Date,
-                require: true
+                required: true
             }
         }
     ],
@@ -51,7 +51,7 @@ const postSchema = new mongoose.Schema({
             },
             sharedAt: {
                 type: Date,
-                require: true
+                required: true
             }
         }
     ],

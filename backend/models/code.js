@@ -5,7 +5,7 @@ const {ObjectId} = mongoose.Schema;
 const resetCodeSchema = new mongoose.Schema({
     code: {
         type: String,
-        require: true
+        required: true
     },
     userId: {
         type: ObjectId,

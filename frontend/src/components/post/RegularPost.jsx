@@ -26,6 +26,7 @@ const RegularPost = ({ user,
     setShowOptions,
     // Add the missing props below:
     react,
+    shares,
     timerRef,
     handleReact,
     reactionColors,
@@ -125,7 +126,7 @@ const RegularPost = ({ user,
                     }
                 </div>
 
-                {/* ---- Reactions & Comments ---- */}
+                {/* ---- Reactions/Comments/Shares ---- */}
                 <div className="flex items-center justify-between mb-2 px-4">
                     {/* ---- Reactions & Count ---- */}
                     <div className="flex items-center gap-x-1.5">
@@ -149,8 +150,13 @@ const RegularPost = ({ user,
                         <span>{totalReacts ? totalReacts : ""}</span>
                     </div>
 
-                    {/* ---- Comments & Count ---- */}
-                    <p>{allComments.length > 0 ? `${allComments.length} comments` : ""}</p>
+                    <p className="flex gap-4">
+                        {/* ---- Comments & Count ---- */}
+                        <span>{allComments.length > 0 ? `${allComments.length} comments` : ""}</span>
+
+                        {/* ---- Shares & Count ---- */}
+                        <span>{shares.length > 0 ? `${shares.length} shares` : ""}</span>
+                    </p>
                 </div>
             </div>
 

@@ -257,6 +257,14 @@ const sharePost = async (req, res) => {
             }
         });
 
+        // Add the user to the post shares array and save the post
+        post.shares.push({
+            sharedBy: req.user.id,
+            sharedAt: new Date()
+        });
+
+        await post.save();
+
         res.json({
             message: "Post shared successfully",
             status: "OK",

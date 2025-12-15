@@ -36,7 +36,7 @@ const Post = ({ post }) => {
     const optionsRef = useRef(null);
 
     // Extracting data from post
-    const { _id, text, type, user, background, comments, images, usersReaction, sharedPost, reactionsCount, totalReactions } = post;
+    const { _id, text, type, user, background, comments, images, usersReaction, sharedPost, reactionsCount, totalReactions, shares } = post;
 
     // Reaction api
     const [reactPost] = useReactPostMutation();
@@ -194,6 +194,7 @@ const Post = ({ post }) => {
                 showReacts={showReacts}
                 setShowReacts={setShowReacts}
                 react={react}
+                shares={shares}
                 timerRef={timerRef}
                 handleReact={handleReact}
 

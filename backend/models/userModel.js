@@ -5,26 +5,26 @@ const {ObjectId} = mongoose.Schema;
 const UserModel = new Schema({
     firstname: {
         type: String,
-        require: true,
+        required: true,
         trim: true,
         text: true
     },
     lastname: {
         type: String,
-        require: true,
+        required: true,
         trim: true,
         text: true,
     },
     username: {
         type: String,
-        require: true,
+        required: true,
         trim: true,
         text: true,
         unique: true
     },
     email: {
         type: String,
-        require: true,
+        required: true,
         trim: true,
         unique: true
     },
@@ -42,22 +42,22 @@ const UserModel = new Schema({
     },
     day: {
         type: Number,
-        require: true,
+        required: true,
         trim: true
     },
     month: {
         type: Number,
-        require: true,
+        required: true,
         trim: true
     },
     year: {
         type: Number,
-        require: true,
+        required: true,
         trim: true
     },
     gender: {
         type: String,
-        require: true,
+        required: true,
         enum: ["Male", "Female", "Other"]
     },
     verified: {
@@ -97,12 +97,12 @@ const UserModel = new Schema({
             user: {
                 type: ObjectId,
                 ref: "User",
-                require: true,
+                required: true,
                 text: true
             },
             createdAt: {
                 type: Date,
-                require: true,
+                required: true,
             }
         }
     ],
@@ -188,7 +188,7 @@ const UserModel = new Schema({
             },
             savedAt: {
                 type: Date,
-                require: true
+                required: true
             }
         }
     ],
@@ -204,7 +204,7 @@ const UserModel = new Schema({
             },
             sharedAt: {
                 type: Date,
-                require: true
+                required: true
             }
         }
     ],
