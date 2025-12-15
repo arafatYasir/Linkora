@@ -9,6 +9,7 @@ import { addPost } from "../../slices/postsSlice";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import defaultPhoto from "/default images/avatar.png";
+import { FaAngleLeft } from "react-icons/fa6";
 
 const PostModal = ({ onClose }) => {
     // States
@@ -212,11 +213,11 @@ const PostModal = ({ onClose }) => {
                     {/* ---- Custom Backgrounds ---- */}
                     <div className="flex items-center mb-4 gap-x-2">
                         <div
-                            className="w-10 h-10 cursor-pointer rounded-lg bg-gradient-to-r from-cyan-400 to-blue-500 shadow-sm hover:opacity-80 transition-all flex items-center justify-center text-white font-bold text-xs"
+                            className="w-10 h-10 cursor-pointer rounded-lg bg-gradient-to-r from-cyan-400 to-blue-500 shadow-sm hover:opacity-80 transition-all flex items-center justify-center text-white font-bold text-sm"
                             onClick={() => setShowBackgrounds(prev => !prev)}
                             title="Backgrounds"
                         >
-                            Aa
+                            {showBackgrounds ? <FaAngleLeft size={20} /> : "Aa"}
                         </div>
 
                         {showBackgrounds && (
