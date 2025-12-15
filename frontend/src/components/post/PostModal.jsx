@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { FaTimes, FaImage, FaVideo, FaFileAlt, FaGlobeAmericas, FaCaretDown } from "react-icons/fa";
+import { FaTimes, FaVideo, FaFileAlt, FaGlobeAmericas, FaCaretDown } from "react-icons/fa";
+import { IoImages } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { backgrounds } from "../../constants/postBackgrounds";
 import { useCreatePostMutation, useUploadImageMutation } from "../../../api/authApi";
@@ -274,7 +275,7 @@ const PostModal = ({ onClose }) => {
                         {/* ---- Upload Buttons ---- */}
                         <div className="flex items-center gap-1">
                             <label className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-bg cursor-pointer text-green-500 transition-colors" title="Photo">
-                                <FaImage size={24} />
+                                <IoImages size={24} />
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -284,7 +285,7 @@ const PostModal = ({ onClose }) => {
                                 />
                             </label>
 
-                            <label className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-bg cursor-pointer text-blue-500 transition-colors" title="Video">
+                            <label className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-bg cursor-pointer text-red-400 transition-colors" title="Video">
                                 <FaVideo size={24} />
                                 <input
                                     type="file"
@@ -295,7 +296,7 @@ const PostModal = ({ onClose }) => {
                                 />
                             </label>
 
-                            <label className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-bg cursor-pointer text-purple-500 transition-colors" title="File">
+                            <label className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-bg cursor-pointer text-blue-500 transition-colors" title="File">
                                 <FaFileAlt size={22} />
                                 <input
                                     type="file"
