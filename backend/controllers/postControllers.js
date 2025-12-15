@@ -24,13 +24,19 @@ const getAllPosts = async (req, res) => {
             path: "sharedPost",
             populate: {
                 path: "user",
-                select: "firstname lastname username profilePicture coverPhoto gender"
+                select: "firstname lastname username profilePicture gender"
             }
         });
 
         // Find the peoples he is following to and get all the posts of those people
         const userFollowing = await User.findById(req.user.id).select("following");
-        const followingPosts = await Post.find({ user: { $in: userFollowing.following } }).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username");
+        const followingPosts = await Post.find({ user: { $in: userFollowing.following } }).populate("user", "firstname lastname username profilePicture gender").populate("comments.commentedBy", "firstname lastname profilePicture username").populate({
+            path: "sharedPost",
+            populate: {
+                path: "user",
+                select: "firstname lastname username profilePicture gender"
+            }
+        });
 
         // Merge his own posts and his following peoples posts
         const posts = [...userPosts, ...followingPosts];
@@ -210,12 +216,20 @@ const deletePost = async (req, res) => {
             });
         }
 
-        // If the post is a shared post then delete it from user shared posts
+        // If the post is a shared post then delete the original one from user "sharedPosts" and also decreament the count of shares on the original post
         if (post.type === "shared-post") {
             await User.findByIdAndUpdate(req.user.id, {
                 $pull: {
                     sharedPosts: {
                         post: post.sharedPost._id
+                    }
+                }
+            });
+
+            await Post.findByIdAndUpdate(post.sharedPost._id, {
+                $pull: {
+                    shares: {
+                        sharedBy: req.user.id
                     }
                 }
             });

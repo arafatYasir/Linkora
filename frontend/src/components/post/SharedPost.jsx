@@ -43,6 +43,7 @@ const SharedPost = ({
 
     // Check if original post exists
     const isOriginalAvailable = !!sharedPost;
+    console.log(`post title: ${text} ------- post createdAt: ${sharedPost.createdAt}`);
     const originalUser = sharedPost?.user;
     const realPostedTime = isOriginalAvailable ? formatDistance(new Date(sharedPost.createdAt), new Date(), { addSuffix: true }) : "";
 

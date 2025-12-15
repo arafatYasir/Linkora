@@ -137,6 +137,8 @@ const Post = ({ post }) => {
 
     const postedTime = formatDistance(post.createdAt, new Date(), { addSuffix: true });
 
+    console.log(sharedPost);
+
     return (
         type === "shared-post" ? (
             <SharedPost
