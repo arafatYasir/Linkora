@@ -124,7 +124,7 @@ const ShareModal = ({ onClose, postLink, postId, originalPostedTime }) => {
                             <img
                                 src={userInfo.profilePicture || defaultPhoto}
                                 alt={userInfo.firstname + " " + userInfo.lastname}
-                                className="w-full h-full object-cover border"
+                                className="w-full h-full object-cover"
                             />
                         </Link>
 
