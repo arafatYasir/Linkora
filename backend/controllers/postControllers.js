@@ -202,6 +202,26 @@ const savePost = async (req, res) => {
 const deletePost = async (req, res) => {
     try {
         const { id } = req.params;
+        const post = await Post.findById(id);
+
+        if (!post) {
+            return res.status(404).json({
+                error: "Post not found!"
+            });
+        }
+
+        // If the post is a shared post then delete it from user shared posts
+        if (post.type === "shared-post") {
+            await User.findByIdAndUpdate(req.user.id, {
+                $pull: {
+                    sharedPosts: {
+                        post: post.sharedPost._id
+                    }
+                }
+            });
+        }
+
+        // Then finally delete the post from main database
         await Post.findByIdAndDelete(id);
 
         res.json({
