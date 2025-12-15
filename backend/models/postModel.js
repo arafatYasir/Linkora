@@ -43,6 +43,18 @@ const postSchema = new mongoose.Schema({
             }
         }
     ],
+    shares: [
+        {
+            sharedBy: {
+                type: ObjectId,
+                ref: "User"
+            },
+            sharedAt: {
+                type: Date,
+                require: true
+            }
+        }
+    ],
     reacts: [
         {
             react: {
