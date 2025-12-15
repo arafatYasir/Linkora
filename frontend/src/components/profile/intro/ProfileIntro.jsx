@@ -15,10 +15,10 @@ import Location from "./Location";
 import SocialLink from "./SocialLink";
 import { IoMdMail } from "react-icons/io";
 import { FaFacebook, FaGithub, FaInstagram, FaXTwitter, FaYoutube } from "react-icons/fa6";
+import { toast } from "react-toastify";
 
 const ProfileIntro = ({ user, details }) => {
     // States
-    const [introInfos, setIntroInfos] = useState(null);
     const [isIntroEmpty, setIsIntroEmpty] = useState(true);
     const [showEditDetailsModal, setShowEditDetailsModal] = useState(false);
     const [addBio, setAddBio] = useState(false);
@@ -30,6 +30,7 @@ const ProfileIntro = ({ user, details }) => {
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
+    const { details: introInfos } = userInfo;
 
     // Extra hooks
     const dispatch = useDispatch();
@@ -37,7 +38,7 @@ const ProfileIntro = ({ user, details }) => {
     // useEffect to check if intro is empty
     useEffect(() => {
         if (details) {
-            setIntroInfos({
+            dispatch(setIntro({
                 bio: details.bio,
                 college: details.college,
                 university: details.university,
@@ -54,7 +55,7 @@ const ProfileIntro = ({ user, details }) => {
                 x: details.x,
                 youtube: details.youtube,
                 github: details.github
-            });
+            }));
             const values = Object.values(details);
 
             values.forEach(value => {
@@ -87,30 +88,16 @@ const ProfileIntro = ({ user, details }) => {
         setEditBio(false);
     }
 
-    const saveIntroInLocal = (intro) => {
-        // Saving in local state
-        setIntroInfos(intro);
-
-        // Saving in Redux
-        dispatch(setIntro(intro));
-
-        // Saving in localstorage
-        const user = JSON.parse(localStorage.getItem("userInfo"));
-        user.details = intro;
-
-        localStorage.setItem("userInfo", JSON.stringify(user));
-    }
-
     const handleSaveIntro = async (type, object, key, value) => {
         try {
             setLoading(true);
 
             // Saving in local state based on multiple or single
             if (type === "single") {
-                saveIntroInLocal({ ...introInfos, [key]: value });
+                dispatch(setIntro({ ...introInfos, [key]: value }));
             }
             else {
-                saveIntroInLocal({ ...introInfos, ...object });
+                dispatch(setIntro({ ...introInfos, ...object }));
             }
 
             // Saving in database

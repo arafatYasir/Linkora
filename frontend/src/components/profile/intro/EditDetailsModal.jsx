@@ -7,11 +7,16 @@ import CustomSelect from "../../common/CustomSelect"
 import ButtonPair from "../../common/ButtonPair";
 import IntroDetailsButton from "../../common/IntroDetailsButton";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { setIntro } from "../../../slices/authSlice";
 
 const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
+    // Redux states
+    const { details: local } = useSelector(state => state.auth.userInfo);
+
+    // Extra hooks
     const introModalRef = useRef(null);
-    const [local, setLocal] = useState({ ...initialDetails });
-    const [loadingField, setLoadingField] = useState(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const handleClose = (e) => {
@@ -23,23 +28,16 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         return () => document.removeEventListener("mousedown", handleClose);
     }, [onClose]);
 
-    useEffect(() => {
-        setLocal({ ...initialDetails });
-    }, [initialDetails]);
-
     const saveField = async (type, object, key, value) => {
-        setLoadingField(key);
         const previous = local[key];
 
         try {
             await onSave(type, object, key, value);
         } catch (e) {
             // revert on error
-            setLocal((p) => ({ ...p, [key]: previous }));
+            dispatch(setIntro({ ...local, [key]: previous }));
             console.error("Error saving field", key, e);
-            throw e;
-        } finally {
-            setLoadingField(null);
+            toast.error("Failed to save field");
         }
     };
 
@@ -56,11 +54,14 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         const handleAddPronoun = async () => {
             try {
                 setLoading(true);
+
                 if (!pronoun) return;
+
                 await saveField("single", {}, "pronoun", pronoun);
                 setShowSelect(false);
             } catch (e) {
-                console.log("Error while adding a pronoun: ", e);
+                console.error("Error while adding a pronoun: ", e);
+                toast.error("Failed to add pronoun");
             } finally {
                 setLoading(false);
             }
@@ -72,7 +73,15 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
         }
 
         const removePronoun = async () => {
-            await saveField("single", {}, "pronoun", "");
+            try {
+                setLoading(true);
+                await saveField("single", {}, "pronoun", "");
+            } catch (e) {
+                console.error("Error while removing a pronoun: ", e);
+                toast.error("Failed to remove pronoun");
+            } finally {
+                setLoading(false);
+            }
         };
 
         return (
@@ -81,7 +90,7 @@ const EditDetailsModal = ({ initialDetails = {}, onClose, onSave }) => {
 
                 <div className={`flex items-center justify-between ${showSelect ? "flex-col items-stretch" : "flex-row"}`}>
                     <div className="flex items-center gap-2 flex-wrap">
-                        {pronoun ? (
+                        {pronoun.trim() ? (
                             <div className="px-3 py-1 rounded-full bg-border text-sm flex items-center gap-x-2">
                                 <span>{pronoun}</span>
                                 <button aria-label="remove" onClick={removePronoun} className="text-lg hover:text-primary opacity-80 hover:opacity-100 cursor-pointer">×</button>
