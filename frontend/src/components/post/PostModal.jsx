@@ -144,6 +144,7 @@ const PostModal = ({ onClose }) => {
                     <button
                         onClick={onClose}
                         className="absolute right-4 p-2 rounded-full cursor-pointer text-text-secondary bg-border/50 hover:bg-border hover:text-text-primary transition-colors active:scale-95"
+                        aria-label="Close"
                     >
                         <IoMdClose size={22} />
                     </button>
@@ -157,7 +158,7 @@ const PostModal = ({ onClose }) => {
                             <img
                                 src={userInfo.profilePicture || defaultPhoto}
                                 alt={userInfo.firstname + " " + userInfo.lastname}
-                                className="w-full h-full object-cover border"
+                                className="w-full h-full object-cover"
                             />
                         </Link>
                         <div className="flex flex-col items-start">
@@ -178,7 +179,7 @@ const PostModal = ({ onClose }) => {
                     <div className="w-full mb-4">
                         {background ? (
                             <div className="relative">
-                                <img className="w-full h-[300px] rounded-lg object-cover shadow-sm" src={background} alt="post-background" />
+                                <img className="w-full rounded-lg object-cover shadow-sm" src={background} alt="post-background" />
 
                                 <button
                                     className="absolute top-2 right-2 p-1 bg-black/40 hover:bg-black/60 rounded-full text-white transition-all"
@@ -209,9 +210,9 @@ const PostModal = ({ onClose }) => {
                     </div>
 
                     {/* ---- Custom Backgrounds ---- */}
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center mb-4 gap-x-2">
                         <div
-                            className="w-9 h-9 cursor-pointer rounded-lg bg-gradient-to-tr from-cyan-400 to-blue-500 shadow-sm hover:opacity-90 transition-all flex items-center justify-center text-white font-bold text-xs"
+                            className="w-10 h-10 cursor-pointer rounded-lg bg-gradient-to-r from-cyan-400 to-blue-500 shadow-sm hover:opacity-80 transition-all flex items-center justify-center text-white font-bold text-xs"
                             onClick={() => setShowBackgrounds(prev => !prev)}
                             title="Backgrounds"
                         >
@@ -219,10 +220,10 @@ const PostModal = ({ onClose }) => {
                         </div>
 
                         {showBackgrounds && (
-                            <div className="flex gap-2 animate-fade-in pl-2 overflow-x-auto pb-1 custom-scrollbar">
+                            <div className="flex gap-x-2">
                                 {backgrounds.map((source, index) => (
                                     <div
-                                        className="w-9 h-9 min-w-[36px] cursor-pointer hover:scale-110 transition-transform"
+                                        className="w-10 h-10 cursor-pointer transition-transform hover:opacity-80"
                                         key={index}
                                         onClick={() => setBackground(source)}
                                     >
@@ -265,12 +266,13 @@ const PostModal = ({ onClose }) => {
                     )}
 
 
-                    {/* ---- Add to Post (Upload buttons) ---- */}
-                    <div className="flex items-center justify-between px-4 py-3 border border-border rounded-lg shadow-sm">
+                    {/* ---- Add to Post ---- */}
+                    <div className="flex items-center justify-between px-4 py-2 border border-border rounded-lg shadow-sm">
                         <span className="text-text-primary font-semibold text-[15px]">Add to your post</span>
 
+                        {/* ---- Upload Buttons ---- */}
                         <div className="flex items-center gap-1">
-                            <label className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-bg cursor-pointer text-green-500 transition-colors" title="Photo">
+                            <label className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-bg cursor-pointer text-green-500 transition-colors" title="Photo">
                                 <FaImage size={24} />
                                 <input
                                     type="file"
@@ -281,7 +283,7 @@ const PostModal = ({ onClose }) => {
                                 />
                             </label>
 
-                            <label className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-bg cursor-pointer text-blue-500 transition-colors" title="Video">
+                            <label className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-bg cursor-pointer text-blue-500 transition-colors" title="Video">
                                 <FaVideo size={24} />
                                 <input
                                     type="file"
@@ -292,7 +294,7 @@ const PostModal = ({ onClose }) => {
                                 />
                             </label>
 
-                            <label className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-bg cursor-pointer text-purple-500 transition-colors" title="File">
+                            <label className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-bg cursor-pointer text-purple-500 transition-colors" title="File">
                                 <FaFileAlt size={22} />
                                 <input
                                     type="file"
@@ -310,7 +312,7 @@ const PostModal = ({ onClose }) => {
                     <button
                         onClick={handleSubmit}
                         disabled={text === "" && files.length === 0 && !background}
-                        className="w-full py-2.5 bg-primary hover:bg-primary-hover text-white font-semibold rounded-lg transition-all shadow-md active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-2.5 bg-primary hover:bg-primary-hover text-white font-semibold rounded-lg transition-all shadow-md active:scale-[0.98] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {loading ? "Posting..." : "Post"}
                     </button>

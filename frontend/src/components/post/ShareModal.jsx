@@ -127,6 +127,7 @@ const ShareModal = ({ onClose, postLink, postId, originalPostedTime }) => {
                                 className="w-full h-full object-cover border"
                             />
                         </Link>
+
                         <div className="flex flex-col items-start">
                             <span className="font-semibold text-text-primary leading-tight">
                                 {userInfo.firstname + " " + userInfo.lastname}
@@ -148,7 +149,8 @@ const ShareModal = ({ onClose, postLink, postId, originalPostedTime }) => {
                             value={caption}
                             onChange={(e) => setCaption(e.target.value)}
                             style={{ lineHeight: "22px" }}
-                            className="w-full min-h-[140px] bg-transparent text-text-primary placeholder:text-text-secondary/60 resize-none outline-none border-none focus:ring-0 p-0 custom-scrollbar"
+                            className="w-full min-h-[140px] bg-transparent text-text-primary placeholder:text-text-secondary/60 resize-none outline-none border-none focus:ring-0 p-0 custom-scrollbar text-lg"
+                            rows={4}
                             autoFocus
                         />
                     </div>
