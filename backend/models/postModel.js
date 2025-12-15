@@ -22,7 +22,8 @@ const postSchema = new mongoose.Schema({
     },
     sharedPost: {
         type: ObjectId,
-        ref: "Post"
+        ref: "Post",
+        default: null
     },
     comments: [
         {

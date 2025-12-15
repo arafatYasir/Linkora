@@ -51,7 +51,6 @@ const ShareModal = ({ onClose, postLink, postId }) => {
 
             // If post share is successful then create a "post"
             if (sharePostResponse.status === "OK") {
-                console.log("Gonna create the post");
                 const createPostResponse = await createPost({
                     type: "shared-post",
                     images: [],
