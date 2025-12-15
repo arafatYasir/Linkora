@@ -66,6 +66,8 @@ const UserProfilePage = () => {
 
     if (isLoading && !isOwnProfile) return <div className="text-3xl text-center">Loading...</div>
 
+    console.log(posts);
+
     return (
         <div className="max-w-[1100px] mx-auto">
             {userError?.status === 404 ? <NotFound /> : (

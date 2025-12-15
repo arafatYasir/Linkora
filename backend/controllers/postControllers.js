@@ -20,7 +20,7 @@ const createPost = async (req, res) => {
 const getAllPosts = async (req, res) => {
     try {
         // First find all the posts of the user
-        const userPosts = await Post.find({ user: req.user.id }).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username").populate({
+        const userPosts = await Post.find({ user: req.user.id }).populate("user", "firstname lastname username profilePicture gender").populate("comments.commentedBy", "firstname lastname profilePicture username").populate({
             path: "sharedPost",
             populate: {
                 path: "user",
