@@ -42,10 +42,9 @@ const SharedPost = ({
 }) => {
 
     // Check if original post exists
-    console.log(sharedPost)
     const isOriginalAvailable = !!sharedPost;
     const originalUser = sharedPost?.user;
-    const originalPostedTime = isOriginalAvailable ? formatDistance(new Date(sharedPost.createdAt), new Date(), { addSuffix: true }) : "";
+    const realPostedTime = isOriginalAvailable ? formatDistance(new Date(sharedPost.createdAt), new Date(), { addSuffix: true }) : "";
 
     return (
         <li className="w-full bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] transition-[var(--transition-default)]">
@@ -122,7 +121,7 @@ const SharedPost = ({
                                         {originalUser.firstname + " " + originalUser.lastname}
                                     </Link>
                                 </p>
-                                <span className="text-xs text-gray-500 font-medium">{originalPostedTime}</span>
+                                <span className="text-xs text-gray-500 font-medium">{realPostedTime}</span>
                             </div>
                         </div>
 

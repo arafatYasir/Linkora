@@ -39,7 +39,7 @@ const RegularPost = ({ user,
     showShareModal,
     setShowShareModal,
     commentRef,
-    setAllComments 
+    setAllComments
 }) => {
     return (
         <li className="w-full bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] transition-[var(--transition-default)]">
@@ -209,7 +209,7 @@ const RegularPost = ({ user,
 
             {/* ---- Share Modal ---- */}
             {
-                showShareModal && <ShareModal onClose={() => setShowShareModal(false)} postLink={`/posts/${_id}`} postId={_id} />
+                showShareModal && <ShareModal onClose={() => setShowShareModal(false)} postLink={`/posts/${_id}`} postId={_id} originalPostedTime={postedTime} />
             }
 
             {/* ---- Comments ---- */}

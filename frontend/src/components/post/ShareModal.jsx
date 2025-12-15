@@ -7,7 +7,7 @@ import defaultPhoto from "/default images/avatar.png";
 import { useCreatePostMutation, useSharePostMutation } from "../../../api/authApi";
 import { addPost } from "../../slices/postsSlice";
 
-const ShareModal = ({ onClose, postLink, postId }) => {
+const ShareModal = ({ onClose, postLink, postId, originalPostedTime }) => {
     // States
     const [caption, setCaption] = useState("");
     const [loading, setLoading] = useState(false);
@@ -49,6 +49,9 @@ const ShareModal = ({ onClose, postLink, postId }) => {
             // First save the post to the database
             const sharePostResponse = await sharePost({ postId, caption }).unwrap();
 
+            // Extracting the shared post details from api call
+            const sharedPost = sharePostResponse.sharedPost;
+
             // If post share is successful then create a "post"
             if (sharePostResponse.status === "OK") {
                 const createPostResponse = await createPost({
@@ -67,6 +70,7 @@ const ShareModal = ({ onClose, postLink, postId }) => {
                 // Adding the post in redux store
                 dispatch(addPost({
                     ...post,
+                    sharedPost,
                     reactionsCount: {
                         Like: 0,
                         Love: 0,
@@ -79,6 +83,11 @@ const ShareModal = ({ onClose, postLink, postId }) => {
                     usersReaction: null,
                     comments: []
                 }));
+
+                console.log({
+                    ...post,
+                    sharedPost
+                });
             }
         } catch (e) {
             toast.error("Failed to share the post!");

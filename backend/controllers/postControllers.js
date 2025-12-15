@@ -67,7 +67,7 @@ const getAllPosts = async (req, res) => {
 const getUserPosts = async (req, res) => {
     try {
         const { id } = req.params;
-        const posts = await Post.find({ user: id }).populate("user", "firstname lastname username profilePicture coverPhoto gender").populate("comments.commentedBy", "firstname lastname profilePicture username").sort({ createdAt: -1 });
+        const posts = await Post.find({ user: id }).populate("user", "firstname lastname username profilePicture gender").populate("comments.commentedBy", "firstname lastname profilePicture username").sort({ createdAt: -1 });
 
         const postsWithReaction = posts.map(post => {
             const reactionsCount = {};
@@ -218,7 +218,7 @@ const deletePost = async (req, res) => {
 const sharePost = async (req, res) => {
     try {
         const { postId, caption } = req.body;
-        const post = await Post.findById(postId);
+        const post = await Post.findById(postId).populate("user", "firstname lastname profilePicture username gender");
 
         if (!post) {
             return res.status(404).json({
@@ -240,6 +240,7 @@ const sharePost = async (req, res) => {
         res.json({
             message: "Post shared successfully",
             status: "OK",
+            sharedPost: post
         });
 
     } catch (e) {

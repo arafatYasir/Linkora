@@ -145,7 +145,7 @@ const Post = ({ post }) => {
                 type={type}
                 postedTime={postedTime}
                 text={text}
-                sharedPost={sharedPost} // Passing the original post data
+                sharedPost={sharedPost}
                 _id={_id}
 
                 // Reaction States & Logic
