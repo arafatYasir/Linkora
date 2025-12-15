@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import defaultPhoto from "/default images/avatar.png";
 import { useCreatePostMutation, useSharePostMutation } from "../../../api/authApi";
 import { addPost } from "../../slices/postsSlice";
+import { Link } from "react-router-dom";
 
 const ShareModal = ({ onClose, postLink, postId, originalPostedTime }) => {
     // States
@@ -119,13 +120,13 @@ const ShareModal = ({ onClose, postLink, postId, originalPostedTime }) => {
                 <div className="p-4">
                     <div className="flex items-center gap-3 mb-4">
                         {/* Profile Picture & Name */}
-                        <div className="w-10 h-10 overflow-hidden rounded-full">
+                        <Link to={`/profile/${userInfo.username}`} className="block w-10 h-10 overflow-hidden rounded-full">
                             <img
                                 src={userInfo.profilePicture || defaultPhoto}
                                 alt={userInfo.firstname + " " + userInfo.lastname}
                                 className="w-full h-full object-cover border"
                             />
-                        </div>
+                        </Link>
                         <div className="flex flex-col items-start">
                             <span className="font-semibold text-text-primary leading-tight">
                                 {userInfo.firstname + " " + userInfo.lastname}
