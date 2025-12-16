@@ -8,6 +8,7 @@ import { useGetAllPostsQuery, useGetUserQuery } from "../../api/authApi";
 import HomePageFriends from "../components/homepage/HomePageFriends";
 import HomePageSidebar from "../components/homepage/HomePageSidebar";
 import { setPosts } from "../slices/postsSlice";
+import { useLocation } from "react-router-dom";
 
 const HomePage = () => {
     // States
@@ -19,6 +20,14 @@ const HomePage = () => {
 
     // Extra hooks
     const dispatch = useDispatch();
+    const path = useLocation();
+
+    // Checking if there is any post id in url
+    if(path.pathname.includes("/posts/")) {
+        const postId = path.pathname.split("/posts/")[1];
+
+        
+    }
 
     // Fetching user
     const { data: user } = useGetUserQuery(userInfo.username);

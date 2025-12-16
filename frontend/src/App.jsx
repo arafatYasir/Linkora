@@ -32,6 +32,7 @@ const App = () => {
         <Route element={<UserLoggedIn />}>
           <Route path="/" element={<RootLayout />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/posts/:postId" element={<HomePage />} />
           </Route>
           <Route path="/profile" element={<ProfileLayout />}>
             <Route path="/profile" element={<UserProfilePage />} />

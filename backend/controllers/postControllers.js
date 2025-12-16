@@ -99,6 +99,30 @@ const getUserPosts = async (req, res) => {
     }
 }
 
+const getPost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const post = await Post.findById(id).populate("user", "firstname lastname username profilePicture gender").populate("comments.commentedBy", "firstname lastname profilePicture username");
+
+        // If post not found
+        if (!post) {
+            return res.status(404).json({
+                error: "Post not found!"
+            });
+        }
+
+        res.json({
+            message: "Post fetched successfully",
+            status: "OK",
+            post
+        });
+    } catch (e) {
+        res.status(404).json({
+            error: e.message
+        });
+    }
+}
+
 const reactPost = async (req, res) => {
     try {
         const { react, postId } = req.body;
@@ -307,4 +331,4 @@ const sharePost = async (req, res) => {
     }
 }
 
-module.exports = { createPost, getAllPosts, getUserPosts, reactPost, commentPost, savePost, deletePost, sharePost };
+module.exports = { createPost, getAllPosts, getUserPosts, getPost, reactPost, commentPost, savePost, deletePost, sharePost };
