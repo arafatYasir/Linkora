@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import CreatePost from "../components/post/CreatePost";
 import PostModal from "../components/post/PostModal";
 import AllPosts from "../components/post/AllPosts";
-import { useGetAllPostsQuery, useGetUserQuery } from "../../api/authApi";
+import { useGetAllPostsQuery, useGetPostQuery, useGetUserQuery } from "../../api/authApi";
 import HomePageFriends from "../components/homepage/HomePageFriends";
 import HomePageSidebar from "../components/homepage/HomePageSidebar";
 import { setPosts } from "../slices/postsSlice";
@@ -26,7 +26,9 @@ const HomePage = () => {
     if(path.pathname.includes("/posts/")) {
         const postId = path.pathname.split("/posts/")[1];
 
-        
+        const { data } = useGetPostQuery(postId);
+
+        console.log(data?.post);
     }
 
     // Fetching user
