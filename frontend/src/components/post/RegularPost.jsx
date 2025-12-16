@@ -83,7 +83,7 @@ const RegularPost = ({ user,
                     </div>
                     {/* ---- Post Options ---- */}
                     {
-                        showOptions && <PostOptions user={user} postId={_id} />
+                        showOptions && <PostOptions user={user} postId={_id} onClose={() => setShowOptions(false)} />
                     }
                 </div>
             </div>
