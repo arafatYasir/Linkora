@@ -67,6 +67,9 @@ export const authApi = createApi({
         getUserPosts: build.query({
             query: (id) => `/api/v1/posts/get-user-posts/${id}`
         }),
+        getPost: build.query({
+            query: (id) => `/api/v1/posts/get-post/${id}`
+        }),
         getUser: build.query({
             query: (username) => `/api/v1/get-user/${username}`
         }),
@@ -202,4 +205,4 @@ export const authApi = createApi({
     }),
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserPostsQuery, useGetUserQuery, useListImagesQuery, useUpdateProfilePictureMutation, useUpdateCoverPhotoMutation, useUpdateProfileIntroMutation, useAddFriendMutation, useCancelRequestMutation, useAcceptRequestMutation, useFollowMutation, useUnfollowMutation, useUnfriendMutation, useDeleteRequestMutation, useReactPostMutation, useCommentPostMutation, useSavePostMutation, useDeletePostMutation, useSearchQuery, useLazySearchQuery, useAddToSearchHistoryMutation, useRemoveSearchHistoryMutation, useSharePostMutation } = authApi;
+export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserPostsQuery, useGetPostQuery, useGetUserQuery, useListImagesQuery, useUpdateProfilePictureMutation, useUpdateCoverPhotoMutation, useUpdateProfileIntroMutation, useAddFriendMutation, useCancelRequestMutation, useAcceptRequestMutation, useFollowMutation, useUnfollowMutation, useUnfriendMutation, useDeleteRequestMutation, useReactPostMutation, useCommentPostMutation, useSavePostMutation, useDeletePostMutation, useSearchQuery, useLazySearchQuery, useAddToSearchHistoryMutation, useRemoveSearchHistoryMutation, useSharePostMutation } = authApi;
