@@ -98,7 +98,7 @@ const SharedPost = ({
             )}
 
             {/* ---- Shared Content Container ---- */}
-            <div className="mx-4 mb-4 border border-[var(--color-border)] rounded-lg overflow-hidden">
+            <div className="mx-4 mt-4 mb-2 border border-[var(--color-border)] rounded-[var(--radius-card)] overflow-hidden">
                 {isOriginalAvailable ? (
                     <div className="bg-[var(--color-surface)]">
                         {/* ---- Original Post Header ---- */}
@@ -174,7 +174,7 @@ const SharedPost = ({
             </div>
 
             {/* ---- Reactions & Comments Count (For the share) ---- */}
-            <div className="flex items-center justify-between mb-2 px-4 mt-2">
+            <div className="flex items-center justify-between mb-2 px-4">
                 <div className="flex items-center gap-x-1.5">
                     <div className="flex items-center space-x-[-2px]">
                         {allReactionCounts && Object.keys(allReactionCounts).map((reactKey, index) => {
@@ -256,7 +256,7 @@ const SharedPost = ({
 
             {/* ---- Share Modal ---- */}
             {
-                showShareModal && <ShareModal onClose={() => setShowShareModal(false)} postLink={`/posts/${_id}`} postId={_id} />
+                showShareModal && <ShareModal onClose={() => setShowShareModal(false)} postType="shared-post" postLink={`/posts/${sharedPost._id}`} postId={sharedPost._id} />
             }
 
             {/* ---- Comments Section ---- */}

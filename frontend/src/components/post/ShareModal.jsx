@@ -8,7 +8,7 @@ import { useCreatePostMutation, useSharePostMutation } from "../../../api/authAp
 import { addPost } from "../../slices/postsSlice";
 import { Link } from "react-router-dom";
 
-const ShareModal = ({ onClose, postLink, postId, originalPostedTime }) => {
+const ShareModal = ({ onClose, postLink, postId, originalPostedTime, postType }) => {
     // States
     const [caption, setCaption] = useState("");
     const [loading, setLoading] = useState(false);
