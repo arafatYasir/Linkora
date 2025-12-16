@@ -92,13 +92,13 @@ const SharedPost = ({
 
             {/* ---- Sharer Caption ---- */}
             {text && (
-                <div className="px-4 py-3">
+                <div className="px-4 mt-2">
                     <p className="text-[15px]" style={{ lineHeight: "20px" }}>{text}</p>
                 </div>
             )}
 
             {/* ---- Shared Content Container ---- */}
-            <div className="mx-4 mt-4 mb-2 border border-[var(--color-border)] rounded-[var(--radius-card)] overflow-hidden">
+            <div className="mx-4 my-2 border border-[var(--color-border)] rounded-[var(--radius-card)] overflow-hidden">
                 {isOriginalAvailable ? (
                     <div className="bg-[var(--color-surface)]">
                         {/* ---- Original Post Header ---- */}

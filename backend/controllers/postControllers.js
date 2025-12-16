@@ -218,21 +218,35 @@ const deletePost = async (req, res) => {
 
         // If the post is a shared post then delete the original one from user "sharedPosts" and also decreament the count of shares on the original post
         if (post.type === "shared-post") {
-            await User.findByIdAndUpdate(req.user.id, {
-                $pull: {
-                    sharedPosts: {
-                        post: post.sharedPost._id
-                    }
-                }
-            });
+            const user = await User.findById(req.user.id);
 
-            await Post.findByIdAndUpdate(post.sharedPost._id, {
-                $pull: {
-                    shares: {
-                        sharedBy: req.user.id
+            const sharedPostEntry = user.sharedPosts.find(shared => shared.post.toString() === post.sharedPost._id.toString());
+
+            if(sharedPostEntry) {
+                await User.updateOne({_id: req.user.id}, {
+                    $pull: {
+                        sharedPosts: {
+                            _id: sharedPostEntry._id
+                        }
                     }
+                })
+            }
+
+            const originalPost = await Post.findById(post.sharedPost._id);
+
+            if(originalPost) {
+                const shareEntry = originalPost.shares.find(share => share.sharedBy.toString() === req.user.id.toString());
+
+                if(shareEntry) {
+                    await Post.updateOne({ _id: post.sharedPost._id }, {
+                        $pull: {
+                            shares: {
+                                _id: shareEntry._id
+                            }
+                        }
+                    });
                 }
-            });
+            }
         }
 
         // Then finally delete the post from main database
