@@ -6,11 +6,16 @@ import { useDeletePostMutation, useSavePostMutation } from "../../../api/authApi
 import { useDispatch } from "react-redux";
 import { postDelete } from "../../slices/postsSlice";
 import ConfirmationModal from "../common/ConfirmationModal";
+import { toast } from "react-toastify"
+import { postActionTypes } from "../../constants/postActionTypes";
 
 const PostOptions = ({ user, postId, onClose }) => {
     // States
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [modalHeading, setModalHeading] = useState("");
+    const [modalText, setModalText] = useState("");
+    const [confirm, setConfirm] = useState(null);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
@@ -30,8 +35,12 @@ const PostOptions = ({ user, postId, onClose }) => {
         setLoading(true);
         try {
             await savePost(postId).unwrap();
+            
+            toast.success("Post saved!");
+            onClose();
         } catch (e) {
             console.error("Error while saving post", e);
+            toast.error("Failed to save post");
         } finally {
             setLoading(false);
         }
@@ -45,8 +54,12 @@ const PostOptions = ({ user, postId, onClose }) => {
             if (res.status === "OK") {
                 dispatch(postDelete(postId));
             }
+
+            toast.success("Post deleted!");
+            onClose();
         } catch (e) {
             console.error("Error while deleting post", e);
+            toast.error("Failed to delete post");
         } finally {
             setLoading(false);
         }
@@ -55,12 +68,14 @@ const PostOptions = ({ user, postId, onClose }) => {
     const handleClick = (actionType) => {
         setShowModal(true);
 
-        return;
-
         if (actionType === "Save Post") {
-            handleSavePost();
+            setConfirm(() => handleSavePost);
+            setModalHeading(postActionTypes[actionType].heading);
+            setModalText(postActionTypes[actionType].text);
         } else if (actionType === "Delete Post") {
-            handleDeletePost();
+            setConfirm(() => handleDeletePost);
+            setModalHeading(postActionTypes[actionType].heading);
+            setModalText(postActionTypes[actionType].text);
         }
     }
 
@@ -77,8 +92,9 @@ const PostOptions = ({ user, postId, onClose }) => {
             {/* ---- Confirmation Modal ---- */}
             {showModal && (
                 <ConfirmationModal
-                    text="Are you sure you want to delete this post?"
-                    onConfirm={handleDeletePost}
+                    heading={modalHeading}
+                    text={modalText}
+                    onConfirm={confirm}
                     onCancel={() => setShowModal(false)}
                     loading={loading}
                 />

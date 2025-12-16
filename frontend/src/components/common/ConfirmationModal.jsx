@@ -1,6 +1,6 @@
 import { IoMdClose } from "react-icons/io";
 
-const ConfirmationModal = ({ heading = "Confirm", text, onConfirm, onCancel, loading }) => {
+const ConfirmationModal = ({ heading, text, onConfirm, onCancel, loading }) => {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
             <div className="w-full max-w-md rounded-xl shadow-lg bg-surface border border-border overflow-hidden transform transition-all">
