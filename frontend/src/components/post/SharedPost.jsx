@@ -25,6 +25,7 @@ const SharedPost = ({
     showOptions,
     setShowOptions,
     react,
+    shares,
     timerRef,
     handleReact,
     reactionColors,
@@ -189,9 +190,15 @@ const SharedPost = ({
                             }
                         })}
                     </div>
-                    <span>{totalReacts ? totalReacts : ""}</span>
+                    <span>{totalReacts || ""}</span>
                 </div>
-                <p>{allComments.length > 0 ? `${allComments.length} comments` : ""}</p>
+                <p className={`flex ${sharedPost.shares.length > 0 ? "gap-4" : ""}`}>
+                    {/* ---- Comments & Count ---- */}
+                    <span>{allComments.length > 0 ? `${allComments.length} comment${allComments.length > 1 ? "s" : ""}` : ""}</span>
+
+                    {/* ---- Shares & Count ---- */}
+                    <span>{shares.length > 0 ? `${shares.length} share${shares.length > 1 ? "s" : ""}` : ""}</span>
+                </p>
             </div>
 
 

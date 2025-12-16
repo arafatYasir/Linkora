@@ -147,10 +147,10 @@ const RegularPost = ({ user,
                         </div>
 
                         {/* ---- Count ---- */}
-                        <span>{totalReacts ? totalReacts : ""}</span>
+                        <span>{totalReacts || ""}</span>
                     </div>
 
-                    <p className="flex gap-4">
+                    <p className={`flex ${shares.length > 0 ? "gap-4" : ""}`}>
                         {/* ---- Comments & Count ---- */}
                         <span>{allComments.length > 0 ? `${allComments.length} comment${allComments.length > 1 ? "s" : ""}` : ""}</span>
 
