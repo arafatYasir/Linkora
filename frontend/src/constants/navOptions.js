@@ -5,6 +5,7 @@ export const navIcons = [
     {
         icon: FaHome,
         path: "/",
+        alternativePath: "/posts",
         name: "Home"
     },
     {

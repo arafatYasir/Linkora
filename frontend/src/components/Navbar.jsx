@@ -1,4 +1,4 @@
-import { NavLink, Link } from "react-router-dom"
+import { NavLink, useLocation } from "react-router-dom"
 import SearchBar from "./search/SearchBar"
 import { useSelector } from "react-redux"
 import { FaBell } from "react-icons/fa"
@@ -19,6 +19,7 @@ const Navbar = () => {
     // Extra hooks
     const dropdownRef = useRef(null);
     const settingsRef = useRef(null);
+    const location = useLocation();
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
@@ -75,7 +76,7 @@ const Navbar = () => {
                         <NavLink
                             to={icon.path}
                             key={index}
-                            className={({ isActive }) => `w-full max-w-[110px] h-full flex items-center justify-center hover:bg-bg transition group relative ${isActive ? 'text-primary border-b-2 border-b-primary' : 'text-text-secondary rounded-lg'} relative`}
+                            className={({ isActive }) => `w-full max-w-[110px] h-full flex items-center justify-center hover:bg-bg transition group relative ${(isActive || location.pathname.includes(icon.alternativePath)) ? 'text-primary border-b-2 border-b-primary' : 'text-text-secondary rounded-lg'} relative`}
                             onMouseEnter={() => {
                                 if (showIconName !== icon.name) {
                                     setShowIconName(icon.name);

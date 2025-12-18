@@ -85,9 +85,9 @@ const Post = ({ post }) => {
 
         if (showShareModal) {
             body.style.overflow = "hidden";
-        } else {
-            body.style.overflowY = "auto";
         }
+
+        return () => body.style.overflow = "auto";
     }, [showShareModal]);
 
     // Functions

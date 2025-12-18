@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 const HomePage = () => {
     // States
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-    const [sharedPost, setSharedPost] = useState({});
+    const [showSharedPostModal, setShowSharedPostModal] = useState(false);
     const [sharedPostId, setSharedPostId] = useState(null);
 
     // Redux states
@@ -32,7 +32,7 @@ const HomePage = () => {
     const { data: allPosts } = useGetAllPostsQuery();
 
     // Shared post fetching api
-    const { data } = useGetPostQuery(sharedPostId);
+    const { data: sharedPost } = useGetPostQuery(sharedPostId, { skip: !sharedPostId });
 
     const openPostModal = () => {
         setIsPostModalOpen(true);
@@ -42,24 +42,35 @@ const HomePage = () => {
         setIsPostModalOpen(false);
     }
 
+    const closeSharedPostModal = () => {
+        setShowSharedPostModal(false);
+    }
+
     useEffect(() => {
         // Checking if there is any post id in url
         if (path.pathname.includes("/posts/")) {
             const postId = path.pathname.split("/posts/")[1];
             setSharedPostId(postId);
         }
-    }, [path.pathname])
+    }, [path.pathname]);
 
     useEffect(() => {
         const body = document.querySelector("body");
 
-        if (isPostModalOpen) {
+        if (sharedPost && Object.keys(sharedPost).length > 0) {
+            setShowSharedPostModal(true);
+        }
+    }, [sharedPost]);
+
+    useEffect(() => {
+        const body = document.querySelector("body");
+
+        if (isPostModalOpen || showSharedPostModal) {
             body.style.overflow = "hidden";
         }
-        else {
-            body.style.overflowY = "scroll";
-        }
-    }, [isPostModalOpen]);
+        
+        return () => body.style.overflow = "auto";
+    }, [isPostModalOpen, showSharedPostModal]);
 
     useEffect(() => {
         if (allPosts) {
@@ -76,8 +87,6 @@ const HomePage = () => {
             localStorage.setItem("userInfo", JSON.stringify(user));
         }
     }, [user, dispatch]);
-
-    console.log(sharedPost);
 
     return (
         <div className="grid grid-cols-12 gap-x-10 items-start mt-5 min-h-screen">
@@ -103,7 +112,7 @@ const HomePage = () => {
             <HomePageFriends friends={userInfo?.friends} />
 
             {/* ---- Showing shared post in a modal view ---- */}
-            {Object.keys(sharedPost).length > 0 && <PostModalView post={sharedPost} />}
+            {showSharedPostModal && <PostModalView post={sharedPost.post} onClose={closeSharedPostModal} />}
         </div>
     )
 }
