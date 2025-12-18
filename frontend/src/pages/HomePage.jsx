@@ -7,12 +7,15 @@ import AllPosts from "../components/post/AllPosts";
 import { useGetAllPostsQuery, useGetPostQuery, useGetUserQuery } from "../../api/authApi";
 import HomePageFriends from "../components/homepage/HomePageFriends";
 import HomePageSidebar from "../components/homepage/HomePageSidebar";
+import PostModalView from "../components/post/PostModalView";
 import { setPosts } from "../slices/postsSlice";
 import { useLocation } from "react-router-dom";
 
 const HomePage = () => {
     // States
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+    const [sharedPost, setSharedPost] = useState({});
+    const [sharedPostId, setSharedPostId] = useState(null);
 
     // Redux states
     const { userInfo } = useSelector(state => state.auth);
@@ -22,20 +25,14 @@ const HomePage = () => {
     const dispatch = useDispatch();
     const path = useLocation();
 
-    // Checking if there is any post id in url
-    if(path.pathname.includes("/posts/")) {
-        const postId = path.pathname.split("/posts/")[1];
-
-        const { data } = useGetPostQuery(postId);
-
-        console.log(data?.post);
-    }
-
     // Fetching user
     const { data: user } = useGetUserQuery(userInfo.username);
 
     // Fetching posts
     const { data: allPosts } = useGetAllPostsQuery();
+
+    // Shared post fetching api
+    const { data } = useGetPostQuery(sharedPostId);
 
     const openPostModal = () => {
         setIsPostModalOpen(true);
@@ -44,6 +41,14 @@ const HomePage = () => {
     const closePostModal = () => {
         setIsPostModalOpen(false);
     }
+
+    useEffect(() => {
+        // Checking if there is any post id in url
+        if (path.pathname.includes("/posts/")) {
+            const postId = path.pathname.split("/posts/")[1];
+            setSharedPostId(postId);
+        }
+    }, [path.pathname])
 
     useEffect(() => {
         const body = document.querySelector("body");
@@ -72,6 +77,8 @@ const HomePage = () => {
         }
     }, [user, dispatch]);
 
+    console.log(sharedPost);
+
     return (
         <div className="grid grid-cols-12 gap-x-10 items-start mt-5 min-h-screen">
             {/* ---- Left Section ---- */}
@@ -94,6 +101,9 @@ const HomePage = () => {
 
             {/* ---- Design a friends part like facebook here in this component ---- */}
             <HomePageFriends friends={userInfo?.friends} />
+
+            {/* ---- Showing shared post in a modal view ---- */}
+            {Object.keys(sharedPost).length > 0 && <PostModalView post={sharedPost} />}
         </div>
     )
 }
