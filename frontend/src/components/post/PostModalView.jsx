@@ -207,7 +207,7 @@ const PostModalView = ({ post, onClose }) => {
                                 background ? (
                                     <div
                                         style={{
-                                            backgroundImage: `url(${background})`,
+                                            backgroundImage: `url("${background}")`,
                                             backgroundSize: "cover",
                                             backgroundPosition: "center",
                                             backgroundRepeat: "no-repeat",

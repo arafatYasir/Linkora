@@ -10,6 +10,7 @@ import HomePageSidebar from "../components/homepage/HomePageSidebar";
 import PostModalView from "../components/post/PostModalView";
 import { setPosts } from "../slices/postsSlice";
 import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const HomePage = () => {
     // States
@@ -32,7 +33,7 @@ const HomePage = () => {
     const { data: allPosts } = useGetAllPostsQuery();
 
     // Shared post fetching api
-    const { data: sharedPost } = useGetPostQuery(sharedPostId, { skip: !sharedPostId });
+    const { data: sharedPost, error: sharedPostError } = useGetPostQuery(sharedPostId, { skip: !sharedPostId });
 
     const openPostModal = () => {
         setIsPostModalOpen(true);
@@ -60,7 +61,11 @@ const HomePage = () => {
         if (sharedPost && Object.keys(sharedPost).length > 0) {
             setShowSharedPostModal(true);
         }
-    }, [sharedPost]);
+        else if (sharedPostError) {
+            console.log(sharedPostError);
+            toast.error(sharedPostError.data.error);
+        }
+    }, [sharedPost, sharedPostError]);
 
     useEffect(() => {
         const body = document.querySelector("body");
@@ -68,7 +73,7 @@ const HomePage = () => {
         if (isPostModalOpen || showSharedPostModal) {
             body.style.overflow = "hidden";
         }
-        
+
         return () => body.style.overflow = "auto";
     }, [isPostModalOpen, showSharedPostModal]);
 
