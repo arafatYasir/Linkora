@@ -12,6 +12,8 @@ import ProfileLayout from "./components/layouts/ProfileLayout";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify"
+import FriendsPage from "./pages/FriendsPage"
+import FriendsLayout from "./components/layouts/FriendsLayout";
 
 const App = () => {
   const { theme } = useSelector(state => state.auth);
@@ -37,6 +39,10 @@ const App = () => {
           <Route path="/profile" element={<ProfileLayout />}>
             <Route path="/profile" element={<UserProfilePage />} />
             <Route path="/profile/:username" element={<UserProfilePage />} />
+          </Route>
+          
+          <Route path="/friends" element={<FriendsLayout />}>
+            <Route path="/friends" element={<FriendsPage />} />
           </Route>
         </Route>
 
