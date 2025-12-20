@@ -5,7 +5,7 @@
   --color-primary: #34B27B;
   --color-text: #000000;
   --color-primary-hover: #00a85f;
-  --color-bg: #F5F6F7;
+  --color-bg: #F0F2F5;
   --color-surface: #ffffff;
   --color-text-primary: #111827;
   --color-text-secondary: #6b7280;
@@ -162,13 +162,8 @@ li {
   background: var(--color-text-secondary);
 }
 
-/* Firefox */
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;
-}
-
-/* Smooth scrolling for all scrollable elements */
-.custom-scrollbar {
   scroll-behavior: smooth;
 }

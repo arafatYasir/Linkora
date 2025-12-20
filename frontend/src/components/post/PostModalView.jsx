@@ -77,6 +77,10 @@ const PostModalView = ({ post, onClose }) => {
             if (modalRef.current && !modalRef.current.contains(e.target)) {
                 onClose();
             }
+
+            if(optionsRef.current && !optionsRef.current.contains(e.target)) {
+                setShowOptions(false);
+            }
         }
 
         document.addEventListener("mousedown", handleClickOutside);
@@ -150,7 +154,7 @@ const PostModalView = ({ post, onClose }) => {
                 </div>
 
                 {/* ---- Body ---- */}
-                <div className="max-h-[650px] overflow-y-auto scroll-smooth custom-scrollbar">
+                <div className="max-h-[650px] overflow-y-auto custom-scrollbar">
                     {/* ---- Post Header ---- */}
                     <div className="flex items-center justify-between border-b pb-2 px-4 pt-4 border-b-[var(--color-border)]">
                         <div className="flex items-center gap-x-3">
