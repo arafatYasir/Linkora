@@ -48,8 +48,6 @@ const PostModalView = ({ post, onClose }) => {
     const timerRef = useRef(null);
     const commentRef = useRef(null);
 
-    console.log(post);
-
     useEffect(() => {
         if (totalReactions) {
             setTotalReacts(totalReactions);
@@ -137,10 +135,10 @@ const PostModalView = ({ post, onClose }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-y-auto">
             <div
                 ref={modalRef}
-                className="w-full max-w-2xl min-h-[600px] overflow-hidden rounded-xl bg-surface border border-border transform transition-all"
+                className="w-full max-w-2xl rounded-xl bg-surface border border-border transform transition-all"
             >
                 {/* ---- Header ---- */}
-                <div className="sticky top-0 left-0 flex items-center justify-center py-4 border-b border-border">
+                <div className="sticky z-50 top-0 left-0 flex items-center justify-center py-4 rounded-t-xl bg-surface border-b border-border">
                     <h2 className="text-xl font-bold text-text-primary">{user.firstname + " " + user.lastname}'s Post</h2>
                     <button
                         onClick={onClose}
@@ -152,7 +150,7 @@ const PostModalView = ({ post, onClose }) => {
                 </div>
 
                 {/* ---- Body ---- */}
-                <div>
+                <div className="max-h-[650px] overflow-y-auto scroll-smooth custom-scrollbar">
                     {/* ---- Post Header ---- */}
                     <div className="flex items-center justify-between border-b pb-2 px-4 pt-4 border-b-[var(--color-border)]">
                         <div className="flex items-center gap-x-3">
@@ -277,7 +275,7 @@ const PostModalView = ({ post, onClose }) => {
 
                         {/* ---- Buttons ---- */}
                         <button
-                            className="flex items-center justify-center gap-2 relative w-1/3 h-8 text-center cursor-pointer hover:bg-primary/30 rounded-lg transition-all duration-250"
+                            className="flex items-center justify-center gap-2 relative w-1/3 h-8 text-center cursor-pointer hover:bg-bg rounded-lg transition-all duration-250"
                             onMouseEnter={() => {
                                 clearTimeout(timerRef.current);
                                 timerRef.current = setTimeout(() => setShowReacts(true), 200)
@@ -306,7 +304,7 @@ const PostModalView = ({ post, onClose }) => {
                         </button>
 
                         <button
-                            className="flex items-center justify-center gap-2 w-1/3 h-8 text-center cursor-pointer hover:bg-primary/30 rounded-lg transition-all duration-250"
+                            className="flex items-center justify-center gap-2 w-1/3 h-8 text-center cursor-pointer hover:bg-bg rounded-lg transition-all duration-250"
                             onClick={() => {
                                 setShowComments(prev => !prev);
                             }}
@@ -317,25 +315,25 @@ const PostModalView = ({ post, onClose }) => {
 
                         <button
                             onClick={() => setShowShareModal(true)}
-                            className="flex items-center justify-center gap-2 w-1/3 h-8 text-center cursor-pointer hover:bg-primary/30 rounded-lg transition-all">
+                            className="flex items-center justify-center gap-2 w-1/3 h-8 text-center cursor-pointer hover:bg-bg rounded-lg transition-all">
                             <IoMdShareAlt size={20} />
                             <span>Share</span>
                         </button>
                     </div>
+
+                    {/* ---- Comments ---- */}
+                    {
+                        showComments && <CreateComment commentText={commentText} setCommentText={setCommentText} setAllComments={setAllComments} commentFile={commentFile} setCommentFile={setCommentFile} commentRef={commentRef} postId={_id} />
+                    }
+                    {
+                        allComments.length > 0 && <Comments comments={allComments} />
+                    }
                 </div>
             </div>
 
             {/* ---- Share Modal ---- */}
             {
                 showShareModal && <ShareModal onClose={() => setShowShareModal(false)} postLink={`/posts/${_id}`} postId={_id} originalPostedTime={postedTime} />
-            }
-
-            {/* ---- Comments ---- */}
-            {
-                showComments && <CreateComment commentText={commentText} setCommentText={setCommentText} setAllComments={setAllComments} commentFile={commentFile} setCommentFile={setCommentFile} commentRef={commentRef} postId={_id} />
-            }
-            {
-                allComments.length > 0 && <Comments comments={allComments} />
             }
         </div>
     )
