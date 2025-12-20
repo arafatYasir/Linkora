@@ -111,10 +111,26 @@ const getPost = async (req, res) => {
             });
         }
 
+        // Add users reaction and reactions count to each post
+        let postWithReaction = {};
+        const reactionsCount = {};
+
+        post.reacts.forEach(react => {
+            const key = react.react;
+            reactionsCount[key] = (reactionsCount[key] || 0) + 1;
+        });
+
+        postWithReaction = {
+            ...post.toObject(),
+            usersReaction: post.reacts.find(react => react.reactedBy.toString() === req.user.id),
+            reactionsCount,
+            totalReactions: post.reacts.length
+        };
+
         res.json({
             message: "Post fetched successfully",
             status: "OK",
-            post
+            post: postWithReaction
         });
     } catch (e) {
         res.status(404).json({
@@ -246,8 +262,8 @@ const deletePost = async (req, res) => {
 
             const sharedPostEntry = user.sharedPosts.find(shared => shared.post.toString() === post.sharedPost._id.toString());
 
-            if(sharedPostEntry) {
-                await User.updateOne({_id: req.user.id}, {
+            if (sharedPostEntry) {
+                await User.updateOne({ _id: req.user.id }, {
                     $pull: {
                         sharedPosts: {
                             _id: sharedPostEntry._id
@@ -258,10 +274,10 @@ const deletePost = async (req, res) => {
 
             const originalPost = await Post.findById(post.sharedPost._id);
 
-            if(originalPost) {
+            if (originalPost) {
                 const shareEntry = originalPost.shares.find(share => share.sharedBy.toString() === req.user.id.toString());
 
-                if(shareEntry) {
+                if (shareEntry) {
                     await Post.updateOne({ _id: post.sharedPost._id }, {
                         $pull: {
                             shares: {

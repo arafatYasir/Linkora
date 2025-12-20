@@ -101,12 +101,12 @@ const RegularPost = ({ user,
                                     backgroundPosition: "center",
                                     lineHeight: "36px"
                                 }}
-                                className="h-[400px] w-full text-white text-center flex items-center justify-center text-3xl font-bold px-2"
+                                className="w-full aspect-video text-white text-center flex items-center justify-center text-3xl font-bold px-2"
                             >
                                 {text}
                             </div>
                         ) : (
-                            <div className="text-lg">
+                            <div>
                                 <p className="px-4 text-[15px]" style={{ lineHeight: "20px" }}>{text}</p>
 
                                 {images && images.length > 0 && (
