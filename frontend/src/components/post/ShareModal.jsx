@@ -8,7 +8,7 @@ import { useCreatePostMutation, useSharePostMutation } from "../../../api/authAp
 import { addPost } from "../../slices/postsSlice";
 import { Link } from "react-router-dom";
 
-const ShareModal = ({ onClose, postLink, postId, originalPostedTime, postType }) => {
+const ShareModal = ({ onClose, postLink, postId }) => {
     // States
     const [caption, setCaption] = useState("");
     const [loading, setLoading] = useState(false);
@@ -41,6 +41,7 @@ const ShareModal = ({ onClose, postLink, postId, originalPostedTime, postType })
     const handleCopyLink = () => {
         navigator.clipboard.writeText(window.location.origin + postLink);
         toast.success("Link copied to clipboard!");
+        onClose();
     };
 
     const handleSharePost = async () => {

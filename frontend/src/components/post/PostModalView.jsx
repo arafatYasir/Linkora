@@ -156,7 +156,7 @@ const PostModalView = ({ post, onClose }) => {
                 {/* ---- Body ---- */}
                 <div className="max-h-[650px] overflow-y-auto custom-scrollbar">
                     {/* ---- Post Header ---- */}
-                    <div className="flex items-center justify-between border-b pb-2 px-4 pt-4 border-b-[var(--color-border)]">
+                    <div className="flex items-center justify-between border-b p-3 border-b-[var(--color-border)]">
                         <div className="flex items-center gap-x-3">
                             <div className="w-12 h-12 rounded-full overflow-hidden">
                                 <Link to={`/profile/${user.username}`}>

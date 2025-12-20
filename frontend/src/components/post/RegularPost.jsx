@@ -44,7 +44,7 @@ const RegularPost = ({ user,
     return (
         <li className="w-full bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] transition-[var(--transition-default)]">
             {/* ---- Post Header ---- */}
-            <div className="flex items-center justify-between border-b pb-2 px-4 pt-4 border-b-[var(--color-border)]">
+            <div className="flex items-center justify-between border-b p-3 border-b-[var(--color-border)]">
                 <div className="flex items-center gap-x-3">
                     <div className="w-12 h-12 rounded-full overflow-hidden">
                         <Link to={`/profile/${user.username}`}>

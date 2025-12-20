@@ -62,7 +62,6 @@ const HomePage = () => {
             setShowSharedPostModal(true);
         }
         else if (sharedPostError) {
-            console.log(sharedPostError);
             toast.error(sharedPostError.data.error);
         }
     }, [sharedPost, sharedPostError]);
