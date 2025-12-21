@@ -65,6 +65,12 @@ const PostOptions = ({ user, postId, onClose }) => {
         }
     }
 
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(window.location.origin + `/posts/${postId}`);
+        toast.success("Link copied to clipboard!");
+        onClose();
+    }
+
     const handleClick = (actionType) => {
         setShowModal(true);
 
@@ -76,6 +82,9 @@ const PostOptions = ({ user, postId, onClose }) => {
             setConfirm(() => handleDeletePost);
             setModalHeading(postActionTypes[actionType].heading);
             setModalText(postActionTypes[actionType].text);
+        }
+        else if(actionType === "Copy Link") {
+            handleCopyLink();
         }
     }
 

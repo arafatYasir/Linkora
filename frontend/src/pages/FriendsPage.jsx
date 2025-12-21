@@ -39,7 +39,7 @@ const FriendsPage = () => {
                     data?.data[type]?.map(user => (
                         <li
                             key={user._id}
-                            className="w-full h-[240px] border border-border rounded-lg relative"
+                            className="w-full h-[220px] border border-border rounded-lg relative"
                         >
                             <Link className="block" to={`/profile/${user.username}`}>
                                 <div className="relative">
@@ -50,16 +50,16 @@ const FriendsPage = () => {
 
                                     <div className="absolute left-2 -bottom-4 translate-y-1/2 flex items-center">
                                         {/* ---- Profile Picture ---- */}
-                                        <div className="w-24 h-24 overflow-hidden rounded-full border-4 border-bg shrink-0">
+                                        <div className="w-20 h-20 overflow-hidden rounded-full border-4 border-bg shrink-0">
                                             <img className="w-full h-full object-cover" src={user.profilePicture || defaultAvatar} alt="" />
                                         </div>
 
                                         {/* ---- User Info ---- */}
-                                        <div className="p-3 mt-10">
+                                        <div className="p-2 mt-5">
                                             <p className="font-bold">{user.firstname + " " + user.lastname.slice(0, 20)}{user.firstname + " " + user.lastname.length > 20 ? "..." : ""}</p>
 
                                             {/* ---- Profile Status ---- */}
-                                            <div className="flex flex-col gap-y-4 mt-1">
+                                            <div className="mt-1">
                                                 <p className="space-x-1">
                                                     <span className="text-xs">{user?.friends?.length} Friends</span>
                                                     <span>•</span>
