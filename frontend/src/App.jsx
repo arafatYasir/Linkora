@@ -43,6 +43,7 @@ const App = () => {
           
           <Route path="/friends" element={<FriendsLayout />}>
             <Route path="/friends" element={<FriendsPage />} />
+            <Route path="/friends/:type" element={<FriendsPage />} />
           </Route>
         </Route>
 
