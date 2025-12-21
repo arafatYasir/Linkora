@@ -176,6 +176,10 @@ export const authApi = createApi({
                 method: "DELETE",
             })
         }),
+        getFriends: build.query({
+            query: () => `/api/v1/get-friends`,
+            method: "GET"
+        }),
         search: build.query({
             query: (query) => ({
                 url: `/api/v1/search/${query}`,
@@ -205,4 +209,4 @@ export const authApi = createApi({
     }),
 })
 
-export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserPostsQuery, useGetPostQuery, useGetUserQuery, useListImagesQuery, useUpdateProfilePictureMutation, useUpdateCoverPhotoMutation, useUpdateProfileIntroMutation, useAddFriendMutation, useCancelRequestMutation, useAcceptRequestMutation, useFollowMutation, useUnfollowMutation, useUnfriendMutation, useDeleteRequestMutation, useReactPostMutation, useCommentPostMutation, useSavePostMutation, useDeletePostMutation, useSearchQuery, useLazySearchQuery, useAddToSearchHistoryMutation, useRemoveSearchHistoryMutation, useSharePostMutation } = authApi;
+export const { useAddUserMutation, useLoginUserMutation, useVerifyUserMutation, useFindUserMutation, useSendResetCodeMutation, useVerifyResetCodeMutation, useNewPasswordMutation, useCreatePostMutation, useUploadImageMutation, useGetAllPostsQuery, useGetUserPostsQuery, useGetPostQuery, useGetUserQuery, useListImagesQuery, useUpdateProfilePictureMutation, useUpdateCoverPhotoMutation, useUpdateProfileIntroMutation, useAddFriendMutation, useCancelRequestMutation, useAcceptRequestMutation, useFollowMutation, useUnfollowMutation, useUnfriendMutation, useDeleteRequestMutation, useReactPostMutation, useCommentPostMutation, useSavePostMutation, useDeletePostMutation, useSearchQuery, useLazySearchQuery, useAddToSearchHistoryMutation, useRemoveSearchHistoryMutation, useSharePostMutation, useGetFriendsQuery } = authApi;
