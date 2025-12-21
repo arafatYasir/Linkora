@@ -16,9 +16,9 @@ const GridPost = ({ post }) => {
                     <div className="w-full h-[180px] overflow-hidden cursor-pointer">
                         <img src={images[0]} alt="Post Image" className="w-full h-full object-cover hover:opacity-70 transition-all duration-250" />
                     </div>
-                ) : (type === "shared-post") ? (
+                ) : (type === "shared-post" && sharedPost?.images?.length > 0) ? (
                     <div className="w-full h-[180px] overflow-hidden cursor-pointer">
-                        <img src={sharedPost.images[0]} alt="Shared Post Image" className="w-full h-full object-cover hover:opacity-70 transition-all duration-250" />
+                        <img src={sharedPost?.images[0]} alt="Shared Post Image" className="w-full h-full object-cover hover:opacity-70 transition-all duration-250" />
                     </div>
                 ) : (background) ? (
                     <div
