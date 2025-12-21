@@ -1,5 +1,5 @@
 const express = require("express");
-const { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, cancelRequest, follow, unFollow, acceptRequest, unFriend, deleteRequest, search, addToSearchHistory, searchHistory, removeFromSearchHistory } = require("../../controllers/userControllers");
+const { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, cancelRequest, follow, unFollow, acceptRequest, unFriend, deleteRequest, search, addToSearchHistory, removeFromSearchHistory, getFriends } = require("../../controllers/userControllers");
 const authMiddleware = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
@@ -28,6 +28,7 @@ router.post("/follow/:id", authMiddleware, follow);
 router.delete("/unfollow/:id", authMiddleware, unFollow);
 router.delete("/unfriend/:id", authMiddleware, unFriend);
 router.delete("/delete-request/:id", authMiddleware, deleteRequest);
+router.get("/get-friends", authMiddleware, getFriends);
 
 // Search
 router.get("/search/:query", authMiddleware, search);

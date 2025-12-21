@@ -773,6 +773,35 @@ const deleteRequest = async (req, res) => {
     }
 }
 
+const getFriends = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).populate("friends", "firstname lastname username profilePicture").populate("followers", "firstname lastname username profilePicture").populate("following", "firstname lastname username profilePicture").populate("friendRequests", "firstname lastname username profilePicture");
+
+        if(!user) {
+            return res.status(404).json({
+                error: "User not found!"
+            });
+        }
+
+        const response = {
+            friends: user.friends,
+            followers: user.followers,
+            following: user.following,
+            friendRequests: user.friendRequests
+        }
+
+        res.json({
+            status: "OK",
+            data: response
+        });
+
+    } catch (e) {
+        res.status(400).json({
+            error: e.message
+        });
+    }
+}
+
 const search = async (req, res) => {
     try {
         const { query } = req.params;
@@ -855,4 +884,4 @@ const removeFromSearchHistory = async (req, res) => {
     }
 }
 
-module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unFollow, unFriend, deleteRequest, search, addToSearchHistory, removeFromSearchHistory };
+module.exports = { newUser, verifyUser, loginUser, findUser, resetCode, verifyCode, newPassword, refreshToken, getUser, updateProfilePicture, updateCoverPhoto, updateProfileIntro, addFriend, acceptRequest, cancelRequest, follow, unFollow, unFriend, deleteRequest, getFriends, search, addToSearchHistory, removeFromSearchHistory };
