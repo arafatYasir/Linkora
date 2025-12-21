@@ -775,7 +775,7 @@ const deleteRequest = async (req, res) => {
 
 const getFriends = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).populate("friends", "firstname lastname username profilePicture").populate("followers", "firstname lastname username profilePicture").populate("following", "firstname lastname username profilePicture").populate("friendRequests", "firstname lastname username profilePicture");
+        const user = await User.findById(req.user.id).populate("friends", "firstname lastname username profilePicture coverPhoto friends followers following").populate("followers", "firstname lastname username profilePicture coverPhoto friends followers following").populate("following", "firstname lastname username profilePicture coverPhoto friends followers following").populate("friendRequests", "firstname lastname username profilePicture coverPhoto friends followers following");
 
         if(!user) {
             return res.status(404).json({
