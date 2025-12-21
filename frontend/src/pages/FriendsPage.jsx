@@ -39,7 +39,7 @@ const FriendsPage = () => {
                     data?.data[type]?.map(user => (
                         <li
                             key={user._id}
-                            className="w-full border border-border rounded-lg"
+                            className="w-full h-[240px] border border-border rounded-lg relative"
                         >
                             <Link className="block" to={`/profile/${user.username}`}>
                                 <div className="relative">
@@ -48,38 +48,27 @@ const FriendsPage = () => {
                                         <img className="w-full h-full object-cover" src={user.coverPhoto || defaultCoverPhoto} alt="" />
                                     </div>
 
-                                    {/* ---- Profile Picture ---- */}
-                                    <div className="w-24 h-24 overflow-hidden rounded-full absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 border-4 border-bg">
-                                        <img className="w-full h-full object-cover" src={user.profilePicture || defaultAvatar} alt="" />
-                                    </div>
-                                </div>
+                                    <div className="absolute left-2 -bottom-4 translate-y-1/2 flex items-center">
+                                        {/* ---- Profile Picture ---- */}
+                                        <div className="w-24 h-24 overflow-hidden rounded-full border-4 border-bg shrink-0">
+                                            <img className="w-full h-full object-cover" src={user.profilePicture || defaultAvatar} alt="" />
+                                        </div>
 
-                                {/* ---- User Info ---- */}
-                                <div className="p-3 mt-10">
-                                    <p className="font-bold text-center">{user.firstname + " " + user.lastname.slice(0, 20)}{user.firstname + " " + user.lastname.length > 20 ? "..." : ""}</p>
+                                        {/* ---- User Info ---- */}
+                                        <div className="p-3 mt-10">
+                                            <p className="font-bold">{user.firstname + " " + user.lastname.slice(0, 20)}{user.firstname + " " + user.lastname.length > 20 ? "..." : ""}</p>
 
-                                    {/* ---- Profile Status ---- */}
-                                    <div className="flex gap-x-8 justify-center mt-3">
-                                        <p className="flex flex-col gap-y-1 items-center relative after:absolute after:content-[''] after:w-[2px] after:h-10 after:bg-border after:-right-[16px] after:top-1/2 after:-translate-y-1/2 after:z-10">
-                                            <span className="font-bold">
-                                                {user.friends.length}
-                                            </span>
-                                            <span> Friend{user.friends.length > 1 ? "s" : ""}</span>
-                                        </p>
-
-                                        <p className="flex flex-col gap-y-1 items-center relative after:absolute after:content-[''] after:w-[2px] after:h-10 after:bg-border after:-right-[16px] after:top-1/2 after:-translate-y-1/2 after:z-10">
-                                            <span className="font-bold">
-                                                {user.followers.length}
-                                            </span>
-                                            <span> Follower{user.followers.length > 1 ? "s" : ""}</span>
-                                        </p>
-
-                                        <p className="flex flex-col gap-y-1 items-center">
-                                            <span className="font-bold">
-                                                {user.following.length}
-                                            </span>
-                                            <span> Following</span>
-                                        </p>
+                                            {/* ---- Profile Status ---- */}
+                                            <div className="flex flex-col gap-y-4 mt-1">
+                                                <p className="space-x-1">
+                                                    <span className="text-xs">{user?.friends?.length} Friends</span>
+                                                    <span>•</span>
+                                                    <span className="text-xs">{user?.followers?.length} Followers</span>
+                                                    <span>•</span>
+                                                    <span className="text-xs">{user?.following?.length} Following</span>
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </Link>
