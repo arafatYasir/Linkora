@@ -2,8 +2,13 @@ import { Link, useLocation } from "react-router-dom";
 import { useGetFriendsQuery } from "../../api/authApi"
 import defaultAvatar from "/default images/avatar.png"
 import defaultCoverPhoto from "/default images/defaultcover.jpg"
+import SearchIcon from "../icons/SearchIcon";
+import { useState } from "react";
 
 const FriendsPage = () => {
+    // States
+    const [search, setSearch] = useState("");
+
     // Friends data fetching api
     const { data, isLoading, isError } = useGetFriendsQuery();
 
@@ -29,14 +34,22 @@ const FriendsPage = () => {
             <h4 className="font-bold text-xl">Total Results: {data?.data[type]?.length}</h4>
 
             {/* ---- Search ---- */}
-            <div className="mt-5">
-                <input className="block border border-text-secondary rounded py-2 px-3 w-1/3" type="text" name="search" id="search" placeholder="Search" />
+            <div className="w-1/3 mt-5 relative">
+                <input 
+                    className="block border border-text-secondary rounded py-2 pl-3 pr-10 w-full hover:border-primary transition-all"
+                    type="text"
+                    placeholder="Search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+
+                <SearchIcon className="absolute top-1/2 -translate-y-1/2 right-4" width={20} height={20} />
             </div>
 
             {/* ---- List according to the type ---- */}
             <ul className="grid grid-cols-3 gap-3 mt-10">
                 {
-                    data?.data[type]?.map(user => (
+                    data?.data[type]?.filter(user => user.firstname.toLowerCase().includes(search.toLowerCase()) || user.lastname.toLowerCase().includes(search.toLowerCase()))?.map(user => (
                         <li
                             key={user._id}
                             className="w-full h-[220px] border border-border rounded-lg relative"

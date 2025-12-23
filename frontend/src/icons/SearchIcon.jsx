@@ -1,9 +1,9 @@
-const SearchIcon = ({width, height}) => {
+const SearchIcon = ({className, width, height}) => {
     return (
         <svg
             width={width}
             height={height}
-            className="absolute left-4 text-gray-500"
+            className={`text-gray-500 ${className}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
