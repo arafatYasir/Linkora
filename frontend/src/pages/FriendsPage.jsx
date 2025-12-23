@@ -61,9 +61,9 @@ const FriendsPage = () => {
                                             {/* ---- Profile Status ---- */}
                                             <div className="mt-1">
                                                 <p className="space-x-1">
-                                                    <span className="text-xs">{user?.friends?.length} Friends</span>
+                                                    <span className="text-xs">{user?.friends?.length} Friend{user?.friends?.length === 1 ? "" : "s"}</span>
                                                     <span>•</span>
-                                                    <span className="text-xs">{user?.followers?.length} Followers</span>
+                                                    <span className="text-xs">{user?.followers?.length} Follower{user?.followers?.length === 1 ? "" : "s"}</span>
                                                     <span>•</span>
                                                     <span className="text-xs">{user?.following?.length} Following</span>
                                                 </p>

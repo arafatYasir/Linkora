@@ -103,11 +103,12 @@ const newUser = async (req, res) => {
         await user.save();
 
         // Sending verification email
-        await publishEmailJob({
-            type: "verification",
-            email: user.email,
-            url: verificationURL
-        });
+        // await publishEmailJob({
+        //     type: "verification",
+        //     email: user.email,
+        //     url: verificationURL
+        // });
+        await sendVerificationEmail(user.email, verificationURL);
 
         // Sending user data response
         res.send({
@@ -787,7 +788,7 @@ const getFriends = async (req, res) => {
             friends: user.friends,
             followers: user.followers,
             following: user.following,
-            friendRequests: user.friendRequests
+            requests: user.friendRequests
         }
 
         res.json({
