@@ -92,6 +92,12 @@ const UserModel = new Schema({
             ref: "User",
         }
     ],
+    sentRequests: [
+        {
+            type: ObjectId,
+            ref: "User"
+        }
+    ],
     search: [
         {
             user: {

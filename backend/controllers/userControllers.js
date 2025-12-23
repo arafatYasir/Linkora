@@ -526,6 +526,10 @@ const addFriend = async (req, res) => {
                     $push: { friendRequests: requestSender._id }
                 });
 
+                await requestSender.updateOne({
+                    $push: { sentRequests: requestReciever._id }
+                })
+
                 await requestReciever.updateOne({
                     $push: { followers: requestSender._id }
                 });
@@ -568,6 +572,10 @@ const cancelRequest = async (req, res) => {
                 await requestReciever.updateOne({
                     $pull: { friendRequests: requestSender._id }
                 });
+
+                await requestSender.updateOne({
+                    $pull: { sentRequests: requestReciever._id }
+                })
 
                 await requestReciever.updateOne({
                     $pull: { followers: requestSender._id }
@@ -692,6 +700,10 @@ const acceptRequest = async (req, res) => {
                     $push: { friends: receiver._id, followers: receiver._id }
                 });
 
+                await sender.updateOne({
+                    $pull: { sentRequests: receiver._id }
+                });
+
                 res.send({ message: "Friend request accepted!" });
             }
             else {
@@ -758,6 +770,10 @@ const deleteRequest = async (req, res) => {
                     $pull: { following: receiver._id }
                 });
 
+                await sender.updateOne({
+                    $pull: { sentRequests: receiver._id }
+                });
+
                 res.send({ message: "Request deleted!" });
             }
             else {
@@ -776,9 +792,9 @@ const deleteRequest = async (req, res) => {
 
 const getFriends = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).populate("friends", "firstname lastname username profilePicture coverPhoto friends followers following").populate("followers", "firstname lastname username profilePicture coverPhoto friends followers following").populate("following", "firstname lastname username profilePicture coverPhoto friends followers following").populate("friendRequests", "firstname lastname username profilePicture coverPhoto friends followers following");
+        const user = await User.findById(req.user.id).populate("friends", "firstname lastname username profilePicture coverPhoto friends followers following").populate("followers", "firstname lastname username profilePicture coverPhoto friends followers following").populate("following", "firstname lastname username profilePicture coverPhoto friends followers following").populate("friendRequests", "firstname lastname username profilePicture coverPhoto friends followers following").populate("sentRequests", "firstname lastname username profilePicture coverPhoto friends followers following");
 
-        if(!user) {
+        if (!user) {
             return res.status(404).json({
                 error: "User not found!"
             });
@@ -788,7 +804,8 @@ const getFriends = async (req, res) => {
             friends: user.friends,
             followers: user.followers,
             following: user.following,
-            requests: user.friendRequests
+            requests: user.friendRequests,
+            "sent-requests": user.sentRequests
         }
 
         res.json({
