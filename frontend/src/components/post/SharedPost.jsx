@@ -57,7 +57,7 @@ const SharedPost = ({
                             <img
                                 src={user.profilePicture || defaultAvatar}
                                 alt={user.firstname + " " + user.lastname}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover select-none"
                             />
                         </Link>
                     </div>
@@ -108,7 +108,7 @@ const SharedPost = ({
                                     <img
                                         src={originalUser.profilePicture || defaultAvatar}
                                         alt={originalUser.firstname + " " + originalUser.lastname}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover select-none"
                                     />
                                 </Link>
                             </div>
@@ -155,7 +155,7 @@ const SharedPost = ({
                                                         key={index}
                                                         src={image}
                                                         alt="Shared content"
-                                                        className="w-full max-h-[500px] object-cover border-t border-[var(--color-border)]"
+                                                        className="w-full max-h-[500px] object-cover border-t border-[var(--color-border)] select-none"
                                                     />
                                                 ))}
                                             </div>
@@ -184,7 +184,7 @@ const SharedPost = ({
                                         key={index}
                                         src={`/reacts/${reactKey.toLowerCase()}.svg`}
                                         alt={reactKey}
-                                        className="w-5 h-5"
+                                        className="w-5 h-5 select-none"
                                     />
                                 )
                             }
@@ -221,7 +221,7 @@ const SharedPost = ({
                         react ? (
                             <img
                                 src={`/reacts/${react.toLowerCase()}.svg`}
-                                className="w-5 h-5"
+                                className="w-5 h-5 select-none"
                                 alt="Reaction"
                             />
                         ) : (

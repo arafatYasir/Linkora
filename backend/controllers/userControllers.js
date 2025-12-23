@@ -806,7 +806,7 @@ const getFriends = async (req, res) => {
             following: user.following,
             requests: user.friendRequests,
             "sent-requests": user.sentRequests
-        }
+        };
 
         res.json({
             status: "OK",

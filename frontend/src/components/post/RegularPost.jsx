@@ -51,7 +51,7 @@ const RegularPost = ({ user,
                             <img
                                 src={user.profilePicture || defaultAvatar}
                                 alt={`${user.firstname + " " + user.lastname}'s profile picture`}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover select-none"
                             />
                         </Link>
                     </div>
@@ -116,7 +116,7 @@ const RegularPost = ({ user,
                                                 key={index}
                                                 src={image}
                                                 alt={`${user.firstname} ${user.lastname}'s post image ${index + 1}`}
-                                                className={`${type === "profile-picture" ? "w-full h-full" : "w-full"} object-cover`}
+                                                className={`select-none ${type === "profile-picture" ? "w-full h-full" : "w-full"} object-cover`}
                                             />
                                         ))}
                                     </div>
@@ -139,7 +139,7 @@ const RegularPost = ({ user,
                                             key={index}
                                             src={`/reacts/${react.toLowerCase()}.svg`}
                                             alt={react}
-                                            className="w-5 h-5"
+                                            className="w-5 h-5 select-none"
                                         />
                                     )
                                 }
@@ -181,7 +181,7 @@ const RegularPost = ({ user,
                         react ? (
                             <img
                                 src={`/reacts/${react.toLowerCase()}.svg`}
-                                className="w-5 h-5"
+                                className="w-5 h-5 select-none"
                             />
                         ) : (
                             <FaRegThumbsUp />
