@@ -31,12 +31,12 @@ const FriendsPage = () => {
     return (
         <div className="flex-1 pr-4 mt-4">
             {/* ---- Total Count ---- */}
-            <h4 className="font-bold text-xl">Total Results: {data?.data[type]?.length}</h4>
+            <h4 className="font-bold text-xl">Total Results: {data?.data[type]?.length || 0}</h4>
 
             {/* ---- Search ---- */}
             <div className="w-1/3 mt-5 relative">
                 <input 
-                    className="block border border-text-secondary rounded py-2 pl-3 pr-10 w-full hover:border-primary transition-all"
+                    className="block border border-text-secondary rounded-lg py-2 pl-3 pr-10 w-full hover:border-primary transition-all"
                     type="text"
                     placeholder="Search"
                     value={search}
