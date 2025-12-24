@@ -178,11 +178,13 @@ const loginUser = async (req, res) => {
                 const reVerificationTokenExpiry = new Date(Date.now() + 15 * 60 * 1000);
                 const reVerificationURL = `${process.env.BASE_URL}/verify/${reVerificationToken}`;
 
-                await publishEmailJob({
-                    type: "verification",
-                    email: userExists.email,
-                    url: reVerificationURL
-                });
+                // await publishEmailJob({
+                //     type: "verification",
+                //     email: userExists.email,
+                //     url: reVerificationURL
+                // });
+
+                await sendVerificationEmail(userExists.email, reVerificationURL);
 
                 userExists.verificationTokenExpiry = reVerificationTokenExpiry;
                 await userExists.save();
@@ -334,11 +336,13 @@ const resetCode = async (req, res) => {
 
         await newCode.save();
 
-        await publishEmailJob({
-            type: "passwordReset",
-            email: user.email,
-            code: code
-        });
+        // await publishEmailJob({
+        //     type: "passwordReset",
+        //     email: user.email,
+        //     code: code
+        // });
+
+        await sendPasswordResetCode(user.email, code);
 
         res.send({
             message: "Password reset code is sent to your mail!"
