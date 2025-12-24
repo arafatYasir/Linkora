@@ -10,7 +10,7 @@ const CreatePost = ({ onOpenModal, user, }) => {
                     <img
                         src={user?.profilePicture || "/default images/avatar.png"}
                         alt="avatar"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover select-none"
                     />
                 </Link>
 

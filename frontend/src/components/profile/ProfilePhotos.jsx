@@ -23,7 +23,8 @@ const ProfilePhotos = ({ isImagesLoading, images }) => {
                                     <img
                                         src={image.secure_url}
                                         alt="Yasir Arafat Image"
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover select-none"
+                                        loading="lazy"
                                     />
                                 </div>
                             ))

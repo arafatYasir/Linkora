@@ -17,7 +17,7 @@ const PhotosGroup = ({ groupName, images, select, setImage, closeModal, setClose
                             <img
                                 src={image}
                                 alt="Select Photo"
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover select-none"
                                 onClick={select ? () => {
                                     setImage(image);
 

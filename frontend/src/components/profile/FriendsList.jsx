@@ -28,7 +28,7 @@ const FriendsList = ({ friends }) => {
                                         <img
                                             src={friend.profilePicture || defaultPhoto}
                                             alt="Yasir Arafat Image"
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-cover select-none"
                                             loading="lazy"
                                         />
                                     </div>

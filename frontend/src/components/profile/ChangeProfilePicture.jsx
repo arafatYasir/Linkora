@@ -236,7 +236,7 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-scroll">
             <div ref={uploadModalRef} className={`w-full max-w-2xl rounded-xl shadow-lg overflow-hidden bg-surface border border-border ${picture ? "mt-26" : "mt-0"} py-4`}>
-                {/* Header */}
+                {/* ---- Header ---- */}
                 <div className="flex items-center justify-center relative pb-4 border-b border-border">
                     <h2 className="text-xl font-semibold text-text-primary">
                         Choose Profile Picture
@@ -253,174 +253,177 @@ const ChangeProfilePicture = ({ setShowUploadModal, refetchUser, images = [] }) 
                     </button>
                 </div>
 
-                {/* ---- Conditional Description Input ---- */}
-                {
-                    picture && (
-                        <div className="px-4 mt-4">
-                            <label htmlFor="caption">Caption (optional)</label>
-                            <textarea
-                                placeholder="Description"
-                                className="border resize-none w-full rounded-lg px-4 py-3 mt-2"
-                                id="caption"
-                                value={caption}
-                                onChange={(e) => setCaption(e.target.value)}
-                            />
-                        </div>
-                    )
-                }
-
-                {/* ---- Image Preview (on editing mode) ---- */}
-                {
-                    (picture && !imageSaved) && (
-                        <div className="w-full h-[400px] relative overflow-hidden mt-8">
-                            <Cropper
-                                image={pictureUrl}
-                                crop={crop}
-                                zoom={zoom}
-                                zoomWithScroll={false}
-                                cropShape="round"
-                                aspect={1 / 1}
-                                onCropChange={setCrop}
-                                onCropComplete={onCropComplete}
-                                onZoomChange={setZoom}
-                            />
-                        </div>
-                    )
-                }
-
-                {/* ---- Image Preview (after saving the image) ---- */}
-                {
-                    (picture && imageSaved) && (
-                        <div className="w-[400px] h-[400px] mx-auto relative overflow-hidden rounded-full my-8">
-                            <img src={pictureUrl} alt="Profile Picture" className="w-full h-full object-cover" />
-                        </div>
-                    )
-                }
-
-                {/* ---- Image zoom in and zoom out slider ---- */}
-                {
-                    (picture && !imageSaved) && (
-                        <div className="flex items-center justify-center my-8 gap-x-1">
-                            <button
-                                onClick={zoomOut}
-                                className="p-2 hover:bg-border transition-all duration-250 rounded-full cursor-pointer"
-                            >
-                                <IoMdRemove size={25} />
-                            </button>
-                            <input
-                                ref={rangeInputRef}
-                                type="range"
-                                className="cursor-pointer zoom-range"
-                                value={zoom}
-                                onChange={(e) => setZoom(e.target.value)}
-                                min={MIN}
-                                max={MAX}
-                                step={STEPS}
-                                style={{
-                                    width: "400px",
-                                    background: `linear-gradient(to right, var(--color-primary) ${((zoom - MIN) / (MAX - MIN)) * 100}%, var(--color-border) ${((zoom - MIN) / (MAX - MIN)) * 100}%)`
-                                }}
-                            />
-                            <button
-                                onClick={zoomIn}
-                                className="p-2 hover:bg-border transition-all duration-250 rounded-full cursor-pointer"
-                            >
-                                <IoMdAdd size={25} />
-                            </button>
-                        </div>
-                    )
-                }
-
-                {/* ---- All Initial Buttons (Upload, Frame, Edit) - Conditionally Rendering (Cancel, Save) ---- */}
-                {
-                    (picture && !imageSaved) ? (
-                        <div className="px-4 flex items-center justify-end gap-4">
-                            <button
-                                onClick={handleCancel}
-                                className="w-[15%] py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer  hover:bg-border"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={saveImage}
-                                className="w-[20%] py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary hover:bg-primary-hover"
-                            >
-                                Save
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="px-4 pt-4 flex items-center justify-between">
-                            {/* ---- Upload Btn ---- */}
-                            <div className="w-[44%]">
-                                <button
-                                    onClick={handleAddOrUpload}
-                                    className="w-full py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary/50 hover:bg-primary-hover"
-                                >
-                                    {(!picture && !imageSaved) ? <IoMdAdd size={20} /> : <FaUpload />}
-                                    <span>
-                                        {
-                                            !loading ? (
-                                                (!picture && !imageSaved) ? "Add Image" : "Upload"
-                                            ) : (
-                                                "Uploading..."
-                                            )
-                                        }
-                                    </span>
-                                </button>
-
-                                {/* ---- File Input ---- */}
-                                <input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                    className="hidden"
+                {/* ---- Body ---- */}
+                <div className="max-h-[70vh] overflow-y-auto custom-scrollbar">
+                    {/* ---- Conditional Description Input ---- */}
+                    {
+                        picture && (
+                            <div className="px-4 mt-4">
+                                <label htmlFor="caption">Caption (optional)</label>
+                                <textarea
+                                    placeholder="Description"
+                                    className="border resize-none w-full rounded-lg px-4 py-3 mt-2"
+                                    id="caption"
+                                    value={caption}
+                                    onChange={(e) => setCaption(e.target.value)}
                                 />
                             </div>
+                        )
+                    }
 
-                            {/* ---- Add Frame Btn ---- */}
-                            <div className="w-[44%]">
+                    {/* ---- Image Preview (on editing mode) ---- */}
+                    {
+                        (picture && !imageSaved) && (
+                            <div className="w-full h-[400px] relative overflow-hidden mt-8">
+                                <Cropper
+                                    image={pictureUrl}
+                                    crop={crop}
+                                    zoom={zoom}
+                                    zoomWithScroll={false}
+                                    cropShape="round"
+                                    aspect={1 / 1}
+                                    onCropChange={setCrop}
+                                    onCropComplete={onCropComplete}
+                                    onZoomChange={setZoom}
+                                />
+                            </div>
+                        )
+                    }
+
+                    {/* ---- Image Preview (after saving the image) ---- */}
+                    {
+                        (picture && imageSaved) && (
+                            <div className="w-[400px] h-[400px] mx-auto relative overflow-hidden rounded-full my-8">
+                                <img src={pictureUrl} alt="Profile Picture" className="w-full h-full object-cover" />
+                            </div>
+                        )
+                    }
+
+                    {/* ---- Image zoom in and zoom out slider ---- */}
+                    {
+                        (picture && !imageSaved) && (
+                            <div className="flex items-center justify-center my-8 gap-x-1">
                                 <button
-                                    className="w-full py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-border hover:bg-primary/50 "
+                                    onClick={zoomOut}
+                                    className="p-2 hover:bg-border transition-all duration-250 rounded-full cursor-pointer"
                                 >
-                                    <PiFrameCorners size={20} />
-                                    <span>Add Frame</span>
+                                    <IoMdRemove size={25} />
+                                </button>
+                                <input
+                                    ref={rangeInputRef}
+                                    type="range"
+                                    className="cursor-pointer zoom-range"
+                                    value={zoom}
+                                    onChange={(e) => setZoom(e.target.value)}
+                                    min={MIN}
+                                    max={MAX}
+                                    step={STEPS}
+                                    style={{
+                                        width: "400px",
+                                        background: `linear-gradient(to right, var(--color-primary) ${((zoom - MIN) / (MAX - MIN)) * 100}%, var(--color-border) ${((zoom - MIN) / (MAX - MIN)) * 100}%)`
+                                    }}
+                                />
+                                <button
+                                    onClick={zoomIn}
+                                    className="p-2 hover:bg-border transition-all duration-250 rounded-full cursor-pointer"
+                                >
+                                    <IoMdAdd size={25} />
                                 </button>
                             </div>
+                        )
+                    }
 
-                            <div>
+                    {/* ---- All Initial Buttons (Upload, Frame, Edit) - Conditionally Rendering (Cancel, Save) ---- */}
+                    {
+                        (picture && !imageSaved) ? (
+                            <div className="px-4 flex items-center justify-end gap-4">
                                 <button
-                                    onClick={handleSwitchEditMode}
-                                    className="py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-border hover:bg-primary/50 "
+                                    onClick={handleCancel}
+                                    className="w-[15%] py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer  hover:bg-border"
                                 >
-                                    <MdEdit size={20} />
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={saveImage}
+                                    className="w-[20%] py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary hover:bg-primary-hover"
+                                >
+                                    Save
                                 </button>
                             </div>
-                        </div>
-                    )
-                }
+                        ) : (
+                            <div className="px-4 pt-4 flex items-center justify-between">
+                                {/* ---- Upload Btn ---- */}
+                                <div className="w-[44%]">
+                                    <button
+                                        onClick={handleAddOrUpload}
+                                        className="w-full py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-primary/50 hover:bg-primary-hover"
+                                    >
+                                        {(!picture && !imageSaved) ? <IoMdAdd size={20} /> : <FaUpload />}
+                                        <span>
+                                            {
+                                                !loading ? (
+                                                    (!picture && !imageSaved) ? "Add Image" : "Upload"
+                                                ) : (
+                                                    "Uploading..."
+                                                )
+                                            }
+                                        </span>
+                                    </button>
 
-                {/* ---- Other Images ---- */}
-                {
-                    !picture && (
-                        <div className="px-4 mt-4 flex flex-col gap-y-2 font-[Inter]">
-                            {/* ---- Profile Pictures ---- */}
-                            {
-                                (profilePictures.length > 0) && <PhotosGroup groupName="Profile Pictures" images={profilePictures} select={true} setImage={setPicture} cols={5} />
-                            }
+                                    {/* ---- File Input ---- */}
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                        className="hidden"
+                                    />
+                                </div>
 
-                            {/* ---- Cover Photos ---- */}
-                            {
-                                (coverPhotos.length > 0) && <PhotosGroup groupName="Cover Photos" images={coverPhotos} select={true} setImage={setPicture} cols={5} />
-                            }
+                                {/* ---- Add Frame Btn ---- */}
+                                <div className="w-[44%]">
+                                    <button
+                                        className="w-full py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-border hover:bg-primary/50 "
+                                    >
+                                        <PiFrameCorners size={20} />
+                                        <span>Add Frame</span>
+                                    </button>
+                                </div>
 
-                            {/* ---- Uploads ---- */}
-                            {
-                                (uploads.length > 0) && <PhotosGroup groupName="Uploads" images={uploads} select={true} setImage={setPicture} cols={5} />
-                            }
-                        </div>
-                    )
-                }
+                                <div>
+                                    <button
+                                        onClick={handleSwitchEditMode}
+                                        className="py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-250 cursor-pointer bg-border hover:bg-primary/50 "
+                                    >
+                                        <MdEdit size={20} />
+                                    </button>
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    {/* ---- Other Images ---- */}
+                    {
+                        !picture && (
+                            <div className="px-4 mt-4 flex flex-col gap-y-2 font-[Inter]">
+                                {/* ---- Profile Pictures ---- */}
+                                {
+                                    (profilePictures.length > 0) && <PhotosGroup groupName="Profile Pictures" images={profilePictures} select={true} setImage={setPicture} cols={5} />
+                                }
+
+                                {/* ---- Cover Photos ---- */}
+                                {
+                                    (coverPhotos.length > 0) && <PhotosGroup groupName="Cover Photos" images={coverPhotos} select={true} setImage={setPicture} cols={5} />
+                                }
+
+                                {/* ---- Uploads ---- */}
+                                {
+                                    (uploads.length > 0) && <PhotosGroup groupName="Uploads" images={uploads} select={true} setImage={setPicture} cols={5} />
+                                }
+                            </div>
+                        )
+                    }
+                </div>
             </div>
         </div>
     );

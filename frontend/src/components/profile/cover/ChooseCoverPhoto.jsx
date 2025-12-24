@@ -36,8 +36,8 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
-            <div ref={chooseModalRef} className={`w-full max-w-xl rounded-xl shadow-lg overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border)] py-4`}>
-                {/* Header */}
+            <div ref={chooseModalRef} className={`w-full max-w-2xl rounded-xl shadow-lg overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border)] py-4`}>
+                {/* ---- Header ---- */}
                 <div className="flex items-center justify-center relative pb-4 border-b border-border">
                     <h2 className="text-xl font-semibold text-text-primary">
                         Choose Cover Photo
@@ -53,24 +53,24 @@ const ChooseCoverPhoto = ({ setImage, setShowChooseModal, chooseModalRef, isImag
                     </button>
                 </div>
 
-                {/* Body */}
-                <div className="px-4 pt-4 max-h-[70vh] overflow-y-auto flex flex-col gap-y-2">
+                {/* ---- Body ---- */}
+                <div className="px-4 pt-4 max-h-[70vh] overflow-y-auto custom-scrollbar flex flex-col gap-y-2">
                     {
                         isImagesLoading ? <ChoosePhotosSkeleton /> : (
                             <>
                                 {/* ---- Profile Pictures ---- */}
                                 {
-                                    (profilePictures.length > 0) && <PhotosGroup groupName="Profile Pictures" images={profilePictures} select={true} setImage={setImage} closeModal={true} setCloseModal={setShowChooseModal} />
+                                    (profilePictures.length > 0) && <PhotosGroup groupName="Profile Pictures" images={profilePictures} select={true} setImage={setImage} closeModal={true} setCloseModal={setShowChooseModal} cols={5} />
                                 }
 
                                 {/* ---- Cover Photos ---- */}
                                 {
-                                    (coverPhotos.length > 0) && <PhotosGroup groupName="Cover Photos" images={coverPhotos} select={true} setImage={setImage} closeModal={true} setCloseModal={setShowChooseModal} />
+                                    (coverPhotos.length > 0) && <PhotosGroup groupName="Cover Photos" images={coverPhotos} select={true} setImage={setImage} closeModal={true} setCloseModal={setShowChooseModal} cols={5} />
                                 }
 
                                 {/* ---- Uploads ---- */}
                                 {
-                                    (uploads.length > 0) && <PhotosGroup groupName="Uploads" images={uploads} select={true} setImage={setImage} closeModal={true} setCloseModal={setShowChooseModal} />
+                                    (uploads.length > 0) && <PhotosGroup groupName="Uploads" images={uploads} select={true} setImage={setImage} closeModal={true} setCloseModal={setShowChooseModal} cols={5} />
                                 }
                             </>
                         )

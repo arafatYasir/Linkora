@@ -123,7 +123,7 @@ const ProfilePictureInfos = ({ user, defaultPhoto, refetchUser, isImagesLoading,
                     <img
                         src={user?.profilePicture || defaultPhoto}
                         alt={`${user?.firstname} ${user?.lastname}'s Profile Picture | ${user?.username}`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover select-none"
                     />
                 </div>
 
