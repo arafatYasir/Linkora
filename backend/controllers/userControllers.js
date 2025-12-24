@@ -311,6 +311,8 @@ const findUser = async (req, res) => {
 
         res.send({
             email: userExists.email,
+            firstname: userExists.firstname,
+            lastname: userExists.lastname,
             profilePicture: userExists.profilePicture
         })
     } catch (e) {
@@ -324,6 +326,12 @@ const resetCode = async (req, res) => {
     try {
         const { email } = req.body;
         const user = await User.findOne({ email }).select("-password");
+
+        if (!user) {
+            return res.status(404).json({
+                error: "Unable to send the reset code!"
+            });
+        }
 
         await Code.findOneAndDelete({ userId: user._id });
 
