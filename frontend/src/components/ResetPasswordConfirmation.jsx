@@ -1,15 +1,50 @@
-import { useVerifyResetCodeMutation } from "../../api/authApi"
-import { useState } from "react";
+import { useSendResetCodeMutation, useVerifyResetCodeMutation } from "../../api/authApi"
+import { useEffect, useState } from "react";
 import CustomInput from "./common/CustomInput";
 import { FiHash } from "react-icons/fi";
 import { toast } from "react-toastify";
 
 const ResetPasswordConfirmation = ({ user, setVisibility }) => {
     // States
-    const [verifyResetCode, { isLoading }] = useVerifyResetCodeMutation();
+    const [verifyResetCode, { isLoading: verifyingCode }] = useVerifyResetCodeMutation();
+    const [sendResetCode, { isLoading: sendingCode }] = useSendResetCodeMutation();
     const [code, setCode] = useState("");
     const [error, setError] = useState("");
+    const [minutes, setMinutes] = useState();
+    const [seconds, setSeconds] = useState();
+    const [startTimer, setStartTimer] = useState(true);
 
+    // Starting a timer
+    useEffect(() => {
+        // If startTimer is false then don't run next code
+        if (!startTimer) return;
+
+        const startingTime = new Date().getTime();
+        const endTime = startingTime + (1 * 60 * 1000);
+
+        const timer = setInterval(() => {
+            const currentTime = new Date().getTime();
+            const timeLeft = endTime - currentTime;
+
+            const minutes = Math.floor(timeLeft / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            if (minutes <= 0 && seconds <= 0) {
+                clearInterval(timer);
+                setMinutes(0);
+                setSeconds(0);
+                setStartTimer(false);
+                return;
+            }
+
+            setMinutes(minutes);
+            setSeconds(seconds);
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [startTimer]);
+
+    // Functions
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -27,6 +62,21 @@ const ResetPasswordConfirmation = ({ user, setVisibility }) => {
             if (res?.status && res?.status === "OK") {
                 setVisibility(3);
             }
+        } catch (e) {
+            console.error(e);
+            toast.error(e.data.error);
+        }
+    }
+
+    const handleSendCode = async () => {
+        try {
+            const res = await sendResetCode(user.email).unwrap();
+
+            if (res?.message && res?.message.trim() !== "") {
+                toast.success(res.message);
+                setStartTimer(true);
+            }
+
         } catch (e) {
             console.error(e);
             toast.error(e.data.error);
@@ -76,13 +126,13 @@ const ResetPasswordConfirmation = ({ user, setVisibility }) => {
                     </button>
                     <button
                         type="submit"
-                        disabled={isLoading}
-                        className={`flex-1 py-3 px-5 rounded-lg font-semibold text-white bg-gradient-primary transition-[var(--transition-default)] ${isLoading
+                        disabled={verifyingCode}
+                        className={`flex-1 py-3 px-5 rounded-lg font-semibold text-white bg-gradient-primary transition-[var(--transition-default)] ${verifyingCode
                             ? "bg-primary-hover/80 cursor-not-allowed opacity-70"
                             : "bg-primary-hover cursor-pointer opacity-100"
                             } active:scale-98 hover:bg-primary-hover/80`}
                     >
-                        {isLoading ? "Verifying..." : "Verify Code"}
+                        {verifyingCode ? "Verifying..." : "Verify Code"}
                     </button>
                 </div>
             </form>
@@ -90,9 +140,18 @@ const ResetPasswordConfirmation = ({ user, setVisibility }) => {
             <div className="text-center">
                 <p className="text-sm text-text-secondary">
                     Didn't receive the code?{" "}
-                    <button className="text-primary font-medium hover:underline cursor-pointer">Resend</button>
+                    <span>You can resend code after: {minutes}m {seconds}s</span>
+                    <br />
+                    <button
+                        type="button"
+                        onClick={handleSendCode}
+                        disabled={minutes !== 0 || seconds !== 0}
+                        className={`text-primary font-medium hover:underline cursor-pointer disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:no-underline ${sendingCode ? "cursor-not-allowed opacity-70 hover:no-underline" : "cursor-pointer opacity-100"}`}
+                    >
+                        {sendingCode ? "Sending..." : "Resend"}
+                    </button>
                 </p>
-            </div>  
+            </div>
         </div>
     )
 }

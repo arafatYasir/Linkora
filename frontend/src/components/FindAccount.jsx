@@ -21,11 +21,11 @@ const FindAccount = ({ setUser, setVisibility }) => {
         setError("");
 
         // Email validation
-        if(email.trim() === "") {
+        if (email.trim() === "") {
             setError("Email is required");
             return;
         }
-        if(!emailRegex.test(email)) {
+        if (!emailRegex.test(email)) {
             setError("Invalid email format");
             return;
         }
