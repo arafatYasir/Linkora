@@ -4,7 +4,7 @@ import { toast } from "react-toastify"
 
 const ResetPassword = ({ user, setVisibility }) => {
 
-    const [sendResetCode, { isLoading, error }] = useSendResetCodeMutation();
+    const [sendResetCode, { isLoading }] = useSendResetCodeMutation();
 
     const handleSendCode = async () => {
         try {
@@ -16,7 +16,7 @@ const ResetPassword = ({ user, setVisibility }) => {
             }
 
         } catch (e) {
-            console.error(e.data.error);
+            console.error(e);
             toast.error(e.data.error);
         }
     }

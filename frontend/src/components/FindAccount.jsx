@@ -8,7 +8,7 @@ import { toast } from "react-toastify"
 const FindAccount = ({ setUser, setVisibility }) => {
     // States
     const [email, setEmail] = useState("");
-    const [findUser, { isLoading, error: findUserError, isError }] = useFindUserMutation();
+    const [findUser, { isLoading }] = useFindUserMutation();
     const [error, setError] = useState("");
 
     // Constants
@@ -39,7 +39,7 @@ const FindAccount = ({ setUser, setVisibility }) => {
             }
         }
         catch (e) {
-            console.error(e.data.error);
+            console.error(e);
             toast.error(e.data.error);
         }
     }
