@@ -20,7 +20,7 @@ const ResetPasswordConfirmation = ({ user, setVisibility }) => {
         if (!startTimer) return;
 
         const startingTime = new Date().getTime();
-        const endTime = startingTime + (1 * 60 * 1000);
+        const endTime = startingTime + (2 * 60 * 1000);
 
         const timer = setInterval(() => {
             const currentTime = new Date().getTime();
