@@ -1,4 +1,5 @@
 import { FaUserFriends, FaBookmark } from "react-icons/fa";
+import { IoIosShareAlt } from "react-icons/io";
 import { Link } from "react-router-dom";
 import defaultAvatar from "../../../public/default images/avatar.png";
 
@@ -13,7 +14,7 @@ const HomePageSidebar = ({ user }) => {
                             <img
                                 src={user?.profilePicture || defaultAvatar}
                                 alt="Profile"
-                                className="w-[36px] h-[36px] rounded-full object-cover"
+                                className="w-[36px] h-[36px] rounded-full object-cover select-none"
                             />
                             <span className="font-medium text-text-primary text-[15px]">
                                 {user?.firstname} {user?.lastname}
@@ -35,12 +36,23 @@ const HomePageSidebar = ({ user }) => {
 
                     {/* ---- Saved Posts ---- */}
                     <li>
-                        <Link to="/saved" className="flex items-center gap-3 p-2 rounded-lg hover:bg-border transition cursor-pointer">
+                        <Link to="/saved-posts" className="flex items-center gap-3 p-2 rounded-lg hover:bg-border transition cursor-pointer">
                             <div className="w-[36px] h-[36px] rounded-full bg-transparent flex items-center justify-center text-purple-500">
                                 <FaBookmark size={24} />
                             </div>
                             <span className="font-medium text-text-primary text-[15px]">
                                 Saved Posts
+                            </span>
+                        </Link>
+                    </li>
+
+                    <li>
+                        <Link to="/shared-posts" className="flex items-center gap-3 p-2 rounded-lg hover:bg-border transition cursor-pointer">
+                            <div className="w-[36px] h-[36px] rounded-full bg-transparent flex items-center justify-center text-error">
+                                <IoIosShareAlt size={28} />
+                            </div>
+                            <span className="font-medium text-text-primary text-[15px]">
+                                Shared Posts
                             </span>
                         </Link>
                     </li>
