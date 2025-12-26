@@ -193,6 +193,49 @@ router.post("/refresh", refreshToken);
  *                                     example: User not found!
  */
 router.post("/findUser", findUser);
+
+/**
+ * @swagger
+ * /reset-code:
+ *     post:
+ *         summary: Sends a reset code to the user's email
+ *         tags:
+ *             - Authentication
+ *         security: [] #Public API (no JWT)
+ *         requestBody:
+ *             required: true
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         $ref: '#/components/schemas/FindUserInput'
+ *         responses:
+ *             200:
+ *                 description: Reset code is sent successfully.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             type: object
+ *                             properties:
+ *                                 message:
+ *                                     type: string
+ *                                     example: Password reset code is sent to your mail!
+ *             400:
+ *                 description: Some internal error occurred!
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/ErrorResponse'
+ *             404:
+ *                 description: User not found!
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             type: object
+ *                             properties:
+ *                                 error:
+ *                                     type: string
+ *                                     example: Unable to send the reset code!
+ */
 router.post("/reset-code", resetCode);
 router.post("/verify-code", verifyCode);
 router.post("/new-password", newPassword);
