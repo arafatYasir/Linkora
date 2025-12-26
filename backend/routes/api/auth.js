@@ -288,6 +288,49 @@ router.post("/reset-code", resetCode);
  *                                     example: The code is invalid!
  */
 router.post("/verify-code", verifyCode);
+
+/**
+ * @swagger
+ * /new-password:
+ *     post:
+ *         summary: Updates the user's password
+ *         tags:
+ *             - Authentication
+ *         security: [] #Public API (no JWT)
+ *         requestBody:
+ *             required: true
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         type: object
+ *                         properties:
+ *                             email:
+ *                                 type: string
+ *                                 example: john@gmail.com
+ *                             password:
+ *                                 type: string
+ *                                 example: password123
+ *         responses:
+ *             200:
+ *                 description: Password reset successful.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             type: object
+ *                             properties:
+ *                                 message:
+ *                                     type: string
+ *                                     example: Password reset successful!
+ *                                 status:
+ *                                     type: string
+ *                                     example: OK
+ *             400:
+ *                 description: Email or password is unavailable.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/ErrorResponse'
+ */
 router.post("/new-password", newPassword);
 
 // Profile
