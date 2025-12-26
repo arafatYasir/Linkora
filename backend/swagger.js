@@ -78,10 +78,28 @@ const options = {
                     properties: {
                         message: {
                             type: "string",
-                            example: "Can't create a user."
+                            example: "Something went wrong! Please try again later."
                         }
                     }
-                }
+                },
+                VerifyInput: {
+                    type: "object",
+                    properties: {
+                        token: {
+                            type: "string",
+                            example: "your-verification-token"
+                        }
+                    }
+                },
+                VerifySuccess: {
+                    type: "object",
+                    properties: {
+                        message: {
+                            type: "string",
+                            example: "Email is verified successfully!"
+                        }
+                    }
+                },
             }
         },
     },

@@ -40,8 +40,43 @@ const router = express.Router();
  *                         schema:
  *                             $ref: '#/components/schemas/ErrorResponse'
  */
-
 router.post("/signup", newUser);
+
+/**
+ * @swagger
+ * /verify:
+ *     post:
+ *         summary: Verifies a user's email
+ *         description: Verifies a user's email address using a verification link.
+ *         tags:
+ *             - Authentication
+ *         security: [] #Public API (no JWT)
+ *         requestBody:
+ *             required: true
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         $ref: '#/components/schemas/VerifyInput'
+ *         responses:
+ *             200:
+ *                 description: Email is verified successfully!
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/VerifySuccess'
+ *             400:
+ *                 description: This email is already verified!
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/ErrorResponse'
+ *             404:
+ *                 description: Token is expired or user not found!
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/ErrorResponse'
+ */
 router.post("/verify", verifyUser);
 router.post("/login", loginUser);
 router.post("/refresh", refreshToken);
