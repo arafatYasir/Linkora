@@ -198,7 +198,7 @@ router.post("/findUser", findUser);
  * @swagger
  * /reset-code:
  *     post:
- *         summary: Sends a reset code to the user's email
+ *         summary: Sends a reset password code to the user's email
  *         tags:
  *             - Authentication
  *         security: [] #Public API (no JWT)
@@ -237,6 +237,56 @@ router.post("/findUser", findUser);
  *                                     example: Unable to send the reset code!
  */
 router.post("/reset-code", resetCode);
+
+/**
+ * @swagger
+ * /verify-code:
+ *     post:
+ *         summary: Verifies the reset password code
+ *         tags:
+ *             - Authentication
+ *         security: [] #Public API (no JWT)
+ *         requestBody:
+ *             required: true
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         type: object
+ *                         properties:
+ *                             email:
+ *                                 type: string
+ *                                 example: john@gmail.com
+ *                             code:
+ *                                 type: string
+ *                                 example: 1N29X2
+ *         responses:
+ *             200:
+ *                 description: Reset code is verified successfully.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             type: object
+ *                             properties:
+ *                                 status:
+ *                                     type: string
+ *                                     example: OK
+ *             400:
+ *                 description: Email or code is unavailable.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/ErrorResponse'
+ *             404:
+ *                 description: The code is invalid!
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             type: object
+ *                             properties:
+ *                                 error:
+ *                                     type: string
+ *                                     example: The code is invalid!
+ */
 router.post("/verify-code", verifyCode);
 router.post("/new-password", newPassword);
 
