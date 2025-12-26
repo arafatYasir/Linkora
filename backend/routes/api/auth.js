@@ -153,6 +153,45 @@ router.post("/login", loginUser);
  *                             $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/refresh", refreshToken);
+
+/**
+ * @swagger
+ * /findUser:
+ *     post:
+ *         summary: Finds a user by email
+ *         tags:
+ *             - Authentication
+ *         security: [] #Public API (no JWT)
+ *         requestBody:
+ *             required: true
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         $ref: '#/components/schemas/FindUserInput'
+ *         responses:
+ *             200:
+ *                 description: User is found successfully.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/FindUserSuccess'
+ *             400:
+ *                 description: Invalid email!
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/ErrorResponse'
+ *             404:
+ *                 description: User not found!
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             type: object
+ *                             properties:
+ *                                 error:
+ *                                     type: string
+ *                                     example: User not found!
+ */
 router.post("/findUser", findUser);
 router.post("/reset-code", resetCode);
 router.post("/verify-code", verifyCode);

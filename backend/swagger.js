@@ -287,6 +287,36 @@ const options = {
                             example: "your-access-token"
                         }
                     }
+                },
+                FindUserInput: {
+                    type: "object",
+                    properties: {
+                        email: {
+                            type: "string",
+                            example: "john@example.com"
+                        }
+                    }
+                },
+                FindUserSuccess: {
+                    type: "object",
+                    properties: {
+                        email: {
+                            type: "string",
+                            example: "john@example.com"
+                        },
+                        firstname: {
+                            type: "string",
+                            example: "John"
+                        },
+                        lastname: {
+                            type: "string",
+                            example: "Doe"
+                        },
+                        profilePicture: {
+                            type: "string",
+                            example: "https://example.com/profile.jpg"
+                        }
+                    }
                 }
             }
         },
