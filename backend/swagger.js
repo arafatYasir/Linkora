@@ -278,6 +278,15 @@ const options = {
                             example: "your-access-token"
                         }
                     }
+                },
+                RefreshSuccess: {
+                    type: "object",
+                    properties: {
+                        accessToken: {
+                            type: "string",
+                            example: "your-access-token"
+                        }
+                    }
                 }
             }
         },

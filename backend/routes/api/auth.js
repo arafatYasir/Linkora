@@ -115,6 +115,43 @@ router.post("/verify", verifyUser);
  *                             $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/login", loginUser);
+
+/**
+ * @swagger
+ * /refresh:
+ *     post:
+ *         summary: Refreshes a user's JWT token
+ *         description: Refreshes a user's JWT token using his refresh token.
+ *         tags:
+ *             - Authentication
+ *         security: [] #Public API (no JWT)
+ *         parameters:
+ *             - in: cookie
+ *               name: refreshToken
+ *               required: true
+ *               description: Refresh token
+ *               schema:
+ *                 type: string
+ *         responses:
+ *             200:
+ *                 description: Token is refreshed successfully.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/RefreshSuccess'
+ *             400:
+ *                 description: Token not found!
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/ErrorResponse'
+ *             404:
+ *                 description: Invalid token or user not found.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/ErrorResponse'
+ */
 router.post("/refresh", refreshToken);
 router.post("/findUser", findUser);
 router.post("/reset-code", resetCode);
