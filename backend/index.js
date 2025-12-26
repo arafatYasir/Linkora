@@ -1,6 +1,8 @@
 require("dotenv").config();
 
 const express = require("express");
+const swaggerUI = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
 const app = express();
 const cors = require("cors");
 const path = require("path");
@@ -26,7 +28,10 @@ app.use(cookieParser())
 app.use(express.json());
 
 // Routes
-app.use(routes)
+app.use(routes);
+
+// Swagger
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 app.listen(port, () => {
     console.log("Running on port:", port);
