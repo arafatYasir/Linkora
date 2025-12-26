@@ -78,6 +78,42 @@ router.post("/signup", newUser);
  *                             $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/verify", verifyUser);
+
+/**
+ * @swagger
+ * /login:
+ *     post:
+ *         summary: Logs in a user
+ *         description: Logs in a user and returns a JWT token.
+ *         tags:
+ *             - Authentication
+ *         security: [] #Public API (no JWT)
+ *         requestBody:
+ *             required: true
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         $ref: '#/components/schemas/LoginInput'
+ *         responses:
+ *             200:
+ *                 description: Login successful!
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/LoginSuccess'
+ *             400:
+ *                 description: Invalid email or password or not verified user.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/ErrorResponse'
+ *             404:
+ *                 description: Email doesn't exist or password is invalid.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/ErrorResponse'
+ */
 router.post("/login", loginUser);
 router.post("/refresh", refreshToken);
 router.post("/findUser", findUser);
