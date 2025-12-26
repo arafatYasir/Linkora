@@ -111,7 +111,7 @@ const newUser = async (req, res) => {
         await sendVerificationEmail(user.email, verificationURL);
 
         // Sending user data response
-        res.send({
+        res.status(201).json({
             message: "Registration successful! Please verify your email.",
         });
     } catch (e) {

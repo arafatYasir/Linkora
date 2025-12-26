@@ -4,7 +4,43 @@ const authMiddleware = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
 
-// Authentication
+// ---- Authentication ---- //
+/**
+ * @swagger
+ * /signup:
+ *     post:
+ *         summary: Registers a new user
+ *         description: Creates a new user account and sends a verification email.
+ *         tags:
+ *             - Authentication
+ *         security: [] #Public API (no JWT)
+ *         requestBody:
+ *             required: true
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                         $ref: '#/components/schemas/SignupInput'
+ *         responses:
+ *             201:
+ *                 description: Registration successful! Please verify your email.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/SignupSuccess'
+ *             400:
+ *                 description: Validation error or email already exists.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/ErrorResponse'
+ *             404:
+ *                 description: Can't create a user.
+ *                 content:
+ *                     application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/ErrorResponse'
+ */
+
 router.post("/signup", newUser);
 router.post("/verify", verifyUser);
 router.post("/login", loginUser);
